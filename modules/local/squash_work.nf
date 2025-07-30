@@ -12,7 +12,7 @@ process SQUASH_WORK {
     mksquashfs ${work_dir}/* ${image} -no-compression
 
     # params.keep_workdir: ${params.keep_workdir}
-    if ! ( ${params.keep_workdir } ); then
+    if ! ( ${params.keep_workdir} ); then
         # Remove contents of work-dir.
         rm -rf ${work_dir}/*
     fi
