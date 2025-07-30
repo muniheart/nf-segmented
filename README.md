@@ -56,8 +56,7 @@ to the container at its path of origin, maintaining the integrity of the cache.
 # Requirements
 
 Singularity or apptainer containerization is required to allow the mounting of squash-fs images.  The slurm executor is
-used and must be enabled in the container.  Required databases and datasets should be locally available and paths in the
-database.csv file should indicate the locations of decompressed databases.
+used and must be enabled in the container.  [Squashfs-tools](https://github.com/plougher/squashfs-tools) is required for the creation of images.  The nested pipeline should be downloaded along with all required databases and datasets.
 
 # Acknowledgements
-I would like to thank @mahesh-panchal for sharing his project `nf-cascade` which provided the seed for this project.
+I would like to thank [Mahesh Binzer-Panchal](https://github.com/mahesh-panchal) for sharing his project [nf-cascade](https://github.com/mahesh-panchal/nf-cascade) which provided the seed for this project.
