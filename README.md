@@ -5,7 +5,7 @@ limited file system resources, for example HPC users.
 
 # Introduction
 
-This project provides a wrapper pipeline that can be used to run another pipeline of interest, refered hereafter as
+This project provides a wrapper pipeline that can be used to run another pipeline of interest, referred to hereafter as
 the nested pipeline.  The nested pipeline is run in a recursive manner using the process.scan method applied to a
 channel of pipeline parameter files.
 On an initial run of the nested pipeline, the workdir is set to `work_1`.  Upon termination, a squash-fs image, `work_1.sqfs`,
