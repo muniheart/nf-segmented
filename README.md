@@ -51,9 +51,13 @@ params_1.yaml                                       work_1.sqfs
 [ params_2.yaml, work_1.sqfs ]                      work_2.sqfs
 [ params_3.yaml, work_1.sqfs, work_2.sqfs ]         work_3.sqfs
 ```
-Mounting of workdir images of previous segments is handled in `conf/modules` where a bind-mount directive for
-each image is added to the `containerOptions` that is passed to singularity.  Each workdir image is bind-mounted
-to the container of the currently running NFCORE_DEMO task at its path of origin, maintaining the integrity of the cache.  The nested workflow also requires access to each workdir image.  While singularity should propagate the mounts to a nested container, I did not find that this worked reliably.  The bind-mount options are also passed to the nested workflow as `param.image_mounts` which is referenced in a custom configuration file that is passed to the nested workflow.
+Maintaining validity of nextflow's cache for a pipeline requires that file paths recorded in the cache remain valid 
+across resume runs.  This is accomplished here by mounting workdir images of prior segments to the container that runs
+the nested pipeline and to the container of each containerized task of the nested pipeline.  Further, each image is mounted at its path of origin.  The bind-mount directives are created in `conf/modules.config` and passed to
+singularity via `process.containerOptions`.  The propagation of bind-mounts to nested containers
+should be handled seamlessly by singularity and apptainer, but I found that this mechanism did not work reliably.
+I observed cases where a file that had been staged in a task workdir by .command.run script was not found by the
+.command.sh script.  This problem is circumvented by explicitly passing bind-mount directives to each nested container.
 
 # Requirements
 
