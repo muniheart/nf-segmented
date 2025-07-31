@@ -52,8 +52,8 @@ params_1.yaml                                       work_1.sqfs
 [ params_3.yaml, work_1.sqfs, work_2.sqfs ]         work_3.sqfs
 ```
 Mounting of workdir images of previous segments is handled in `conf/modules` where a bind-mount directive for
-each image is added to the `containerOptions` that is passed to singularity.  Each workdir is bind-mounted
-to the container at its path of origin, maintaining the integrity of the cache.
+each image is added to the `containerOptions` that is passed to singularity.  Each workdir image is bind-mounted
+to the container of the currently running NFCORE_DEMO task at its path of origin, maintaining the integrity of the cache.  The nested workflow also requires access to each workdir image.  While singularity should propagate the mounts to a nested container, I did not find that this worked reliably.  The bind-mount options are also passed to the nested workflow as `param.image_mounts` which is referenced in a custom configuration file that is passed to the nested workflow.
 
 # Requirements
 
