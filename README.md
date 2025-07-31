@@ -3,8 +3,8 @@
 This project was created to mitigate the inode limitation associated with certain HPC.  It runs a pipeline of
 interest in a segmented execution to reduce the total number of inodes consumed by intermediate files ( workdir )
 during the lifetime of a pipeline run.
-It may be of interest to nextflow users who have limited file system resources, such as users of HPCs, or
-users that want to run multiple pipelines on numerous or large datasets.  The functionality provided here 
+It may be of interest to nextflow users who have limited storage resources, such as users of HPCs, or
+those who want to run multiple pipelines on numerous or large datasets.  The functionality provided here 
 is distinct from that provided by the nextflow setting of `'cleanup: true'`, which reduces inode pressure by removing
 intermediate files ( workdir ) after a complete pipeline run. Here, inodes are reclaimed throughout the execution
 of a pipeline.
