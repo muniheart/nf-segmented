@@ -56,7 +56,7 @@ across resume runs.  This is accomplished here by mounting workdir images of pri
 the nested pipeline and to the container of each containerized task of the nested pipeline.  Further, each image is mounted at its path of origin.  The bind-mount directives are created in `conf/modules.config` and passed to
 singularity via `process.containerOptions`.  The propagation of bind-mounts to nested containers
 should be handled seamlessly by singularity and apptainer, but I found that this mechanism did not work reliably.
-I observed cases where a file that had been staged in a task workdir by .command.run script was not found by the
+I observed instances in which a file that had been staged in a task workdir by .command.run script was not found by the
 .command.sh script.  This problem is circumvented by explicitly passing bind-mount directives to each nested container.
 
 # Requirements
