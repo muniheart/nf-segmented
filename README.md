@@ -53,7 +53,7 @@ params_1.yaml                                       work_1.sqfs
 ```
 Maintaining validity of nextflow's cache for a pipeline requires that file paths recorded in the cache remain valid 
 across resume runs.  This is accomplished here by mounting workdir images of prior segments to the container that runs
-the nested pipeline and to the container of each containerized task of the nested pipeline.  Further, each image is mounted at its path of origin.  The bind-mount directives are created in `conf/modules.config` and passed to
+the nested pipeline and to the container of each containerized task of the nested pipeline.  Further, each image is mounted at the path of its source workdir.  The bind-mount directives are created in `conf/modules.config` and passed to
 singularity via `process.containerOptions`.  The propagation of bind-mounts to nested containers
 should be handled seamlessly by singularity and apptainer, but I found that this mechanism did not work reliably.
 I observed instances in which a file that had been staged in a task workdir by .command.run script was not found by the
