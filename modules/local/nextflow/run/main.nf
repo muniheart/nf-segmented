@@ -10,20 +10,17 @@ process NEXTFLOW_RUN {
     input:
     val pipeline_name                   // String
     val nextflow_opts                   // String
-    val samplesheet                     // pipeline samplesheet
-    val databases                       // pipeline databases sheet
+    path samplesheet                    // pipeline samplesheet
+    path databases                      // pipeline databases sheet
     path additional_config              // custom configs
     path outdir, name: 'results'        // create link to params.outdir
     path cache_dir                      // common nextflow cache-dir for all tasks
-    path data                           // [ params_i.yaml, work_1.sqfs, work_2.sqfs, ..., work_{i-1}.sqfs ]
-
-    // directives:
-    tag "$pipeline_name"
+    val data                           // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
     log.info "task.ext.args: ${task.ext.args}"
     log.info "task.ext: ${task.ext}"
-    def params_file = data[0]
+    def meta = data[0]
     def i = task.index
     log.info "NEXTFLOW_RUN: task: ${task}"
     log.info "NEXTFLOW RUN: i: ${i}"
@@ -38,12 +35,15 @@ process NEXTFLOW_RUN {
     image_param = "${task.ext.image_mounts_absolute}" ? "--image_mounts ${task.ext.image_mounts_absolute}" : ''
     log.info "image_param: ${image_param}"
 
+    samplesheet = meta.containsKey( 'samplesheet' ) && meta.samplesheet ? meta.samplesheet : samplesheet
+    databases   = meta.containsKey( 'databases'   ) && meta.databases   ? meta.databases   : databases
+
     // Construct nextflow command
     def nxf_cmd = [
         'nextflow -log nextflow.log run',
             nextflow_opts,
             pipeline_name,
-            params_file ? "-params-file $params_file" : '',
+            meta.params_file ? "-params-file ${meta.params_file}" : '',
             additional_config ? "-c $additional_config" : '',
             samplesheet ? "--input $samplesheet" : '',
             databases ? "--databases $databases" : '',
