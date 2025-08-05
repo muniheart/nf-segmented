@@ -47,7 +47,7 @@ ch_param = [ params_1.yaml, params_2.yaml, params_3.yaml ]
 the `iteration` workflow will be called 3 times with inputs and outputs,
 ```
 input                                               output
-params_1.yaml                                       work_1.sqfs
+[ params_1.yaml ]                                   work_1.sqfs
 [ params_2.yaml, work_1.sqfs ]                      work_2.sqfs
 [ params_3.yaml, work_1.sqfs, work_2.sqfs ]         work_3.sqfs
 ```
