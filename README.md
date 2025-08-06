@@ -12,11 +12,17 @@ of a pipeline.
 # Introduction
 A wrapper pipeline is used to run a pipeline of interest, referred to as
 the nested pipeline.  The nested pipeline is run inside a singularity container in a recursive manner using
-`process.scan`, an [experimental recursive method](https://github.com/nextflow-io/nextflow/discussions/2521), applied to a channel of pipeline parameter files.
-Segmentation of the nested pipeline is defined by the sequence of input parameter files
-which is constructed to
-progressively enable pipeline functionality.  Execution of
-a segment is performed by workflow `iteration` which takes one input, `data`, and emits one value, a `TaskPath` object representing a file-system image.
+`process.scan`, an [experimental recursive method](https://github.com/nextflow-io/nextflow/discussions/2521), applied to a channel of maps, meta.
+    meta = [ params: 'params.yaml', samplesheet: 'samplesheet.csv', databases: 'databases.csv' ]
+Each meta map specifies the parameter file, samplesheet and databases file to be used for a
+pipeline segment.  A sequence of meta maps can be constructed to,
+    1. progressively enable pipeline functionality.
+    2. partition samples into separate segments.
+    3. partition the databases into separate segments.
+
+Processing of a segment is performed by workflow `iteration` which takes one input, `data`, and emits one value, a tuple,
+`[ image, work ]`, where `work` is the path to a work-dir and `image` is the path to a squash-fs image of
+that work-dir.
 
 ```nextflow
 workflow iteration {
@@ -37,27 +43,26 @@ workflow {
     // Read meta file into ch_params.
     ch_params = Channel.fromPath( ...)
 
-    iteration.scan( ch_params )
+    iteration.scan( ch_meta )
 }
 ```
 Given the input channel,
 ```
-ch_param = [ params_1.yaml, params_2.yaml, params_3.yaml ]
+ch_meta = [ meta_1, meta_2, meta_3 ]
 ```
 the `iteration` workflow will be called 3 times with inputs and outputs,
 ```
-input                                               output
-[ params_1.yaml ]                                   work_1.sqfs
-[ params_2.yaml, work_1.sqfs ]                      work_2.sqfs
-[ params_3.yaml, work_1.sqfs, work_2.sqfs ]         work_3.sqfs
+input                                                           output
+[ meta_1 ]                                                      [ image_1, work_1 ]
+[ meta_2, [ image_1, work_1 ] ]                                 [ image_2, work_2 ]
+[ meta_3, [ image_1, work_1 ], [ image_2, work_2 ] ]            [ image_3, work_3 ]
 ```
 Maintaining validity of nextflow's cache for a pipeline requires that file paths recorded in the cache remain valid 
 across resume runs.  This is accomplished here by mounting workdir images of prior segments to the container that runs
-the nested pipeline and to the container of each containerized task of the nested pipeline.  Further, each image is mounted at the path of its source workdir.  The bind-mount directives are created in `conf/modules.config` and passed to
+the nested pipeline and to the container of each containerized process of the nested pipeline.  Further, each image is mounted at the path of its source workdir.  The bind-mount directives are created in `conf/modules.config` and passed to
 singularity via `process.containerOptions`.  The propagation of bind-mounts to nested containers
 should be handled seamlessly by singularity and apptainer, but I found that this mechanism did not work reliably.
-I observed instances in which a file that had been staged in a task workdir by .command.run script was not found by the
-.command.sh script.  This problem is circumvented by explicitly passing bind-mount directives to each nested container.
+Instead, bind-mount directives are passed to each nested container through `containerOptions`.
 
 # Requirements
 
