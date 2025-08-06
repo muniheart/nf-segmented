@@ -16,9 +16,9 @@ the nested pipeline.  The nested pipeline is run inside a singularity container 
     meta = [ params: 'params.yaml', samplesheet: 'samplesheet.csv', databases: 'databases.csv' ]
 Each meta map specifies the parameter file, samplesheet and databases file to be used for a
 pipeline segment.  A sequence of meta maps can be constructed to,
-    1. progressively enable pipeline functionality.
-    2. partition samples into separate segments.
-    3. partition the databases into separate segments.
+- progressively enable pipeline functionality,
+- select the samples processed per segment,
+- select the tools and databases used per segment.
 
 Processing of a segment is performed by workflow `iteration` which takes one input, `data`, and emits one value, a tuple,
 `[ image, work ]`, where `work` is the path to a work-dir and `image` is the path to a squash-fs image of
@@ -41,7 +41,7 @@ workflow iteration {
 
 workflow {
     // Read meta file into ch_params.
-    ch_params = Channel.fromPath( ...)
+    ch_meta = Channel.fromPath( ...)
 
     iteration.scan( ch_meta )
 }
