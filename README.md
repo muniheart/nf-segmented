@@ -12,8 +12,10 @@ of a pipeline.
 # Introduction
 A wrapper pipeline is used to run a pipeline of interest, referred to as
 the nested pipeline.  The nested pipeline is run inside a singularity container in a recursive manner using
-`process.scan`, an [experimental recursive method](https://github.com/nextflow-io/nextflow/discussions/2521), applied to a channel of maps, meta.
+`process.scan`, an [experimental recursive method](https://github.com/nextflow-io/nextflow/discussions/2521), applied to a channel of maps,
+```
     meta = [ params: 'params.yaml', samplesheet: 'samplesheet.csv', databases: 'databases.csv' ]
+```
 Each meta map specifies the parameter file, samplesheet and databases file to be used for a
 pipeline segment.  A sequence of meta maps can be constructed to,
 - progressively enable pipeline functionality,
