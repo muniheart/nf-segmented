@@ -15,6 +15,7 @@ process NEXTFLOW_RUN {
     path additional_config              // custom configs
     path outdir, name: 'results'        // create link to params.outdir
     path cache_dir                      // common nextflow cache-dir for all tasks
+    path env_file                       // file with env var strings defining workdir paths.
     val data                           // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
