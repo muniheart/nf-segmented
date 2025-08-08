@@ -4,6 +4,7 @@ nextflow.preview.recursion=true
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { WRITE_ENVIRONMENT } from "./modules/local/write_environment.nf"
+include { GET_WORKDIRS } from "./modules/local/get_workdirs.nf"
 
 as_path = { it ? file( it ) : Channel.value([]) }
 
@@ -21,6 +22,8 @@ workflow iteration {
 
     WRITE_ENVIRONMENT( data )
 
+    workdirs = GET_WORKDIRS( data )
+
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
@@ -30,6 +33,7 @@ workflow iteration {
         params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
+        workdirs,
         data
     )
 
