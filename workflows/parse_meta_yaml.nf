@@ -10,11 +10,6 @@ process PARSE_YAML {
     path( meta_file )
 
     script:
-    """
-    :
-    """
-
-    exec:
 	Yaml yaml = new Yaml();
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
@@ -23,6 +18,9 @@ process PARSE_YAML {
                     x.main = params + x.main
                     return x
                 }
+    """
+    :
+    """
 
     output:
     val meta
