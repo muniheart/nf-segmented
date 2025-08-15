@@ -2,7 +2,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import java.io.FileWriter;
 
-include { SPLIT_SAMPLESHEET } from "./workflows/split_samplesheet.nf"
+include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
 
 process PARSE_YAML {
     input:

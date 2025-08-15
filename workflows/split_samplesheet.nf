@@ -1,5 +1,5 @@
-include { RECORDS_TO_CSV } from "./modules/local/write_csv.nf"
-include { groupTuplesNearSize } from "./modules/local/chunk_samplesheet.nf"
+include { RECORDS_TO_CSV } from "../modules/local/write_csv.nf"
+include { groupTuplesNearSize } from "../modules/local/chunk_samplesheet.nf"
 
 workflow SPLIT_SAMPLESHEET {
     take:
