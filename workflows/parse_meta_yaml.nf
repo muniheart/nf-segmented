@@ -5,9 +5,21 @@ import java.io.File;
 
 include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
 
+def parse_yaml( infile ) {
+    InputStream inputStream = new FileInputStream( infile.toFile() );
+	Yaml yaml = new Yaml();
+    // nested nextflow will be run once per params file.
+    // Order of arguments to `+` allows  YAML params to override default params.
+    return yaml.load( inputStream )
+                .collect { x ->
+                    x.main = params + x.main
+                    return x
+                }
+}
+
 process PARSE_YAML {
     input:
-    path( meta_file )
+    path meta_file
 
     script:
     InputStream inputStream = new FileInputStream( meta_file.toFile() );
@@ -48,7 +60,7 @@ workflow PARSE_META_YAML {
     meta_file
     
     main:
-    ch_meta = PARSE_YAML( meta_file )
+    ch_meta = parse_yaml( meta_file )
 
     ch_nested_params = ch_meta.map { it.nested } | WRITE_PARAMS_YAML
 
