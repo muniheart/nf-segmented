@@ -8,6 +8,7 @@ include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { WRITE_ENVIRONMENT } from "./modules/local/write_environment.nf"
 include { GET_WORKDIRS } from "./modules/local/get_workdirs.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
+include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
 as_path = { it ? file( it ) : Channel.value([]) }
 
@@ -44,31 +45,6 @@ workflow iteration {
 
     emit:
     SQUASH_WORK.out
-}
-
-process PARSE_META_CSV {
-    def ch_meta
-
-    input:
-    path( meta_file )
-
-    exec:
-    // nested nextflow will be run once per params file.
-    ch_meta = Channel.fromPath( meta_file, checkIfExists: true )
-                    .splitCsv( header: true )
-                    .map { rec ->
-                        {
-                            rec.params_file = file( rec.params_file, checkIfExists: true )
-                            rec.samplesheet = rec.containsKey( 'samplesheet' ) && rec.samplesheet ?
-                                                file( rec.samplesheet, checkIfExists: true ) : null
-                            rec.databases   = rec.containsKey( 'databases'   ) && rec.databases ?
-                                                file( rec.databases,   checkIfExists: true ) : null
-                            return rec
-                        }
-                    }
-
-    output:
-    ch_meta
 }
 
 workflow {
