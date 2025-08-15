@@ -10,7 +10,7 @@ process PARSE_YAML {
     path( meta_file )
 
     script:
-    InputStream inputStream = new FileInputStream(new File( meta_file ));
+    InputStream inputStream = new FileInputStream( meta_file.toFile() );
 	Yaml yaml = new Yaml();
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
