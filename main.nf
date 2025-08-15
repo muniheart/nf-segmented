@@ -87,7 +87,7 @@ workflow {
         throw new Exception( 'Meta file must be specified with params.meta.' )
     }
 
-//  ch_meta.subscribe { log.info "ch_meta: ${it}" }
+    ch_meta.subscribe { log.info "ch_meta: ${it}" }
 
 //  /*
 //   * Don't use combine.  ch_samplesheet is list of paths.  I want to pair corresponding elements
