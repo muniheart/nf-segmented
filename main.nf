@@ -46,7 +46,7 @@ workflow iteration {
     SQUASH_WORK.out
 }
 
-process READ_META_CSV {
+process PARSE_META_CSV {
     input:
     path( meta_file )
 
