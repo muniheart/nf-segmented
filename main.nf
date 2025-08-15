@@ -47,6 +47,8 @@ workflow iteration {
 }
 
 process PARSE_META_CSV {
+    def ch_meta
+
     input:
     path( meta_file )
 
