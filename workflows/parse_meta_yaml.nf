@@ -12,7 +12,7 @@ process PARSE_YAML {
     exec:
 	Yaml yaml = new Yaml();
     // nested nextflow will be run once per params file.
-    ch_meta = yaml.load( new File( meta_file ).text )
+    ch_meta = yaml.load( meta_file.text )
     /*
      *  Could use flag to indicate whether or not params should be injected.
      *  Order of arguments to `+` allows  YAML params to override default params.
