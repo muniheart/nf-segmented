@@ -13,7 +13,7 @@ def parse_yaml( infile ) {
     return yaml.load( inputStream )
                 .collect { x ->
                     // Convert ParamsMap to map.
-                    x.main = [ Map( params ), x.main ].collectEntries()
+                    x.main = [ new Map( params ), x.main ].collectEntries()
                     return x
                 }
 }
