@@ -1,4 +1,7 @@
+@Grab(group='com.csvreader', module='csvreader', version='1.0')
+
 import com.csvreader.CsvWriter
+import java.io.FileWriter
 
 /*
 ** The following code was found at,
