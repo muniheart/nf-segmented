@@ -90,6 +90,7 @@ workflow {
     /*
      * Don't use combine.  ch_samplesheet is list of paths.  I want to pair corresponding elements
      * of ch_meta*.nested and ch_samplesheet, then unnest.
+     */
 
     /*
      * E = [A,B].combinations { it -> it.collectEntries() }
