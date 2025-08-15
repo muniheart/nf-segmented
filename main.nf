@@ -76,7 +76,7 @@ workflow {
         meta_file = file( params.meta, checkIfExists: true )
         if ( meta_file.name.endsWith( '.yaml' ) {
             ch_meta = PARSE_META_YAML( meta_file )
-        } else if ( meta_file.name.endsWith( '.csv' ) {
+        } else if ( meta_file.name.endsWith( '.csv' ) ) {
             ch_meta = PARSE_META_CSV( meta_file )
         } else {
             throw new Exception( 'File specified by params.meta must have format CSV or YAML.' )
