@@ -85,40 +85,40 @@ workflow {
         throw new Exception( 'Meta file must be specified with params.meta.' )
     }
 
-    ch_meta.subscribe { log.info "ch_meta: ${it}" }
+//  ch_meta.subscribe { log.info "ch_meta: ${it}" }
 
-    /*
-     * Don't use combine.  ch_samplesheet is list of paths.  I want to pair corresponding elements
-     * of ch_meta*.nested and ch_samplesheet, then unnest.
-     */
+//  /*
+//   * Don't use combine.  ch_samplesheet is list of paths.  I want to pair corresponding elements
+//   * of ch_meta*.nested and ch_samplesheet, then unnest.
+//   */
 
-    /*
-     * E = [A,B].combinations { it -> it.collectEntries() }
-     * Given A=[a1,a2,a3], B=[b1,b2], generate [[a1,b1],[a1,b2],[a2,b1],[a2,b2],[a3,b1],[a3,b2]] then
-     * combine dictionaries ai,bj as ai+bj, [a1+b1,a1+b2,a2+b1,a2+b2,a3+b1,a3+b2]
-     *
-     * CAREFUL! the order of merge was chosen to get [p1,s1],[p1,s2],...,[p2,s1],[p2,s2],...
-     * where pI is i-th params file and sj is j-th samplesheet, but this fixes the order of arguments to
-     * collectEntries and arguments seen last will take precidence, I think.
-     */
+//  /*
+//   * E = [A,B].combinations { it -> it.collectEntries() }
+//   * Given A=[a1,a2,a3], B=[b1,b2], generate [[a1,b1],[a1,b2],[a2,b1],[a2,b2],[a3,b1],[a3,b2]] then
+//   * combine dictionaries ai,bj as ai+bj, [a1+b1,a1+b2,a2+b1,a2+b2,a3+b1,a3+b2]
+//   *
+//   * CAREFUL! the order of merge was chosen to get [p1,s1],[p1,s2],...,[p2,s1],[p2,s2],...
+//   * where pI is i-th params file and sj is j-th samplesheet, but this fixes the order of arguments to
+//   * collectEntries and arguments seen last will take precidence, I think.
+//   */
 
-   /*
-    * Need the following to continue:
-    *  - meta file is parsed to generate params file per segment.
-    *  - samplesheet channel, a path, or list of files per segment
-    *    - This will be generated using `fromList`, with each element either the default samplesheet
-    *      or the segment-specific samplesheets, using collect { it.samplesheet ?: default_samplesheet }.
-    *    - Need to think about when we split samplesheet.
-    *       - using meta.csv, multiple samplesheets per segment could be input.  these don't need to be split.
-    *       - using one samplesheet per segment.
-    *
-    *  - generate combinations of these per segment.
-    *    - Does the order matter?  We want to be sure that the last segment, that runs MULTIQC, is run after all
-    *      previous segments for all previous samplesheets.
-    *      Yes.  Must generate combinations: ( seg_1, ss_11 ), ( seg_1, ss_12 ), ... ( seg_2, ss_21 ), ...
-    *      so that we are sure that the segments are processed in order.
-    */
+// /*
+//  * Need the following to continue:
+//  *  - meta file is parsed to generate params file per segment.
+//  *  - samplesheet channel, a path, or list of files per segment
+//  *    - This will be generated using `fromList`, with each element either the default samplesheet
+//  *      or the segment-specific samplesheets, using collect { it.samplesheet ?: default_samplesheet }.
+//  *    - Need to think about when we split samplesheet.
+//  *       - using meta.csv, multiple samplesheets per segment could be input.  these don't need to be split.
+//  *       - using one samplesheet per segment.
+//  *
+//  *  - generate combinations of these per segment.
+//  *    - Does the order matter?  We want to be sure that the last segment, that runs MULTIQC, is run after all
+//  *      previous segments for all previous samplesheets.
+//  *      Yes.  Must generate combinations: ( seg_1, ss_11 ), ( seg_1, ss_12 ), ... ( seg_2, ss_21 ), ...
+//  *      so that we are sure that the segments are processed in order.
+//  */
 
-    ch_out = iteration.scan( ch_meta )
-    ch_out.subscribe { log.info "ch_out: $it" }
+//  ch_out = iteration.scan( ch_meta )
+//  ch_out.subscribe { log.info "ch_out: $it" }
 }
