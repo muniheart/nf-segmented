@@ -12,7 +12,8 @@ def parse_yaml( infile ) {
     // Order of arguments to `+` allows  YAML params to override default params.
     return yaml.load( inputStream )
                 .collect { x ->
-                    x.main = params + x.main
+                    // Convert ParamsMap to map.
+                    x.main = map( params ) + x.main
                     return x
                 }
 }
