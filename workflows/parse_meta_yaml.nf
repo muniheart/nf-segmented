@@ -10,10 +10,11 @@ process PARSE_YAML {
     path( meta_file )
 
     script:
+    InputStream inputStream = new FileInputStream(new File( meta_file ));
 	Yaml yaml = new Yaml();
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
-    meta = yaml.load( meta_file.text )
+    meta = yaml.load( inputStream )
                 .collect { x ->
                     x.main = params + x.main
                     return x
