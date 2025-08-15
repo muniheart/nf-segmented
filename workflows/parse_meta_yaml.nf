@@ -16,9 +16,9 @@ process PARSE_YAML {
      *  Could use flag to indicate whether or not params should be injected.
      *  Order of arguments to `+` allows  YAML params to override default params.
      */
-    ch_meta = ch_meta.collect { it ->
-            it.main = params + it.main
-            return it
+    ch_meta = ch_meta.collect { x ->
+            x.main = params + x.main
+            return x
     }
 
     output:
