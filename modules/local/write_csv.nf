@@ -1,6 +1,6 @@
 // @Grab(group='com.csvreader', module='csvreader', version='1.0')
-import nextflow.util.CsvWriter
-import java.io.FileWriter
+import com.opencsv.CSVWriter
+import java.io.StringWriter
 
 /*
 ** The following code was found at,
@@ -24,15 +24,31 @@ void mergeCsv(Map opts=[:], List records, Path path) {
 }
 
 process RECORDS_TO_CSV {
-  publishDir 'results'
+    publishDir 'results'
 
-  input:
-  val records
+    input:
+    val records
 
-  output:
-  path '*csv'
+    output:
+    path '*csv'
 
-  exec:
-  def path = task.workDir.resolve("records_${task.index}.csv")
-  mergeCsv(records, path, header: true, sep: ',')
+    script:
+    // StringWriter to capture the CSV output
+    StringWriter stringWriter = new StringWriter()
+    CSVWriter csvWriter = new CSVWriter(stringWriter)
+
+    // Write data to the CSVWriter
+    records.each { row ->
+        csvWriter.writeNext(row as String[])
+    }
+
+    // Close the writer
+    csvWriter.close()
+
+    // Get the CSV string
+    String csvString = stringWriter.toString()
+
+    """
+    echo -e \"\"\"${csvString}\"\"\" >batch_${task.index}.csv
+    """
 }
