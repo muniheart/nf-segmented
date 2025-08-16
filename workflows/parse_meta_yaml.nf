@@ -1,6 +1,6 @@
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import java.io.FileWriter;
+import java.io.StringWriter;
 import java.io.File;
 
 include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
@@ -45,16 +45,20 @@ process WRITE_PARAMS_YAML {
     input:
     val params
 
-    exec:
+    script:
     DumperOptions options = new DumperOptions();
     options.setIndent(2);
     Yaml writerYaml = new Yaml(options);
 
-    FileWriter writer = new FileWriter("params.yaml");
+    StringWriter writer = new StringWriter();
     writerYaml.dump( params, writer);
 
+    """
+    echo ${writer} >> params.yaml
+    """
+
     output:
-    path "params.yaml"
+    path 'params.yaml'
 }
 
 workflow PARSE_META_YAML {
