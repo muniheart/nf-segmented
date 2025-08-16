@@ -51,7 +51,7 @@ process WRITE_PARAMS_YAML {
     Yaml writerYaml = new Yaml(options);
 
     FileWriter writer = new FileWriter("params.yaml");
-    writerYaml.dump(data, writer);
+    writerYaml.dump( params, writer);
 
     output:
     path "params.yaml"
