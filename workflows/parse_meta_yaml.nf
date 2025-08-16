@@ -1,4 +1,4 @@
-@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
+// @Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
 
 import org.apache.ivy.util.MessageLogger;
 import org.yaml.snakeyaml.DumperOptions;
@@ -76,7 +76,7 @@ workflow PARSE_META_YAML {
     ch_nested_params = ch_meta.map { it.nested } | WRITE_PARAMS_YAML
 
     ch_batch_size = ch_meta.collect {
-        it.main.containsKey( 'batch_size' ) && it.main.batch_size ? it.main.batch_size : null
+        it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
     }
     ch_input = ch_meta.collect {
         it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
@@ -84,7 +84,7 @@ workflow PARSE_META_YAML {
     }
     ch_input.subscribe { log.info "ch_input: ${it}" }
     ch_batch_size.subscribe { log.info "ch_batch_size: ${it}" }
-//  ch_samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
+    ch_samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
