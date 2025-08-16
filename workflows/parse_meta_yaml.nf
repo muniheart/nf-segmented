@@ -10,12 +10,13 @@ def parse_yaml( infile ) {
 	Yaml yaml = new Yaml();
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
-    return yaml.load( inputStream )
+    meta = yaml.load( inputStream )
                 .collect { x ->
                     // Convert ParamsMap to map.
                     x.main = [ params as Map, x.main ].collectEntries()
                     return x
                 }
+    return Channel.fromList( meta )
 }
 
 process PARSE_YAML {
