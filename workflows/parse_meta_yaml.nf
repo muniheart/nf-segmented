@@ -54,7 +54,7 @@ process WRITE_PARAMS_YAML {
     writerYaml.dump( params, writer);
 
     """
-    echo ${writer} >> params.yaml
+    echo ${writer.toString()} > params.yaml
     """
 
     output:
