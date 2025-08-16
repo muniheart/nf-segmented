@@ -7,6 +7,7 @@ import java.io.StringWriter
 **
 ** https://github.com/bentsherman/nf-boost/blob/6d2bb44f46311334a0078155920a75949329f45e/src/main/groovy/nextflow/boost/BoostExtension.groovy#L95
 **
+** and modified to use opencsv to write csv format string.
 */
 
 /**
@@ -16,13 +17,6 @@ import java.io.StringWriter
 * @param records
 * @param path
 */
-void mergeCsv(Map opts=[:], List records, Path path) {
-    if( records.size() == 0 )
-        throw new IllegalArgumentException('In `mergeCsv` function -- at least one record must be provided')
-
-    new CsvWriter(opts).apply(records, path)
-}
-
 process RECORDS_TO_CSV {
     publishDir 'results'
 
