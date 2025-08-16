@@ -46,15 +46,13 @@ process WRITE_PARAMS_YAML {
     val params
 
     script:
-    DumperOptions options = new DumperOptions();
-    options.setIndent(2);
-    Yaml writerYaml = new Yaml(options);
-
-    StringWriter writer = new StringWriter();
-    writerYaml.dump( params, writer);
+    def options = new DumperOptions()
+    options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+    def yaml = new Yaml(options)
+    def yamlString = yaml.dump(params).stripIndent()
 
     """
-    echo ${writer.toString()} > params.yaml
+    echo ${yamlString} > params.yaml
     """
 
     output:
