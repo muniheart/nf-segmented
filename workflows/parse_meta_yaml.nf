@@ -1,4 +1,4 @@
-// @Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
+@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
 
 import org.apache.ivy.util.MessageLogger;
 import org.yaml.snakeyaml.DumperOptions;

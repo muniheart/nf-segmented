@@ -1,3 +1,5 @@
+@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
+
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
