@@ -49,10 +49,10 @@ process WRITE_PARAMS_YAML {
     def options = new DumperOptions()
     options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
     def yaml = new Yaml(options)
-    def yamlString = yaml.dump(params).stripIndent()
+    def yamlString = yaml.dump(params)
 
     """
-    echo ${yamlString} > params.yaml
+    echo -e \"\"\"${yamlString}\"\"\" > params.yaml
     """
 
     output:
