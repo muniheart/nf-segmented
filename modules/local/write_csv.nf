@@ -1,5 +1,6 @@
 // @Grab(group='com.csvreader', module='csvreader', version='1.0')
 @Grab(group='com.opencsv', module='opencsv', version='4.6')
+@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
 import com.opencsv.CSVWriter
 import java.io.StringWriter
 
