@@ -1,7 +1,7 @@
-@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
-
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
+
+@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
 
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
