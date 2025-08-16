@@ -70,9 +70,7 @@ workflow PARSE_META_YAML {
 
     ch_nested_params = ch_meta.map { it.nested } | WRITE_PARAMS_YAML
 
-    ch_samplesheet = ch_meta.collect {
-        SPLIT_SAMPLESHEET( it.nested.input ?: it.main.samplesheet, it.main.batch_size )
-    }
+    ch_samplesheet = ch_meta.collect { it.nested.input ?: it.main.samplesheet, it.main.batch_size } | SPLIT_SAMPLESHEET
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
