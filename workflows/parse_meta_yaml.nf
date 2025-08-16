@@ -64,6 +64,7 @@ workflow PARSE_META_YAML {
     log.info "PARSE_META_YAML: meta_file: ${meta_file}"
     ch_meta = parse_yaml( meta_file )
     log.info "PARSE_META_YAML: ch_meta class: ${ch_meta.getClass()}"
+    log.info "PARSE_META_YAML: ch_meta: ${ch_meta}"
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: ${it}" }
 
     ch_nested_params = ch_meta.map { it.nested } | WRITE_PARAMS_YAML
