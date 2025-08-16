@@ -79,11 +79,11 @@ workflow PARSE_META_YAML {
     }
     ch_input.subscribe { log.info "ch_input: ${it}" }
     ch_batch_size.subscribe { log.info "ch_batch_size: ${it}" }
-    ch_samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
+//  ch_samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
-    ch_out = ch_meta.map { it.nested }.merge( ch_samplesheet ).map { it.combinations() }
+    ch_out = ch_meta.map { it.nested } //.merge( ch_samplesheet ).map { it.combinations() }
 
     emit:
     ch_out
