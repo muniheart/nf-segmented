@@ -1,8 +1,6 @@
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
-import org.yaml.snakeyaml.Yaml
-
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { WRITE_ENVIRONMENT } from "./modules/local/write_environment.nf"
