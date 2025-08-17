@@ -91,7 +91,7 @@ workflow PARSE_META_YAML {
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
-    ch_out = ch_meta.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }.collect { it.combinations() }
+    ch_out = ch_meta.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }.flatMap { it.combinations() }
 
     emit:
     ch_out
