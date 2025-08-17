@@ -75,10 +75,10 @@ workflow PARSE_META_YAML {
 
     ch_nested_params = ch_meta.map { it.nested } | WRITE_PARAMS_YAML
 
-    ch_batch_size = ch_meta.collect {
+    ch_batch_size = ch_meta.map {
         it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
     }
-    ch_input = ch_meta.collect {
+    ch_input = ch_meta.map {
         it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
         it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
     }
