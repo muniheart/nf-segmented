@@ -1,4 +1,4 @@
-include { records_to_string,WRITE_CSV } from "../modules/local/write_csv.nf"
+include { records_to_string; WRITE_CSV } from "../modules/local/write_csv.nf"
 include { groupTuplesNearSize } from "../modules/local/chunk_samplesheet.nf"
 
 /*
