@@ -73,14 +73,17 @@ workflow PARSE_META_YAML {
     log.info "PARSE_META_YAML: ch_meta: ${ch_meta}"
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: ${it}" }
 
-    ch_nested_params = ch_meta.map { it.nested } | WRITE_PARAMS_YAML
+    ch_meta.map { it.nested } | WRITE_PARAMS_YAML
 
     ch_batch_size = ch_meta.map {
         it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
     }
     ch_input = ch_meta.map {
-        it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
-        it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
+        tuple(
+            it.nested,
+            it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
+            it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
+        )
     }
     ch_input.subscribe { log.info "ch_input: ${it}" }
     ch_batch_size.subscribe { log.info "ch_batch_size: ${it}" }
@@ -88,7 +91,7 @@ workflow PARSE_META_YAML {
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
-    ch_out = ch_meta.map { it.nested }.merge( ch_samplesheet ).map { it.combinations() }
+    ch_out = ch_meta.map { it.nested }.map { it.combinations() }
 
     emit:
     ch_out
