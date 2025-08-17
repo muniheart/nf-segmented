@@ -1,9 +1,3 @@
-// @Grab(group='com.csvreader', module='csvreader', version='1.0')
-@Grab(group='com.opencsv', module='opencsv', version='4.6')
-@Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
-import com.opencsv.CSVWriter
-import java.io.StringWriter
-
 /*
 ** The following code was found at,
 **
@@ -12,39 +6,24 @@ import java.io.StringWriter
 ** and modified to use opencsv to write csv format string.
 */
 
-/**
-* Save a list of records to a CSV file.
-*
-* @param opts
-* @param records
-* @param path
-*/
-process RECORDS_TO_CSV {
-    publishDir 'results'
-
+process write_csv {
     input:
-    val records
-
-    output:
-    path '*csv'
+    val csv_string
 
     script:
-    // StringWriter to capture the CSV output
-    StringWriter stringWriter = new StringWriter()
-    CSVWriter csvWriter = new CSVWriter(stringWriter)
-
-    // Write data to the CSVWriter
-    records.each { row ->
-        csvWriter.writeNext(row as String[])
-    }
-
-    // Close the writer
-    csvWriter.close()
-
-    // Get the CSV string
-    String csvString = stringWriter.toString()
+    csv_file = params_${task.index}.csv
 
     """
-    echo -e \"\"\"${csvString}\"\"\" >batch_${task.index}.csv
+    echo -e \"\"\"$csv_string\"\"\" > $csv_file
     """
+
+    output:
+    path csv_file
+}
+
+def records_to_string( records ) {
+    header = records[0].collect { (it*.key) }.flatten().join(",")
+    log.info "header: $header"
+    body = records.collect { (it*.value).join(",") }. join("\n")
+    return header + "\n" + body
 }

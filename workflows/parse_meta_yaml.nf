@@ -1,9 +1,9 @@
 // @Grab(group='org.apache.ivy', module='ivy', version='2.5.0')
 
-import org.apache.ivy.util.MessageLogger;
+// import org.apache.ivy.util.MessageLogger;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import java.io.StringWriter;
+// import java.io.StringWriter;
 import java.io.File;
 
 include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
@@ -88,7 +88,7 @@ workflow PARSE_META_YAML {
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
-    ch_out = ch_meta.map { it.nested } //.merge( ch_samplesheet ).map { it.combinations() }
+    ch_out = ch_meta.map { it.nested }.merge( ch_samplesheet ).map { it.combinations() }
 
     emit:
     ch_out

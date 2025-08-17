@@ -1,6 +1,11 @@
 include { RECORDS_TO_CSV } from "../modules/local/write_csv.nf"
 include { groupTuplesNearSize } from "../modules/local/chunk_samplesheet.nf"
 
+/*
+ * Need to keep samplesheet paired with params so we can modify params.input, or otherwise pass
+ * each samplesheet batch to the nested workflow.
+ *
+ */
 workflow SPLIT_SAMPLESHEET {
     take:
     samplesheet
@@ -16,7 +21,8 @@ workflow SPLIT_SAMPLESHEET {
             }
             .map { it -> groupTuplesNearSize( it ) }
             .flatMap { it }
-            .RECORDS_TO_CSV()
+            .map { records_to_csv( it ) }
+            | write_csv()
     }
 
     emit:
