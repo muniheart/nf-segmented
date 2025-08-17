@@ -6,7 +6,7 @@
 ** and modified to use opencsv to write csv format string.
 */
 
-process write_csv {
+process WRITE_CSV {
     input:
     val csv_string
 

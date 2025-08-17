@@ -1,4 +1,4 @@
-include { RECORDS_TO_CSV } from "../modules/local/write_csv.nf"
+include { records_to_string,WRITE_CSV } from "../modules/local/write_csv.nf"
 include { groupTuplesNearSize } from "../modules/local/chunk_samplesheet.nf"
 
 /*
@@ -21,7 +21,7 @@ workflow SPLIT_SAMPLESHEET {
             }
             .map { it -> groupTuplesNearSize( it ) }
             .flatMap { it }
-            .map { records_to_csv( it ) }
+            .map { records_to_string( it ) }
             | write_csv()
     }
 
