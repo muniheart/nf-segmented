@@ -8,6 +8,8 @@ import java.io.File;
 
 include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
 
+def as_list{ it instanceof List ? it : [it] }
+
 def parse_yaml( infile ) {
     InputStream inputStream = new FileInputStream( infile.toFile() );
 	Yaml yaml = new Yaml();
@@ -79,19 +81,17 @@ workflow PARSE_META_YAML {
         it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
     }
     ch_input = ch_meta.map {
-        tuple(
-            it.nested,
             it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
-        )
     }
+
     ch_input.subscribe { log.info "ch_input: ${it}" }
     ch_batch_size.subscribe { log.info "ch_batch_size: ${it}" }
-    ch_samplesheet = ch_input // SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
+    ch_samplesheet = ch_input.map { as_list(it) } // SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
 
-    ch_out = ch_meta.map { it.nested }.map { it.combinations() }
+    ch_out = ch_meta.map{ [ it.nested ] }.merge( ch_input ).map { it.combinations() }
 
     emit:
     ch_out
