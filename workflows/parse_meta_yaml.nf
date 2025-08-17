@@ -8,7 +8,7 @@ import java.io.File;
 
 include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
 
-def as_list{ it instanceof List ? it : [it] }
+def as_list = { it instanceof List ? it : [it] }
 
 def parse_yaml( infile ) {
     InputStream inputStream = new FileInputStream( infile.toFile() );
