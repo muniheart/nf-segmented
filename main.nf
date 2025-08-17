@@ -8,7 +8,7 @@ include { GET_WORKDIRS } from "./modules/local/get_workdirs.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
-as_path = { it ? file( it ) : Channel.value([]) }
+as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 
 workflow iteration {
     take:
@@ -26,12 +26,16 @@ workflow iteration {
 
     workdirs = GET_WORKDIRS( data )
 
+    meta = data[0]
+    samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
+    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().map { as_path }
+
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
-        as_path( params.nfcore_demo_samplesheet ),
+        as_path( samplesheet ),
         as_path( params.nfcore_demo_databases ),
-        as_path( params.nfcore_demo_add_config ),
+        Channel.fromList( configs ),
         params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
