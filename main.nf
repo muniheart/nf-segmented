@@ -52,13 +52,14 @@ workflow iteration {
     workdirs = GET_WORKDIRS( data )
 
     get_meta( data )
-    get_meta.out.samplesheet.subscribe { "log.info: get_meta.out.samplesheet: ${it}" }
-    get_meta.out.configs.subscribe { "log.info: get_meta.out.configs: ${it}" }
+//  get_meta.out.samplesheet.subscribe { "log.info: get_meta.out.samplesheet: ${it}" }
+//  get_meta.out.configs.subscribe { "log.info: get_meta.out.configs: ${it}" }
 
 //  meta = data.first()
 //  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
 //  configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().map { as_path }
-
+    samplesheet = get_meta.out.samplesheet.map { as_path( it ) }
+    configs = get_meta.out.configs.map { it.collect { x -> as_path(x) } }
     
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
