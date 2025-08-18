@@ -51,7 +51,8 @@ workflow iteration {
     workdirs = GET_WORKDIRS( data )
 
     get_meta( data )
-    get_meta.out.subscribe { "log.info: get_meta.out: ${it}" }
+    get_meta.out.samplesheet.subscribe { "log.info: get_meta.out.samplesheet: ${it}" }
+    get_meta.out.configs.subscribe { "log.info: get_meta.out.configs: ${it}" }
 
 //  meta = data.first()
 //  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
