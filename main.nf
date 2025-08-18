@@ -16,8 +16,8 @@ process get_meta {
 
     exec:
     meta = data[0]
-    samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
-    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().collect { as_path(it) }
+    samplesheet = meta.samplesheet ?: params.nfcore_demo_samplesheet
+    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll()
 
     output:
     val samplesheet, emit: samplesheet
@@ -60,9 +60,9 @@ workflow iteration {
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
-        get_meta.out.samplesheet,
+        as_path( get_meta.out.samplesheet ),
         as_path( params.nfcore_demo_databases ),
-        get_meta.out.configs,
+        get_meta.out.configs.collect { as_path( it ) },
         params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
