@@ -124,5 +124,5 @@ workflow {
 //  */
 
     ch_out = iteration.scan( ch_meta )
-    ch_out.subscribe { log.info "ch_out: $it" }
+//  ch_out.subscribe { log.info "ch_out: $it" }
 }
