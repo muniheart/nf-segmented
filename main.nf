@@ -17,7 +17,7 @@ process get_meta {
     exec:
     meta = data[0]
     samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
-    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().collect { as_path }
+    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().collect { as_path(it) }
 
     output:
     path samplesheet, emit: samplesheet
