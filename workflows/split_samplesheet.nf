@@ -12,7 +12,7 @@ workflow SPLIT_SAMPLESHEET {
     batch_size
 
     main:
-    ch_out = Channel.value( file( samplesheet, checkIfExists: true ) )
+    ch_out = Channel.value( samplesheet )
 
     if ( batch_size > 0 ) {
         ch_out = Channel.fromPath( samplesheet ).splitCsv( header: true )
