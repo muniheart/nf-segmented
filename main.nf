@@ -64,9 +64,9 @@ workflow iteration {
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
-        as_path( get_meta.out.samplesheet ),
+        samplesheet,
         as_path( params.nfcore_demo_databases ),
-        get_meta.out.configs.collect { as_path( it ) },
+        configs,
         params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
