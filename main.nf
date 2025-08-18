@@ -10,6 +10,7 @@ include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
 as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 
+/***********************
 process get_meta {
     input:
     val data
@@ -20,8 +21,17 @@ process get_meta {
     configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().collect { as_path(it) }
 
     output:
-    path samplesheet, emit: samplesheet
-    path configs,     emit: configs
+    val samplesheet, emit: samplesheet
+    val configs,     emit: configs
+}
+**************************/
+
+def get_meta ( data )
+{
+    meta = data[0]
+    samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
+    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().collect { as_path(it) }
+    return [ out:[ samplesheet: samplesheet, configs: configs ] ]
 }
 
 workflow iteration {
@@ -40,7 +50,7 @@ workflow iteration {
 
     workdirs = GET_WORKDIRS( data )
 
-    get_meta( data )
+    _get_meta( data )
 
 //  meta = data.first()
 //  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
