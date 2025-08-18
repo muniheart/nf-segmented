@@ -50,7 +50,7 @@ workflow iteration {
 
     workdirs = GET_WORKDIRS( data )
 
-    _get_meta( data )
+    get_meta( data )
 
 //  meta = data.first()
 //  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
