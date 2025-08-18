@@ -8,7 +8,8 @@ include { GET_WORKDIRS } from "./modules/local/get_workdirs.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
-def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
+// def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
+def as_path( x ) { x ? file( x ) : x }
 
 process get_meta {
     input:
