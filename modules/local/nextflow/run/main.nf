@@ -46,7 +46,7 @@ process NEXTFLOW_RUN {
             nextflow_opts,
             pipeline_name,
             meta.params_file ? "-params-file ${meta.params_file}" : '',
-            additional_config ? additional_config.map { it ? "-c $it" : '' }.join(' '),
+            additional_config ? additional_config.map { it ? "-c $it" : '' }.join(' ') : '',
             samplesheet ? "--input $samplesheet" : '',
             databases ? "--databases $databases" : '',
             "--outdir $child_outdir",
