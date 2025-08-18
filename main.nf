@@ -8,7 +8,7 @@ include { GET_WORKDIRS } from "./modules/local/get_workdirs.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
-as_path = { it ? (it instanceof Path ? it : file( it )) : null }
+def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 
 process get_meta {
     input:
@@ -51,6 +51,7 @@ workflow iteration {
     workdirs = GET_WORKDIRS( data )
 
     get_meta( data )
+    get_meta.out.subscribe { "log.info: get_meta.out: ${it}" }
 
 //  meta = data.first()
 //  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
