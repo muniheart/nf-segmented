@@ -115,13 +115,10 @@ workflow PARSE_META_YAML {
      *  join later.
      */
 
-    ch_samplesheet.map { it ->
-        [ it + it.samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
-
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_segments.
 
-    ch_out = ch_segments.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
-        .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
+//  ch_out = ch_segments.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
+//      .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
 
     emit:
     ch_out
