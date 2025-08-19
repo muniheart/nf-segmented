@@ -88,6 +88,8 @@ workflow PARSE_META_YAML {
         return [ meta, it.nested ]
     }
 
+    ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
+
     /*
      * Write params.nested to params file and update the channel with file path.
      *
