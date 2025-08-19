@@ -19,6 +19,7 @@ def parse_yaml( infile ) {
                 .collect { x ->
                     // Convert ParamsMap to map.
                     x.main = [ params as Map, x.main ].collectEntries()
+                    // Create unique key for future splitting/rejoining.
                     return x
                 }
     return Channel.fromList( meta )
@@ -48,7 +49,7 @@ process PARSE_YAML {
 
 process WRITE_PARAMS_YAML {
     input:
-    val params
+    tuple val meta, val params
 
     script:
     def options = new DumperOptions()
@@ -61,7 +62,7 @@ process WRITE_PARAMS_YAML {
     """
 
     output:
-    path 'params.yaml'
+    tuple val meta, path 'params.yaml'
 }
 
 workflow PARSE_META_YAML {
@@ -70,28 +71,56 @@ workflow PARSE_META_YAML {
     
     main:
     log.info "PARSE_META_YAML: meta_file: ${meta_file}"
-    ch_meta = parse_yaml( meta_file )
-    log.info "PARSE_META_YAML: ch_meta class: ${ch_meta.getClass()}"
-    log.info "PARSE_META_YAML: ch_meta: ${ch_meta}"
-    ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: ${it}" }
+    ch_segments = parse_yaml( meta_file )
+    log.info "PARSE_META_YAML: ch_segments class: ${ch_segments.getClass()}"
+    log.info "PARSE_META_YAML: ch_segments: ${ch_segments}"
+    ch_segments.subscribe { log.info "PARSE_META_YAML: ch_segments: ${it}" }
 
-    ch_meta.map { it.nested } | WRITE_PARAMS_YAML
-
-    ch_batch_size = ch_meta.map {
-        it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
-    }
-    ch_input = ch_meta.map {
-            it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
+    /*
+     * Extract params.nested, samplesheet, batch_size from params.
+     *
+     */
+    ch_nested_params = ch_segments.map { it ->
+        def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
-    }.map { it ? file( it, checkIfExists: true ) : null }
+        def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
+        def meta = [ samplesheet: samplesheet, batch_size: batch_size ]
+        [ meta, it.nested ]
+    }
 
-    ch_input.subscribe { log.info "ch_input: ${it}" }
-    ch_batch_size.subscribe { log.info "ch_batch_size: ${it}" }
-    ch_samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
+    /*
+     * Write params.nested to params file and update the channel with file path.
+     *
+     */
 
-    // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_meta.
+    ch_nested_params | WRITE_PARAMS_YAML |
+        groupTuple().map {
+            it[0] = file( it[0], checkIfExists: true )
+            return it
+        } | SPLIT_SAMPLESHEET
 
-    ch_out = ch_meta.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
+    /*
+     * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
+     *
+     */
+
+    /*
+     *  merge input and batch_size channels.  Split channel on batch_size>0.
+     *  true:
+     *      split samplesheet, write each to string, write each string to file, return path
+     *  false:
+     *      return samplesheet 
+     *
+     *  PITFALL: Reordering these channels will lose correspondence with ch_params.  Must add key to each and
+     *  join later.
+     */
+
+    ch_samplesheet.map { it ->
+        [ it + it.samplesheet = SPLIT_SAMPLESHEET( ch_input, ch_batch_size )
+
+    // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_segments.
+
+    ch_out = ch_segments.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
         .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
 
     emit:
