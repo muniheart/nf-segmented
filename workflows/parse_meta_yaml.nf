@@ -49,7 +49,7 @@ process PARSE_YAML {
 
 process WRITE_PARAMS_YAML {
     input:
-    tuple val meta, val params
+    tuple val(meta), val(params)
 
     script:
     def options = new DumperOptions()
