@@ -51,6 +51,9 @@ process WRITE_PARAMS_YAML {
     input:
     tuple val(meta), val(params)
 
+    output:
+    tuple val(meta), path('params.yaml')
+
     script:
     def options = new DumperOptions()
     options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
@@ -60,9 +63,6 @@ process WRITE_PARAMS_YAML {
     """
     echo -e \"\"\"${yamlString}\"\"\" > params.yaml
     """
-
-    output:
-    tuple val meta, path 'params.yaml'
 }
 
 workflow PARSE_META_YAML {
