@@ -22,7 +22,7 @@ workflow SPLIT_SAMPLESHEET {
 
     main:
 
-    ch_in.subscribe { "SPLIT_SAMPLESHEET: ch_in: $it" }
+    ch_in.subscribe { log.info "SPLIT_SAMPLESHEET: ch_in: $it" }
 
     ch_1 = Channel.value([])
 
