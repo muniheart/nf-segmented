@@ -19,7 +19,7 @@ workflow SPLIT_SAMPLESHEET {
     ch_in       // [ meta [ sampsheet:, batch_size: ], params_files [] ]  
 
     main:
-    ch_in.branch { meta, params_files ->
+    ch_0 = ch_in.branch { meta, params_files ->
         single: meta.batch_size<=0
         multiple: meta.sbatch_size>0
     }
@@ -29,7 +29,7 @@ workflow SPLIT_SAMPLESHEET {
      *
      */
     
-    ch_1 = ch_in.multiple.map { meta,x ->
+    ch_1 = ch_0.multiple.map { meta,x ->
         def lines = read_csv( meta.samplesheet )
         def batches = groupTuplesNearSize( lines )
         def csv_strings = batches.map { write_csv_string(it) }
