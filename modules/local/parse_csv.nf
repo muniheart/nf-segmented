@@ -35,7 +35,9 @@ process parseAllCsvFiles {
     log.info "parseAllCsvFiles: csv_files: $csv_files"
     
     csv_files.each { file ->
-        results << parseCsvFile(file)
+        x = parseCsvFile(file)
+        log.info "x: $x"
+        results.add( x )
     }
 
     parsed_data = results
