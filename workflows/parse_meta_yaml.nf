@@ -111,7 +111,6 @@ workflow PARSE_META_YAML {
     ch_5 = ch_4 | SPLIT_SAMPLESHEET
     ch_5.subscribe { log.info "ch_5: ${it}" }
 
-    if ( false ) {
     /*
      * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
      *
@@ -130,7 +129,6 @@ workflow PARSE_META_YAML {
 
     // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_segments.
 
-    }
 
 //  ch_out = ch_segments.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
 //      .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }

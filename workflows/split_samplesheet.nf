@@ -42,7 +42,9 @@ workflow SPLIT_SAMPLESHEET {
     }
 
     ch_1.subscribe{ log.info "ch_1: $it" }
+    ch_out = ch_1 | WRITE_CSV
+    ch_out.subscribe{ log.info "ch_out: $it" }
 
     emit:
-    ch_1
+    ch_out
 }

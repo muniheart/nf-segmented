@@ -8,17 +8,17 @@
 
 process WRITE_CSV {
     input:
-    val csv_string
+    tuple val(meta), val(params), val(csv_lines)
 
     script:
     csv_file = params_${task.index}.csv
 
     """
-    echo -e \"\"\"$csv_string\"\"\" > $csv_file
+    echo -e \"\"\"$csv_lines\"\"\" > $csv_file
     """
 
     output:
-    path csv_file
+    tuple val(meta), val(params), path(csv_file)
 }
 
 def records_to_string( records ) {
