@@ -11,7 +11,7 @@ process WRITE_CSV {
     tuple val(meta), val(params), val(csv_lines)
 
     script:
-    csv_file = params_${task.index}.csv
+    csv_file = "samplesheet_${task.index}.csv"
 
     """
     echo -e \"\"\"$csv_lines\"\"\" > $csv_file
