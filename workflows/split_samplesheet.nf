@@ -45,7 +45,6 @@ workflow SPLIT_SAMPLESHEET {
         [ meta, x, csv_strings ]
         .transpose( by: 2 )
         }
-    }
 
     ch_1.subscribe { log.info "ch_1: $it" }
 
