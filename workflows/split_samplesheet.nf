@@ -19,8 +19,6 @@ workflow SPLIT_SAMPLESHEET {
     ch_in       // [ meta [ sampsheet:, batch_size: ], params_files [] ]  
 
     main:
-    ch_out = samplesheet
-
     ch_in.branch { meta, params_files ->
         single: meta.batch_size<=0
         multiple: meta.sbatch_size>0
