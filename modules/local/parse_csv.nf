@@ -1,5 +1,8 @@
 // Utility function for parsing a CSV file
 def parseCsvFile(filePath) {
+    log.info "parseCsvFile: filePath: $filePath"
+    return []
+
     def file = new File(filePath)
     def header = file.readLines().first().split(',').collect { it.trim() }
     def data = file.readLines().tail().collect { line ->
