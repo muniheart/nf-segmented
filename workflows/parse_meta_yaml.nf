@@ -109,7 +109,7 @@ workflow PARSE_META_YAML {
         }
     ch_4.subscribe { log.info "ch_4: ${it}" }
 
-    ch_5 = ch_3 | SPLIT_SAMPLESHEET
+    ch_5 = ch_4 | SPLIT_SAMPLESHEET
     ch_5.subscribe { log.info "ch_5: ${it}" }
 
     if ( false ) {
