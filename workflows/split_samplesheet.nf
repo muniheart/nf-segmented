@@ -37,26 +37,12 @@ workflow SPLIT_SAMPLESHEET {
     ch_1 = ch_0.multiple.collect { meta, params, ss_path ->
         def records = parseCsvFile( ss_path )
         def batches = groupTuplesNearSize( records, meta.batch_size )
-        def lines = batches.map { write_csv_string(it) }
+        def lines = batches.map { records_to_string(it) }
         [ meta, params, lines ]
         .transpose( by: 2 )
     }
 
     ch_1.subscribe{ log.info "ch_1: $it" }
-
-    if ( false ) {
-    ch_1.subscribe{ log.info "ch_1: $it" }
-
-        def lines = read_csv( meta.samplesheet )
-        log.info "lines: $lines"
-
-        def batches = groupTuplesNearSize( lines, meta.batch_size )
-        def csv_strings = batches.map { write_csv_string(it) }
-        [ meta, x, csv_strings ]
-        .transpose( by: 2 )
-    }
-
-    ch_1.subscribe { log.info "ch_1: $it" }
 
     emit:
     ch_1
