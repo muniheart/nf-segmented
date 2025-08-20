@@ -24,9 +24,6 @@ workflow SPLIT_SAMPLESHEET {
 
     ch_in.subscribe { log.info "SPLIT_SAMPLESHEET: ch_in: $it" }
 
-    ch_1 = Channel.value([])
-
-    if ( false ) {
     ch_0 = ch_in.branch { meta, params_files, ss_file ->
         single: meta.batch_size<=0
         multiple: meta.batch_size>0
@@ -42,6 +39,7 @@ workflow SPLIT_SAMPLESHEET {
 
     ch_1.subscribe{ log.info "ch_1: $it" }
 
+    if ( false ) {
         def lines = read_csv( meta.samplesheet )
         log.info "lines: $lines"
 
