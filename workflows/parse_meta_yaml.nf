@@ -88,7 +88,6 @@ workflow PARSE_META_YAML {
         return [ meta, it.nested ]
     }
 
-    if ( false ) {
     ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
 
     /*
@@ -96,8 +95,12 @@ workflow PARSE_META_YAML {
      *
      */
 
-    ch_nested_params | WRITE_PARAMS_YAML |
-        groupTuple().map {
+    ch_2 = ch_nested_params | WRITE_PARAMS_YAML
+
+    ch_2.subscribe { log.info "ch_2: ${it}" }
+    if ( false ) {
+    ch_2
+        .groupTuple().map { it ->
             it[0] = file( it[0], checkIfExists: true )
             return it
         } | SPLIT_SAMPLESHEET
