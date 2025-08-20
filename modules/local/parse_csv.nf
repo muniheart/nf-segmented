@@ -1,6 +1,7 @@
 // Utility function for parsing a CSV file
 def parseCsvFile(filePath) {
     log.info "parseCsvFile: filePath: $filePath"
+    log.info "ParseCsvFile: filePath.getClass(): ${filePath.getClass()}"
     return []
 
     def file = new File(filePath)
