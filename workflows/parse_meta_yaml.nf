@@ -105,8 +105,8 @@ workflow PARSE_META_YAML {
     if ( false ) {
     ch_4=ch_3
         .map { it ->
-            it[0] = file( it[0], checkIfExists: true )
-            return it
+            def infile = file( it[0].samplesheet, checkIfExists: true )
+            return it + [ infile ]
         } | SPLIT_SAMPLESHEET
 
     ch_4.subscribe { log.info "ch_4: ${it}" }
