@@ -6,6 +6,7 @@ def parseCsvFile(filePath) {
         def values = line.split(',').collect { it.trim() }
         [header, values].transpose().collectEntries()
     }
+    log.info "parseCsvFile: data: $data"
     return data
 }
 
