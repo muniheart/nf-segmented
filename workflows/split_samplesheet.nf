@@ -18,9 +18,13 @@ def read_csv( infile ) {
  */
 workflow SPLIT_SAMPLESHEET {
     take:
-    ch_in       // [ meta [ sampsheet:, batch_size: ], params_files [] ]  
+    ch_in       // [ meta [ sampsheet:, batch_size: ], params_files [], ss_file ]  
 
     main:
+
+    ch_in.subscribe { "SPLIT_SAMPLESHEET: ch_in: $it" }
+
+    if (false) {
     ch_0 = ch_in.branch { meta, params_files, ss_file ->
         single: meta.batch_size<=0
         multiple: meta.batch_size>0
@@ -36,7 +40,6 @@ workflow SPLIT_SAMPLESHEET {
 
     ch_1.subscribe{ log.info "ch_1: $it" }
 
-        if (false) {
         def lines = read_csv( meta.samplesheet )
         log.info "lines: $lines"
 
@@ -44,7 +47,7 @@ workflow SPLIT_SAMPLESHEET {
         def csv_strings = batches.map { write_csv_string(it) }
         [ meta, x, csv_strings ]
         .transpose( by: 2 )
-        }
+    }
 
     ch_1.subscribe { log.info "ch_1: $it" }
 
