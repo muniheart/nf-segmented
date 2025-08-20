@@ -1,6 +1,6 @@
 include { records_to_string; WRITE_CSV } from "../modules/local/write_csv.nf"
 include { groupTuplesNearSize } from "../modules/local/chunk_samplesheet.nf"
-include { parseAllCsvFiles } from "../modules/local/parse_csv.nf"
+include { parseCsvFile; parseAllCsvFiles } from "../modules/local/parse_csv.nf"
 
 def read_csv( infile ) {
     ch_out = Channel.fromPath( infile ).splitCsv( header: true )
@@ -34,10 +34,9 @@ workflow SPLIT_SAMPLESHEET {
      *
      */
     
-    ch_1 = ch_0.multiple.collect { it -> it[2] }
+    ch_1 = ch_0.multiple.collect { it -> parseCsvFile( it[2] ) }
 
     ch_1.subscribe{ log.info "ch_1: $it" }
-    ch_1 = ch_1.parseAllCsvFiles()
 
     if ( false ) {
     ch_1.subscribe{ log.info "ch_1: $it" }
