@@ -10,9 +10,8 @@ def parseCsvFile(filePath) {
     log.info "parseCsvFile: lines: $lines"
     def header = lines.first().split(',').collect { it.trim() }
     log.info "parseCsvFile: header: $header"
-    return lines
 
-    def data = lines.readLines().tail().collect { line ->
+    def data = lines.tail().collect { line ->
         def values = line.split(',').collect { it.trim() }
         [header, values].transpose().collectEntries()
     }
