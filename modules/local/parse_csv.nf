@@ -2,9 +2,11 @@
 def parseCsvFile(filePath) {
     log.info "parseCsvFile: filePath: $filePath"
     log.info "ParseCsvFile: filePath.getClass(): ${filePath.getClass()}"
-    return []
 
     def file = new File(filePath)
+    log.info "ParseCsvFile: file.getClass(): $file"
+    return []
+
     def header = file.readLines().first().split(',').collect { it.trim() }
     def data = file.readLines().tail().collect { line ->
         def values = line.split(',').collect { it.trim() }
