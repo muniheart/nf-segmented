@@ -21,8 +21,6 @@ workflow test_parse_csv {
 }
 
 process parseAllCsvFiles {
-    def parsed_data
-
     input:
     path csv_files  // Value Channel with a list of file paths.
 
@@ -31,13 +29,13 @@ process parseAllCsvFiles {
 
     exec:
     // Use Groovy directly in the exec section, no triple quotes needed
-    parsed_data = []
+    def results = []
 
     log.info "parseAllCsvFiles: csv_files: $csv_files"
     
-    if ( false ) {
     csv_files.each { file ->
-        parsed_data << parseCsvFile(file)
+        results << parseCsvFile(file)
     }
-    }
+
+    parsed_data = results
 }
