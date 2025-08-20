@@ -26,7 +26,7 @@ workflow SPLIT_SAMPLESHEET {
 
     ch_1 = Channel.value([])
 
-    if { false } {
+    if ( false ) {
     ch_0 = ch_in.branch { meta, params_files, ss_file ->
         single: meta.batch_size<=0
         multiple: meta.batch_size>0
