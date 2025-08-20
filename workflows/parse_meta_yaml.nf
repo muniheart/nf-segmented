@@ -76,7 +76,6 @@ workflow PARSE_META_YAML {
     log.info "PARSE_META_YAML: ch_segments: ${ch_segments}"
     ch_segments.subscribe { log.info "PARSE_META_YAML: ch_segments: ${it}" }
 
-    if ( false ) {
     /*
      * Extract params.nested, samplesheet, batch_size from params.
      *
@@ -89,6 +88,7 @@ workflow PARSE_META_YAML {
         return [ meta, it.nested ]
     }
 
+    if ( false ) {
     ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
 
     /*
