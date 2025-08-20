@@ -39,7 +39,6 @@ workflow SPLIT_SAMPLESHEET {
         def batches = groupTuplesNearSize( records, meta.batch_size )
         def lines = batches.collect { records_to_string(it) }
         [ meta, params, lines ]
-        .transpose( by: 2 )
     }
 
     ch_1.subscribe{ log.info "ch_1: $it" }
