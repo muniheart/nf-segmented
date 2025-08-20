@@ -102,17 +102,19 @@ workflow PARSE_META_YAML {
         .groupTuple()
     ch_3.subscribe { log.info "ch_3: ${it}" }
 
+    if (false) {
     ch_4=ch_3
         .map { it ->
             def infile = file( it[0].samplesheet, checkIfExists: true )
             return it + [ infile ]
         }
     ch_4.subscribe { log.info "ch_4: ${it}" }
+    }
 
-    if ( false ) {
-    ch_5 = ch_4 | SPLIT_SAMPLESHEET
+    ch_5 = ch_3 | SPLIT_SAMPLESHEET
     ch_5.subscribe { log.info "ch_5: ${it}" }
 
+    if ( false ) {
     /*
      * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
      *
