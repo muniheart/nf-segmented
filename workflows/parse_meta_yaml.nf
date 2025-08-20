@@ -98,13 +98,15 @@ workflow PARSE_META_YAML {
     ch_2 = ch_nested_params | WRITE_PARAMS_YAML
 
     ch_2.subscribe { log.info "ch_2: ${it}" }
-    if ( false ) {
-    ch_2
+    ch_3=ch_2
         .groupTuple().map { it ->
             it[0] = file( it[0], checkIfExists: true )
             return it
         } | SPLIT_SAMPLESHEET
 
+    ch_3.subscribe { log.info "ch_3: ${it}" }
+
+    if ( false ) {
     /*
      * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
      *
