@@ -22,7 +22,7 @@ workflow test_parse_csv {
 
 process parseAllCsvFiles {
     input:
-    path csv_files  // Channel with a list of file paths
+    path csv_files  // Value Channel with a list of file paths.
 
     output:
     val parsed_data  // A list of list of maps for each CSV file

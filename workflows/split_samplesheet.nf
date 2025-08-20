@@ -37,9 +37,9 @@ workflow SPLIT_SAMPLESHEET {
     ch_1 = ch_0.multiple.collect { it -> it[2] }
 
     ch_1.subscribe{ log.info "ch_1: $it" }
-    if ( false ) {
     ch_1 = ch_1.parseAllCsvFiles()
 
+    if ( false ) {
     ch_1.subscribe{ log.info "ch_1: $it" }
 
         def lines = read_csv( meta.samplesheet )
