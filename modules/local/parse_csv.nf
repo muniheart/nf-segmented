@@ -30,8 +30,13 @@ process parseAllCsvFiles {
     exec:
     // Use Groovy directly in the exec section, no triple quotes needed
     def results = []
+
+    log.info "parseAllCsvFiles: csv_files: $csv_files"
+    
+    if ( false ) {
     csv_files.each { file ->
         results << parseCsvFile(file)
+    }
     }
 
     // Return the results
