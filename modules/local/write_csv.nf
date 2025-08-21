@@ -10,15 +10,15 @@ process WRITE_CSV {
     input:
     tuple val(meta), val(params), val(csv_lines)
 
+    output:
+    tuple val(meta), val(params), path(csv_file)
+
     script:
     csv_file = "samplesheet_${task.index}.csv"
 
     """
     echo -e \"\"\"$csv_lines\"\"\" > $csv_file
     """
-
-    output:
-    tuple val(meta), val(params), path(csv_file)
 }
 
 def records_to_string( records ) {
