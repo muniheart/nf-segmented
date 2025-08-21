@@ -23,11 +23,11 @@ process WRITE_CSV {
 
 def records_to_string( records ) {
     header = records.head().collect { (it*.key) }.flatten().join(",")
-    log.info "header: $header"
+    log.info "header: ${header.inspect()}"
     body = records.collect { (it*.value).join(",") }.join("\n")
-    log.info "body: $body"
+    log.info "body: ${body.inspect()}"
     res = [ header,body ].join("\n")
     log.info "res.getClass(): ${res.getClass()}"
-    log.info "res: $res"
+    log.info "res: ${res.inspect()}"
     return res
 }
