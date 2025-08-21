@@ -22,8 +22,12 @@ process WRITE_CSV {
 }
 
 def records_to_string( records ) {
-    header = records[0].collect { (it*.key) }.flatten().join(",")
+    header = records.head().collect { (it*.key) }.flatten().join(",")
     log.info "header: $header"
-    body = records.collect { (it*.value).join(",") }. join("\n")
-    return header + "\n" + body
+    body = records.collect { (it*.value).join(",") }.join("\n")
+    log.info "body: $body"
+    res = [ header,body ].join("\n")
+    log.info "res.getClass(): ${res.getClass()}"
+    log.info "res: $res"
+    return res
 }
