@@ -28,6 +28,9 @@ workflow SPLIT_SAMPLESHEET {
         single: meta.batch_size<=0
         multiple: meta.batch_size>0
     }
+    
+    ch_0.single.subscribe { log.info "SPLIT_SAMPLESHEET: ch_0.single: $it" }
+    ch_0.multiple.subscribe { log.info "SPLIT_SAMPLESHEET: ch_0.multiple: $it" }
 
     /*
      *  batch ch_in.multiple. pass samplesheet path of ch_in.single.
