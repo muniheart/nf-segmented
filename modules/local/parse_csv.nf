@@ -4,7 +4,7 @@ import java.nio.file.Paths
 // Utility function for parsing a CSV file
 def parseCsvFile(filePath) {
     log.info "parseCsvFile: filePath: $filePath"
-    log.info "ParseCsvFile: filePath.getClass(): ${filePath.getClass()}"
+    log.info "parseCsvFile: filePath.getClass(): ${filePath.getClass()}"
 
     def lines = Files.readAllLines( filePath )
     log.info "parseCsvFile: lines: $lines"
@@ -12,7 +12,7 @@ def parseCsvFile(filePath) {
     log.info "parseCsvFile: header: $header"
 
     def data = lines.tail().collect { line ->
-        def values = line.split(',').collect { it.trim() }
+        def values = line.split(',',-1).collect { it.trim() }
         [header, values].transpose().collectEntries()
     }
     log.info "parseCsvFile: data: $data"
