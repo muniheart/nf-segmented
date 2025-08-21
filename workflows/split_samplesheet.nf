@@ -45,8 +45,12 @@ workflow SPLIT_SAMPLESHEET {
     }
 
     ch_1.subscribe{ log.info "ch_1: $it" }
+    if (false) {
     ch_out = ch_1 | WRITE_CSV
     ch_out.subscribe{ log.info "ch_out: $it" }
+    } else {
+        ch_out=ch_1
+    }
 
     emit:
     ch_out
