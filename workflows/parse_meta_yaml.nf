@@ -6,7 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 // import java.io.StringWriter;
 import java.io.File;
 
-include { SPLIT_SAMPLESHEET } from "../workflows/split_samplesheet.nf"
+include { SPLIT_SAMPLESHEET } from "../modules/split_samplesheet.nf"
 
 def as_list = { it instanceof List ? it : [it] }
 

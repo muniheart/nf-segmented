@@ -50,7 +50,7 @@ workflow SPLIT_SAMPLESHEET {
         [ meta, params, lines ]
     }
 
-    ch_1.subscribe{ log.info "SPLIT_SAMPLESHEET: ch_1: ${it.inspect}" }
+    ch_1.subscribe{ log.info "SPLIT_SAMPLESHEET: ch_1: $it" }
     ch_out = ch_1 | WRITE_CSV
     if (true) {
     ch_out.subscribe{ log.info "ch_out: $it" }
