@@ -44,7 +44,7 @@ workflow SPLIT_SAMPLESHEET {
         [ meta, params, lines ]
     }
 
-    ch_1.subscribe{ log.info "ch_1: $it" }
+    ch_1.subscribe{ log.info "SPLIT_SAMPLESHEET: ch_1: $it" }
     if (false) {
     ch_out = ch_1 | WRITE_CSV
     ch_out.subscribe{ log.info "ch_out: $it" }
