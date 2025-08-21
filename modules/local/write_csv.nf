@@ -13,15 +13,13 @@ process WRITE_CSV {
     tuple val(meta), val(params), val(csv_lines)
 
     output:
-    tuple val(meta), val(params), path(csv_file)
+    tuple val(meta), val(params), path(csv_files)
 
     script:
-    csv_files = csv_lines.withIndex().collect { it,index -> "samplesheet_{index}.csv" }
+    csv_files = csv_lines.withIndex().collect { it,index -> "samplesheet_${index}.csv" }
 
     """
-    for i in ${csv_lines.size()}; do
-        echo -e \"\"\"${csv_lines[\$i]}\"\"\" > ${csv_files[\$i]}
-    done
+    parallel -0 "echo -e {1} > {2}" ::: ${csv_lines.join('\0')} :::+ ${csv_files.join('\0')}
     """
 }
 
