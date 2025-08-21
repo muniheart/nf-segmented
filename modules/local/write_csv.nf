@@ -16,10 +16,12 @@ process WRITE_CSV {
     tuple val(meta), val(params), path(csv_file)
 
     script:
-    csv_file = "samplesheet_${task.index}.csv"
+    csv_files = csv_lines.withIndex().collect { it,index -> "samplesheet_{index}.csv" }
 
     """
-    echo -e \"\"\"$csv_lines\"\"\" > $csv_file
+    for i in ${csv_lines.size()}; do
+        echo -e \"\"\"${csv_lines[\$i]}\"\"\" > ${csv_files[\$i]}
+    done
     """
 }
 
