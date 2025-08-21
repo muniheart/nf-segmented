@@ -4,6 +4,8 @@
 ** https://github.com/bentsherman/nf-boost/blob/6d2bb44f46311334a0078155920a75949329f45e/src/main/groovy/nextflow/boost/BoostExtension.groovy#L95
 **
 ** and modified to use opencsv to write csv format string.
+**
+** Update:  I cannot use Ben Sherman's because he writes CSV output to file, whereas I need strings.
 */
 
 process WRITE_CSV {

@@ -42,11 +42,11 @@ workflow SPLIT_SAMPLESHEET {
     
     ch_1 = ch_0.multiple.collect { meta, params, ss_path ->
         def records = parseCsvFile( ss_path )
-        log.info "records: $records"
+        log.info "records: ${records.inspect()}"
         def batches = groupTuplesNearSize( records, meta.batch_size )
-        log.info "batches: $batches"
+        log.info "batches: ${batches.inspect()}"
         def lines = batches.collect { records_to_string(it) }
-        log.info "lines: $lines"
+        log.info "lines: ${lines.inspect()}"
         [ meta, params, lines ]
     }
 
