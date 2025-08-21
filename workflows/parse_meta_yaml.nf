@@ -127,7 +127,9 @@ workflow PARSE_META_YAML {
     ch_5 = ch_4 | SPLIT_SAMPLESHEET
     ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
 
-	ch_out = ch_5.map { unnestAt( it, 2 ) }
+	ch_out = ch_5.map { it -> it[1:2].combinations() }
+        .map { a,b -> [ params: a, samplesheet: b ] }
+
 	ch_out.subscribe { log.info "PARSE_META_YAML: ch_out: $it" }
 
     /*
