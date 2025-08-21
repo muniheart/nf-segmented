@@ -28,7 +28,7 @@ def records_to_string( records ) {
     log.info "header: ${header.inspect()}"
     body = records.collect { (it*.value).join(",") }.join("\n")
     log.info "body: ${body.inspect()}"
-    res = [ header,body,'' ].join("\n")
+    res = [ header,body ].join("\n")
     log.info "res.getClass(): ${res.getClass()}"
     log.info "res: ${res.inspect()}"
     return res

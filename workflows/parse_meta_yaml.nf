@@ -52,16 +52,17 @@ process WRITE_PARAMS_YAML {
     tuple val(meta), val(params)
 
     output:
-    tuple val(meta), path('params.yaml')
+    tuple val(meta), path(params_file)
 
     script:
     def options = new DumperOptions()
     options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
     def yaml = new Yaml(options)
     def yamlString = yaml.dump(params)
+    params_file = "params_${task.index}.yaml"
 
     """
-    echo -e \"\"\"${yamlString}\"\"\" > params.yaml
+    echo -e \"\"\"${yamlString}\"\"\" > $params_file
     """
 }
 
