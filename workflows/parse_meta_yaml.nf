@@ -25,6 +25,21 @@ def parse_yaml( infile ) {
     return Channel.fromList( meta )
 }
 
+/*
+ *
+ * Unnest k-th element A.
+ *
+ */
+def unnestAt = { A, k ->
+    def v = A[k]
+    if (!(v instanceof List)) {
+        throw new IllegalArgumentException("A[${k}] must be a list")
+    }
+    return v.collect { element ->
+        A[0..<k] + [element] + A[(k + 1)..<A.size()]
+    }
+}
+
 process PARSE_YAML {
     input:
     path meta_file
@@ -110,7 +125,10 @@ workflow PARSE_META_YAML {
     ch_4.subscribe { log.info "ch_4: ${it.inspect()}" }
 
     ch_5 = ch_4 | SPLIT_SAMPLESHEET
-    ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it.inspect()}" }
+    ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
+
+	ch_out = ch_5.map { unnestAt( it, 2 ) }
+	ch_out.subscribe { log.info "PARSE_META_YAML: ch_out: $it" }
 
     /*
      * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
@@ -135,6 +153,6 @@ workflow PARSE_META_YAML {
 //      .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
 
     emit:
-    ch_segments
+    ch_out
 }
 
