@@ -16,7 +16,7 @@ process WRITE_CSV {
     tuple val(meta), val(params), path(csv_files)
 
     script:
-    csv_files = csv_lines.withIndex().collect { it,index -> "samplesheet_${index}.csv" }
+    csv_files = csv_lines.withIndex().collect { x,index -> "samplesheet_${index}.csv" }
 
     """
     parallel -0 "echo -e {1} > {2}" ::: ${csv_lines.join('\0')} :::+ ${csv_files.join('\0')}
