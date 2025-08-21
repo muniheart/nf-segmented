@@ -22,6 +22,9 @@ workflow SPLIT_SAMPLESHEET {
 
     main:
 
+    log.info "SPLIT_SAMPLESHEET: workflow: $workflow"
+    log.info "SPLIT_SAMPLESHEET: params: $params"
+
     ch_in.subscribe { log.info "SPLIT_SAMPLESHEET: ch_in: $it" }
 
     ch_0 = ch_in.branch { meta, params_files, ss_file ->
