@@ -11,7 +11,7 @@ process SPLIT_SAMPLESHEET {
 
     python3 ${projectDir}/templates/split_csv.py \
         --input $samplesheet \
-        --output-prefix samplesheet_ \
+        --output-prefix samplesheet \
         --max-records ${meta.batch_size}\
         --key sample
     """
