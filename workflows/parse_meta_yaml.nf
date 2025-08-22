@@ -108,7 +108,7 @@ workflow PARSE_META_YAML {
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
         def meta = [ samplesheet: samplesheet, batch_size: batch_size ]
-        return [ meta ]
+        return meta
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
