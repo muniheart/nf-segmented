@@ -63,6 +63,10 @@ workflow iteration {
     samplesheet = get_meta.out.samplesheet // .map { as_path( it ) }
     configs = get_meta.out.configs // .map { it.collect { x -> as_path(x) } }
     
+    log.info "iteration: samplesheet: $samplesheet"
+    log.info "iteration: samplesheet.getClass(): ${samplesheet.getClass()}"
+    log.info "iteration: configs: $configs"
+    
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
