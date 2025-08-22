@@ -100,7 +100,7 @@ workflow PARSE_META_YAML {
      */
     ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList {a,b ->
                             makeNumericFileComparator( "params_([0-9]+).yaml" )(a,b)
-    }
+    }.flatten()
 
     ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
     /*
@@ -111,8 +111,7 @@ workflow PARSE_META_YAML {
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
-        def meta = [ samplesheet: samplesheet, batch_size: batch_size ]
-        return meta
+        return [ samplesheet: samplesheet, batch_size: batch_size ]
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
