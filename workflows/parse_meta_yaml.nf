@@ -110,6 +110,7 @@ workflow PARSE_META_YAML {
         def meta = [ samplesheet: samplesheet, batch_size: batch_size ]
         return [ meta ]
     }
+    ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
     ch_nested_params = ch_meta.merge( ch_nested_params ) { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
