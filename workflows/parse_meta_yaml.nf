@@ -135,9 +135,10 @@ workflow PARSE_META_YAML {
 
     ch_6 = ch_5.map { it -> it.tail().combinations { a,b -> [ params:a, samplesheet:b ] } }
 
-	ch_6.subscribe { log.info "PARSE_META_YAML: ch_out: $it" }
+	ch_6.subscribe { log.info "PARSE_META_YAML: ch_6: $it" }
 
-    ch_out = ch_6
+    ch_out = ch_6.flatten()
+	ch_out.subscribe { log.info "PARSE_META_YAML: ch_out: $it" }
     /*
      * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
      *
