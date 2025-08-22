@@ -156,6 +156,6 @@ workflow PARSE_META_YAML {
 //      .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
 
     emit:
-    ch_out
+    ch_nested_params
 }
 
