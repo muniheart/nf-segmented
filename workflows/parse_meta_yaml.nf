@@ -115,7 +115,9 @@ workflow PARSE_META_YAML {
     ch_nested_params = ch_meta.merge( ch_nested_params ) { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
 
-    /* Group by meta.
+    /*
+     * Group by meta.
+     */
     ch_3=ch_nested_params.groupTuple()
     ch_3.subscribe { log.info "ch_3: ${it}" }
 
