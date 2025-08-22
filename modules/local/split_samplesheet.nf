@@ -1,6 +1,6 @@
 process SPLIT_SAMPLESHEET {
     input:
-    tuple val(meta), path(params), val(samplesheet)
+    tuple val(meta), path(params), path(samplesheet)
 
     output:
     tuple val(meta), path(params), path('*.csv')
