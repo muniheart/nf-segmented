@@ -8,6 +8,7 @@ import java.io.File;
 
 include { SPLIT_SAMPLESHEET     } from "../modules/local/split_samplesheet.nf"
 include { EXTRACT_NESTED_PARAMS } from "../modules/local/extract_nested_params.nf"
+include { makeNumericFileComparator } from "../modules/local/filename_comparator.nf"
 
 def as_list = { it instanceof List ? it : [it] }
 
@@ -97,7 +98,9 @@ workflow PARSE_META_YAML {
      * Extract nested params from meta file, writing a YAML format params-file for each segment.
      *
      */
-    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toList()
+    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).
+                    toSortedList {a,b -> makeNumericFileComparator( "params_(\d+).yaml" )(a.name,b.name)}
+
     ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
     /*
      * Extract samplesheet, batch_size from segments.
