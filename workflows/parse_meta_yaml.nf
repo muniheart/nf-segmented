@@ -98,8 +98,9 @@ workflow PARSE_META_YAML {
      * Extract nested params from meta file, writing a YAML format params-file for each segment.
      *
      */
-    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).
-                    toSortedList {a,b -> makeNumericFileComparator( "params_(\d+).yaml" )(a.name,b.name)}
+    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList {a,b ->
+                            makeNumericFileComparator( "params_(\d+).yaml" )(a.name,b.name)
+    }
 
     ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
     /*
