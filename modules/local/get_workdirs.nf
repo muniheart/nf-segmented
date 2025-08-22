@@ -9,7 +9,7 @@ process GET_WORKDIRS {
     val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     exec:
-    workdirs = data.subList( 1, data.size() ).collect { a,b -> b }
+    workdirs = data.tail().collect { a,b -> b }
 
     output:
     val workdirs                    // [ work_1, work_2, ..., work_{i-1} ]
