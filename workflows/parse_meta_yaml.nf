@@ -98,7 +98,7 @@ workflow PARSE_META_YAML {
      *
      */
     ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file )
-
+    ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
     /*
      * Extract samplesheet, batch_size from segments.
      *
