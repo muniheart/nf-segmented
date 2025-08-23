@@ -53,7 +53,7 @@ process FOO {
     tuple val(meta), val(params), path('*',includeInputs: true)
 
     script:
-    log.info "foo:
+    log.info "foo: samplesheet: $samplesheet"
     """
     :
     """
