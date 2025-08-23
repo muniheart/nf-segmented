@@ -57,22 +57,18 @@ workflow iteration {
 
 //  meta = data.first()
 //  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
-//  configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().map { as_path }
 //  log.info "iteration: samplesheet: $samplesheet"
-//  log.info "iteration: configs: $configs"
     samplesheet = get_meta.out.samplesheet // .map { as_path( it ) }
-    configs = get_meta.out.configs // .map { it.collect { x -> as_path(x) } }
     
     log.info "iteration: samplesheet: $samplesheet"
     log.info "iteration: samplesheet.getClass(): ${samplesheet.getClass()}"
-    log.info "iteration: configs: $configs"
     
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
         samplesheet,
         as_path( params.nfcore_demo_databases ),
-        configs,
+        file( params.nfcore_demo_add_config, checkIfExists: true ),
         params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
