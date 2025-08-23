@@ -11,30 +11,6 @@ include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 def as_path( x ) { x ? file( x ) : x }
 
-process get_meta {
-    input:
-    val data
-
-    exec:
-    meta = data[0]
-    samplesheet = meta.samplesheet ?: params.nfcore_demo_samplesheet
-    configs = [ file( params.nfcore_demo_add_config, checkIfExists: true ), meta.params_file ].findAll()
-
-    output:
-    val samplesheet, emit: samplesheet
-    val configs,     emit: configs
-}
-
-/***********************
-def get_meta ( data )
-{
-    meta = data[0]
-    samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
-    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll().collect { as_path(it) }
-    return [ out:[ samplesheet: samplesheet, configs: configs ] ]
-}
-**************************/
-
 workflow iteration {
     take:
     data                                // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
@@ -51,22 +27,10 @@ workflow iteration {
 
     workdirs = GET_WORKDIRS( data )
 
-    get_meta( data )
-//  get_meta.out.samplesheet.subscribe { "log.info: get_meta.out.samplesheet: ${it}" }
-//  get_meta.out.configs.subscribe { "log.info: get_meta.out.configs: ${it}" }
-
-//  meta = data.first()
-//  samplesheet = as_path( meta.samplesheet ?: params.nfcore_demo_samplesheet )
-//  log.info "iteration: samplesheet: $samplesheet"
-    samplesheet = get_meta.out.samplesheet // .map { as_path( it ) }
-    
-    log.info "iteration: samplesheet: $samplesheet"
-    log.info "iteration: samplesheet.getClass(): ${samplesheet.getClass()}"
-    
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
-        samplesheet,
+        params.samplesheet,
         as_path( params.nfcore_demo_databases ),
         file( params.nfcore_demo_add_config, checkIfExists: true ),
         params.outdir,
