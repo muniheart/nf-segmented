@@ -9,7 +9,7 @@ include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
-def as_path { it -> it ? file( it, checkIfExists: true ) : null }
+def as_path = { it -> it ? file( it, checkIfExists: true ) : null }
 
 workflow iteration {
     take:
