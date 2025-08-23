@@ -9,7 +9,7 @@ include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
-def as_path( x ) { x ? file( x ) : x }
+def as_path { it -> it ? file( it, checkIfExists: true ) : null }
 
 workflow iteration {
     take:
@@ -32,7 +32,7 @@ workflow iteration {
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
         params.samplesheet,
         as_path( params.nfcore_demo_databases ),
-        file( params.nfcore_demo_add_config, checkIfExists: true ),
+        as_path( params.nfcore_demo_add_config ),
         params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
