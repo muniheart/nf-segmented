@@ -18,7 +18,7 @@ process get_meta {
     exec:
     meta = data[0]
     samplesheet = meta.samplesheet ?: params.nfcore_demo_samplesheet
-    configs = [ params.nfcore_demo_add_config, meta.params_file ].findAll()
+    configs = [ file( params.nfcore_demo_add_config, checkIfExists: true ), meta.params_file ].findAll()
 
     output:
     val samplesheet, emit: samplesheet
