@@ -42,6 +42,23 @@ def unnestAt = { A, k ->
     }
 }
 
+/*
+ * This is a dummy process for debugging.  It just copies inputs to outputs.
+ */
+process FOO {
+    input:
+    tuple val(meta), val(params), path(samplesheet)
+
+    output:
+    tuple val(meta), val(params), path('*',includeInputs: true)
+
+    script:
+    log.info "foo:
+    """
+    :
+    """
+}
+
 process PARSE_YAML {
     input:
     path meta_file
@@ -130,7 +147,7 @@ workflow PARSE_META_YAML {
         }
     ch_4.subscribe { log.info "ch_4: ${it.inspect()}" }
 
-    ch_5 = ch_4 | SPLIT_SAMPLESHEET
+    ch_5 = ch_4 | SPLIT_SAMPLESHEET | FOO
     ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
 
     ch_6 = ch_5.map { it -> it.tail().combinations { a,b -> [ params_file:a, samplesheet:b ] } }
