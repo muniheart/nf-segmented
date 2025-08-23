@@ -47,10 +47,10 @@ def unnestAt = { A, k ->
  */
 process FOO {
     input:
-    tuple val(meta), val(params), path(samplesheet)
+    tuple val(meta), val(params_files), path(samplesheet)
 
     output:
-    tuple val(meta), val(params), path('*',includeInputs: true)
+    tuple val(meta), val(params_files), path('*',includeInputs: true)
 
     script:
     log.info "foo: samplesheet: $samplesheet"
