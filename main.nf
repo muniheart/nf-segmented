@@ -30,7 +30,7 @@ workflow iteration {
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
-        params.samplesheet,
+        as_path( params.nfcore_demo_samplesheet ),
         as_path( params.nfcore_demo_databases ),
         as_path( params.nfcore_demo_add_config ),
         params.outdir,
