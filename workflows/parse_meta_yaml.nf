@@ -134,7 +134,7 @@ workflow PARSE_META_YAML {
 
     ch_4=ch_3
         .map { it ->
-            return it + [ file( it[0].samplesheet, checkIfExists: true ) ]
+            return it + [ file( it[1].samplesheet, checkIfExists: true ) ]
         }
     ch_4.subscribe { log.info "ch_4: ${it.inspect()}" }
 
