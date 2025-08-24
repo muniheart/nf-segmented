@@ -106,8 +106,8 @@ workflow PARSE_META_YAML {
     }
 
     ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
-//  ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } ).flatten()
-//  ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
+    ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } ).flatMap {it}
+    ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
 
     /*
      * Extract samplesheet, batch_size from segments.
