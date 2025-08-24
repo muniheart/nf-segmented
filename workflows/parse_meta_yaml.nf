@@ -128,7 +128,7 @@ workflow PARSE_META_YAML {
     /*
      * Group by meta.
      */
-    ch_3=ch_nested_params.groupTuple() | ASSIGN_INDEX
+    ch_3=ch_nested_params.groupTuple( by: 1 ) // | ASSIGN_INDEX
         
     ch_3.subscribe { log.info "ch_3: ${it}" }
 
