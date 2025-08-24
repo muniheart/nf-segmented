@@ -134,7 +134,7 @@ workflow PARSE_META_YAML {
     ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
 
     ch_6 = ch_5.map( { meta,params_files,samplesheets -> [ as_list(params_files), as_list(samplesheets) ] } )
-            .combinations { a,b -> [ params_file:a, samplesheet:b ] } }
+            .combinations { a,b -> [ params_file:a, samplesheet:b ] }
 
 	ch_6.subscribe { log.info "PARSE_META_YAML: ch_6: $it" }
 
