@@ -20,12 +20,13 @@ def parse_yaml( infile ) {
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
     meta = yaml.load( inputStream )
-                .collect { x ->
+                .collect( { x ->
                     // Convert ParamsMap to map.
                     x.main = [ params as Map, x.main ].collectEntries()
                     // Create unique key for future splitting/rejoining.
                     return x
-                }
+                } )
+                .withIndex()
     return Channel.fromList( meta )
 }
 
@@ -102,22 +103,22 @@ workflow PARSE_META_YAML {
      */
     ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList {a,b ->
                             makeNumericFileComparator( "params_([0-9]+).yaml" )(a,b)
-    }.flatten()
+    }.flatten().withIndex()
 
     ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
     /*
      * Extract samplesheet, batch_size from segments.
      *
      */
-    ch_meta = ch_segments.map { it ->
+    ch_meta = ch_segments.map { it,index ->
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
-        return [ samplesheet: samplesheet, batch_size: batch_size ]
+        return [ [ samplesheet: samplesheet, batch_size: batch_size ], index ]
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
-    ch_nested_params = ch_meta.merge( ch_nested_params ) // { a,b -> [meta:a, params_file:b] }
+    ch_nested_params = ch_meta.join( ch_nested_params, by: 1 ) // { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
 
     /*
