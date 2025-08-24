@@ -109,6 +109,7 @@ workflow PARSE_META_YAML {
     ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } ).flatten()
     ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
 
+    if ( false ) {
     /*
      * Extract samplesheet, batch_size from segments.
      *
@@ -181,8 +182,9 @@ workflow PARSE_META_YAML {
 
 //  ch_out = ch_segments.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
 //      .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
+    }
 
     emit:
-    ch_out
+    ch_nested_params
 }
 
