@@ -6,6 +6,6 @@ process ASSIGN_INDEX {
     val out_tuple
 
     exec:
-    out_tuple = in_tuple
-    out_tuple.meta.index = task.index
+    out_tuple = in_tuple.clone()
+    out_tuple[0].index = task.index
 }
