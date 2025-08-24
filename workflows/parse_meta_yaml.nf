@@ -6,10 +6,12 @@ import org.yaml.snakeyaml.Yaml;
 // import java.io.StringWriter;
 import java.io.File;
 
-include { SPLIT_SAMPLESHEET     } from "../modules/local/split_samplesheet.nf"
-include { EXTRACT_NESTED_PARAMS } from "../modules/local/extract_nested_params.nf"
+include { SPLIT_SAMPLESHEET         } from "../modules/local/split_samplesheet.nf"
+include { EXTRACT_NESTED_PARAMS     } from "../modules/local/extract_nested_params.nf"
 include { makeNumericFileComparator } from "../modules/local/filename_comparator.nf"
+include { ASSIGN_INDEX              } from "../modules/local/assign_index.nf"
 
+def index_comparator = { a,b -> a[0].index <=> b[0].index }
 def as_list = { it instanceof List ? it : [it] }
 
 def parse_yaml( infile ) {
@@ -121,7 +123,8 @@ workflow PARSE_META_YAML {
     /*
      * Group by meta.
      */
-    ch_3=ch_nested_params.groupTuple()
+    ch_3=ch_nested_params.groupTuple() | ASSIGN_INDEX
+        
     ch_3.subscribe { log.info "ch_3: ${it}" }
 
     ch_4=ch_3
@@ -130,7 +133,18 @@ workflow PARSE_META_YAML {
         }
     ch_4.subscribe { log.info "ch_4: ${it.inspect()}" }
 
-    ch_5 = ch_4 | SPLIT_SAMPLESHEET
+    /*
+     *
+     * The order of the segments may be modified by process.
+     * To maintain order:
+     * - add index to ch_meta
+     * - call SPLIT_SAMPLESHEET
+     * - call toSortedList, sorting on index
+     * - call flatMap to convert from value channel to queue channel
+     * - drop index
+     *
+     */
+    ch_5 = ch_4 | SPLIT_SAMPLESHEET | toSortedList( index_comparator ) | flatMap { it }
     ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
 
     ch_6 = ch_5.map { meta,params_files,samplesheets ->
