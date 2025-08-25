@@ -3,7 +3,7 @@ process SPLIT_SAMPLESHEET {
     tuple val(index), val(meta), path(samplesheet, name: 'samplesheet.csv')
 
     output:
-    tuple val(index), val(meta), path('*.csv')
+    tuple val(index), path('*.csv')
 
     script:
     log.info "SPLIT_SAMPLESHEET: index: $index; meta: $meta; samplesheet: $samplesheet"

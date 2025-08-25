@@ -137,12 +137,13 @@ workflow PARSE_META_YAML {
      * split samplesheet before joining meta and nested_params.
      * 
      */
-    ch_0 = ch_meta.groupTuple( by: 1 ) | extract_samplesheet | SPLIT_SAMPLESHEET | map { a,b,c -> [a,b,[c]] }
-        | transpose
+    ch_0 = ch_meta.groupTuple( by: 1 ) | extract_samplesheet | SPLIT_SAMPLESHEET |
+        map { it -> it.combinations() }
+       
     ch_0.subscribe { log.info "PARSE_META_YAML: ch_0: $it" }
 
-    ch_nested_params = ch_0.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
-    ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
+    ch_1 = ch_0.join( ch_nested_params, by: 0 ) { a,b -> [samplesheet:a, params_file:b] }
+//  ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
 
     if ( false ) {
     /*
@@ -205,6 +206,6 @@ workflow PARSE_META_YAML {
     }
 
     emit:
-    ch_nested_params    // ch_out
+    ch_1                // ch_out
 }
 
