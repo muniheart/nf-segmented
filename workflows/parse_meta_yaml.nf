@@ -114,7 +114,7 @@ workflow PARSE_META_YAML {
      * Extract samplesheet, batch_size from segments.
      *
      */
-    ch_meta = ch_segments.map { it,index ->
+    ch_meta = ch_segments.map { index,it ->
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
