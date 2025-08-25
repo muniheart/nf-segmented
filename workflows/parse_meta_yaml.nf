@@ -127,7 +127,7 @@ workflow PARSE_META_YAML {
      * split samplesheet before joining meta and nested_params.
      * 
      */
-    ch_0 = ch_meta.groupTuple( by: 2 ) | SPLIT_SAMPLESHEET | transpose
+    ch_0 = ch_meta.groupTuple( by: 1 ) | SPLIT_SAMPLESHEET | transpose
     ch_0.subscribe { log.info "PARSE_META_YAML: ch_1: $it" }
 
     ch_nested_params = ch_0.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
