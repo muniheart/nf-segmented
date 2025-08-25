@@ -54,47 +54,6 @@ def unnestAt = { A, k ->
     }
 }
 
-process PARSE_YAML {
-    input:
-    path meta_file
-
-    script:
-    InputStream inputStream = new FileInputStream( meta_file.toFile() );
-	Yaml yaml = new Yaml();
-    // nested nextflow will be run once per params file.
-    // Order of arguments to `+` allows  YAML params to override default params.
-    meta = yaml.load( inputStream )
-                .collect { x ->
-                    x.main = params + x.main
-                    return x
-                }
-    """
-    :
-    """
-
-    output:
-    val meta
-}
-
-process WRITE_PARAMS_YAML {
-    input:
-    tuple val(meta), val(params)
-
-    output:
-    tuple val(meta), path(params_file)
-
-    script:
-    def options = new DumperOptions()
-    options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
-    def yaml = new Yaml(options)
-    def yamlString = yaml.dump(params)
-    params_file = "params_${task.index}.yaml"
-
-    """
-    echo -e \"\"\"${yamlString}\"\"\" > $params_file
-    """
-}
-
 workflow PARSE_META_YAML {
     take:
     meta_file
@@ -209,4 +168,3 @@ workflow PARSE_META_YAML {
     emit:
     ch_nested_params    // ch_out
 }
-
