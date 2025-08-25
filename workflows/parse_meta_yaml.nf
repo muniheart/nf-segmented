@@ -122,7 +122,7 @@ workflow PARSE_META_YAML {
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
     ch_nested_params = ch_meta.join( ch_nested_params, by: 1 ) // { a,b -> [meta:a, params_file:b] }
-    ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
+    ch_nested_params.subscribe { log.info "PARSE_META_YAML: ch_nested_params: ${it}" }
 
     if ( true ) {
     /*
