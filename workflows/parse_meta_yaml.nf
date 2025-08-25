@@ -101,12 +101,13 @@ workflow PARSE_META_YAML {
      * Extract nested params from meta file, writing a YAML format params-file for each segment.
      *
      */
-    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList {a,b ->
-                            makeNumericFileComparator( "params_([0-9]+).yaml" )(a,b)
-    }
+    def compare_on_segment_index = makeNumericFileComparator( "params_([0-9]+).yaml" )
+    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList { a,b -> compare_on_segment_index(a,b) }
 
+    ch_nested_params.subscribe { "0: PARSE_META_YAML: ch_nested_params: $it" }
+    ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } )
     ch_nested_params.subscribe { "1: PARSE_META_YAML: ch_nested_params: $it" }
-    ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } ).flatMap {it}
+    ch_nested_params = ch_nested_params.flatMap {it}
     ch_nested_params.subscribe { "2: PARSE_META_YAML: ch_nested_params: $it" }
 
     /*
