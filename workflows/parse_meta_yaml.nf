@@ -26,7 +26,7 @@ def parse_yaml( infile ) {
                     // Create unique key for future splitting/rejoining.
                     return x
                 } )
-                .withIndex()
+                .withIndex().collect { it,index -> [index]+it }
     return Channel.fromList( meta )
 }
 
@@ -105,7 +105,7 @@ workflow PARSE_META_YAML {
     ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList { a,b -> compare_on_segment_index(a,b) }
 
     ch_nested_params.subscribe { "0: PARSE_META_YAML: ch_nested_params: $it" }
-    ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } )
+    ch_nested_params = ch_nested_params.map( { it -> it.withIndex().collect { v,i -> [i]+v } )
     ch_nested_params.subscribe { "1: PARSE_META_YAML: ch_nested_params: $it" }
     ch_nested_params = ch_nested_params.flatMap {it}
     ch_nested_params.subscribe { "2: PARSE_META_YAML: ch_nested_params: $it" }
@@ -118,11 +118,11 @@ workflow PARSE_META_YAML {
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
-        return [ [ samplesheet: samplesheet, batch_size: batch_size ], index ]
+        return [ index, [ samplesheet: samplesheet, batch_size: batch_size ] ]
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
-    ch_nested_params = ch_meta.join( ch_nested_params, by: 1 ) // { a,b -> [meta:a, params_file:b] }
+    ch_nested_params = ch_meta.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
 
     if ( true ) {
