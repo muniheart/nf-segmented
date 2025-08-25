@@ -15,7 +15,7 @@ def compare_on_index = { a,b -> a[0].index <=> b[0].index }
 def as_list = { it instanceof List ? it : [it] }
 def add_index( ch ) {
     def k=0
-    ch.map { it -> [k++] + it }
+    ch.map { it -> [k++, it] }
 }
 
 def parse_yaml( infile ) {
