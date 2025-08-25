@@ -34,6 +34,12 @@ def parse_yaml( infile ) {
     return Channel.fromList( meta )
 }
 
+def extract_samplesheet( ch ) {
+    ch.map { it ->
+        def ss_file = file( it[1].samplesheet, checkIfExists: true )
+        return it + [ ss_file ]
+    }
+}
 /*
  *
  * Unnest k-th element A.
@@ -127,12 +133,6 @@ workflow PARSE_META_YAML {
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
-    def extract_samplesheet( ch ) {
-        ch.map { it ->
-            def ss_file = file( it[1].samplesheet, checkIfExists: true )
-            return it + [ ss_file ]
-        }
-    }
     /*
      * split samplesheet before joining meta and nested_params.
      * 
