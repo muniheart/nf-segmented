@@ -1,9 +1,9 @@
 process SPLIT_SAMPLESHEET {
     input:
-    tuple val(meta), val(params_files), path(samplesheet, name: 'samplesheet.csv')
+    tuple val(index), val(meta), path(samplesheet, name: 'samplesheet.csv')
 
     output:
-    tuple val(meta), val(params_files), path('*.csv')
+    tuple val(index), val(meta), path('*.csv')
 
     script:
     if ( meta.batch_size > 0 ) {

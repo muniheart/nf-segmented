@@ -11,7 +11,7 @@ include { EXTRACT_NESTED_PARAMS     } from "../modules/local/extract_nested_para
 include { makeNumericFileComparator } from "../modules/local/filename_comparator.nf"
 include { ASSIGN_INDEX              } from "../modules/local/assign_index.nf"
 
-def index_comparator = { a,b -> a[0].index <=> b[0].index }
+def compare_on_index = { a,b -> a[0].index <=> b[0].index }
 def as_list = { it instanceof List ? it : [it] }
 
 def parse_yaml( infile ) {
@@ -118,11 +118,19 @@ workflow PARSE_META_YAML {
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
-        return [ index, [ samplesheet: samplesheet, batch_size: batch_size ] ]
+        def ss_file = file( it[1].samplesheet, checkIfExists: true )
+        return [ index, [ samplesheet: samplesheet, batch_size: batch_size ], ss_file ]
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
-    ch_nested_params = ch_meta.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
+    /*
+     * split samplesheet before joining meta and nested_params.
+     * 
+     */
+    ch_0 = ch_meta.groupTuple( by: 2 ) | SPLIT_SAMPLESHEET | transpose
+    ch_0.subscribe { log.info "PARSE_META_YAML: ch_1: $it" }
+
+    ch_nested_params = ch_0.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
 
     if ( true ) {
