@@ -133,7 +133,7 @@ workflow PARSE_META_YAML {
     ch_nested_params = ch_0.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
 
-    if ( true ) {
+    if ( false ) {
     /*
      * Group by meta.
      */
@@ -194,6 +194,6 @@ workflow PARSE_META_YAML {
     }
 
     emit:
-    ch_out
+    ch_nested_params    // ch_out
 }
 
