@@ -11,11 +11,10 @@ include { EXTRACT_NESTED_PARAMS     } from "../modules/local/extract_nested_para
 include { makeNumericFileComparator } from "../modules/local/filename_comparator.nf"
 include { ASSIGN_INDEX              } from "../modules/local/assign_index.nf"
 
-def compare_on_index = { a,b -> a[0].index <=> b[0].index }
 def as_list = { it instanceof List ? it : [it] }
 def add_index( ch ) {
     def k=0
-    ch.map { it -> [k++, it] }
+    ch.map { it -> [k++] + it }
 }
 
 def parse_yaml( infile ) {
@@ -112,10 +111,13 @@ workflow PARSE_META_YAML {
      *
      */
     def compare_on_segment_index = makeNumericFileComparator( "params_([0-9]+).yaml" )
-    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList { a,b -> compare_on_segment_index(a,b) }
-                | flatMap { it } | add_index
-
+    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file )
     ch_nested_params.subscribe { "0: PARSE_META_YAML: ch_nested_params: $it" }
+
+    ch_nested_params = ch_nested_params.toSortedList { a,b -> compare_on_segment_index(a,b) }
+                | flatMap { it } | add_index
+    ch_nested_params.subscribe { "0.2: PARSE_META_YAML: ch_nested_params: $it" }
+
 //  ch_nested_params = ch_nested_params.map( { it -> it.withIndex().collect { v,i -> [i]+v } } )
 //  ch_nested_params.subscribe { "1: PARSE_META_YAML: ch_nested_params: $it" }
 //  ch_nested_params = ch_nested_params.flatMap {it}
@@ -138,11 +140,11 @@ workflow PARSE_META_YAML {
      * 
      */
     ch_0 = ch_meta.groupTuple( by: 1 ) | extract_samplesheet | SPLIT_SAMPLESHEET |
-        map { it -> it.combinations() }
+        map { a,b -> [as_list(a),as_list(b)] } | map { it -> it.combinations() } | flatMap {it}
        
     ch_0.subscribe { log.info "PARSE_META_YAML: ch_0: $it" }
 
-    ch_1 = ch_0.join( ch_nested_params, by: 0 ) { a,b -> [samplesheet:a, params_file:b] }
+//  ch_1 = ch_0.join( ch_nested_params, by: [0] ).map { i,a,b -> [samplesheet:a, params_file:b] }
 //  ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
 
     if ( false ) {
@@ -206,6 +208,6 @@ workflow PARSE_META_YAML {
     }
 
     emit:
-    ch_1                // ch_out
+    ch_0                // ch_out
 }
 
