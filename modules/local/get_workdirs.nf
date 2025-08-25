@@ -9,6 +9,7 @@ process GET_WORKDIRS {
     val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     exec:
+    log.info "GET_WORKDIRS: data: $data"
     workdirs = data.tail().collect { a,b -> b }
 
     output:
