@@ -13,6 +13,10 @@ include { ASSIGN_INDEX              } from "../modules/local/assign_index.nf"
 
 def compare_on_index = { a,b -> a[0].index <=> b[0].index }
 def as_list = { it instanceof List ? it : [it] }
+def add_index( ch ) {
+    def k=0
+    ch.map { it -> [k++] + it }
+}
 
 def parse_yaml( infile ) {
     InputStream inputStream = new FileInputStream( infile.toFile() );
@@ -103,12 +107,13 @@ workflow PARSE_META_YAML {
      */
     def compare_on_segment_index = makeNumericFileComparator( "params_([0-9]+).yaml" )
     ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file ).toSortedList { a,b -> compare_on_segment_index(a,b) }
+                | flatMap { it } | add_index
 
     ch_nested_params.subscribe { "0: PARSE_META_YAML: ch_nested_params: $it" }
-    ch_nested_params = ch_nested_params.map( { it -> it.withIndex().collect { v,i -> [i]+v } } )
-    ch_nested_params.subscribe { "1: PARSE_META_YAML: ch_nested_params: $it" }
-    ch_nested_params = ch_nested_params.flatMap {it}
-    ch_nested_params.subscribe { "2: PARSE_META_YAML: ch_nested_params: $it" }
+//  ch_nested_params = ch_nested_params.map( { it -> it.withIndex().collect { v,i -> [i]+v } } )
+//  ch_nested_params.subscribe { "1: PARSE_META_YAML: ch_nested_params: $it" }
+//  ch_nested_params = ch_nested_params.flatMap {it}
+//  ch_nested_params.subscribe { "2: PARSE_META_YAML: ch_nested_params: $it" }
 
     /*
      * Extract samplesheet, batch_size from segments.
@@ -128,7 +133,7 @@ workflow PARSE_META_YAML {
      * 
      */
     ch_0 = ch_meta.groupTuple( by: 1 ) | SPLIT_SAMPLESHEET | transpose
-    ch_0.subscribe { log.info "PARSE_META_YAML: ch_1: $it" }
+    ch_0.subscribe { log.info "PARSE_META_YAML: ch_0: $it" }
 
     ch_nested_params = ch_0.join( ch_nested_params, by: 0 ) // { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
