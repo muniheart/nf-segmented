@@ -105,9 +105,9 @@ workflow PARSE_META_YAML {
                             makeNumericFileComparator( "params_([0-9]+).yaml" )(a,b)
     }
 
-    ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
+    ch_nested_params.subscribe { "1: PARSE_META_YAML: ch_nested_params: $it" }
     ch_nested_params = ch_nested_params.map( { it -> it.withIndex() } ).flatMap {it}
-    ch_nested_params.subscribe { "PARSE_META_YAML: ch_nested_params: $it" }
+    ch_nested_params.subscribe { "2: PARSE_META_YAML: ch_nested_params: $it" }
 
     /*
      * Extract samplesheet, batch_size from segments.
@@ -122,7 +122,7 @@ workflow PARSE_META_YAML {
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
     ch_nested_params = ch_meta.join( ch_nested_params, by: 1 ) // { a,b -> [meta:a, params_file:b] }
-    ch_nested_params.subscribe { log.info "PARSE_META_YAML: ch_nested_params: ${it}" }
+    ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
 
     if ( true ) {
     /*
