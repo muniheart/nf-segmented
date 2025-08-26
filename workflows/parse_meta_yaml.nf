@@ -106,67 +106,6 @@ workflow PARSE_META_YAML {
 
     ch_1 = ch_0.combine( ch_nested_params, by: 0 ).toSortedList { a,b -> a[0] <=> b[0] } .flatMap {it} .map { i,a,b -> [samplesheet:a, params_file:b] }
     ch_1.subscribe { log.info "PARSE_META_YAML: ch_1: $it" }
-//  ch_nested_params.subscribe { log.info "3: PARSE_META_YAML: ch_nested_params: ${it}" }
-
-    if ( false ) {
-    /*
-     * Group by meta.
-     */
-    ch_3=ch_nested_params.groupTuple( by: 1 ) // | ASSIGN_INDEX
-        
-    ch_3.subscribe { log.info "ch_3: ${it}" }
-
-    ch_4=ch_3
-        .map { it ->
-            return it + [ file( it[1].samplesheet, checkIfExists: true ) ]
-        }
-    ch_4.subscribe { log.info "ch_4: ${it.inspect()}" }
-
-    /*
-     *
-     * The order of the segments may be modified by process.
-     * To maintain order:
-     * - add index to ch_meta
-     * - call SPLIT_SAMPLESHEET
-     * - call toSortedList, sorting on index
-     * - call flatMap to convert from value channel to queue channel
-     * - drop index
-     *
-     */
-    ch_5 = ch_4 | SPLIT_SAMPLESHEET | toSortedList( index_comparator ) | flatMap { it }
-    ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
-
-    ch_6 = ch_5.map { meta,params_files,samplesheets ->
-        [ as_list(params_files), as_list(samplesheets) ]
-        .combinations { a,b -> [ params_file:a, samplesheet:b ] }
-    } 
-
-	ch_6.subscribe { log.info "PARSE_META_YAML: ch_6: $it" }
-
-    ch_out = ch_6.flatten()
-	ch_out.subscribe { log.info "PARSE_META_YAML: ch_out: $it" }
-    /*
-     * Join split samplesheets with params_files.  Unnest the samplesheet batches per segment.
-     *
-     */
-
-    /*
-     *  merge input and batch_size channels.  Split channel on batch_size>0.
-     *  true:
-     *      split samplesheet, write each to string, write each string to file, return path
-     *  false:
-     *      return samplesheet 
-     *
-     *  PITFALL: Reordering these channels will lose correspondence with ch_params.  Must add key to each and
-     *  join later.
-     */
-
-    // Order of channels to `merge` operator chosen to expand ch_samplesheet for each value of ch_segments.
-
-
-//  ch_out = ch_segments.map{ it.nested }.merge( ch_input ) { a,b -> [ [a],as_list(b) ] }
-//      .flatMap { it.combinations { a,b -> [ params:a, samplesheet:b ] } }
-    }
 
     emit:
     ch_1        // ch_out
