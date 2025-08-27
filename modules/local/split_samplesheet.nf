@@ -1,9 +1,9 @@
 process SPLIT_SAMPLESHEET {
     input:
-    tuple val(meta), val(params), val(samplesheet)
+    tuple val(meta), path(params), val(samplesheet)
 
     output:
-    tuple val(meta), val(params), path('*.csv')
+    tuple val(meta), path(params), path('*.csv')
 
     script:
     """

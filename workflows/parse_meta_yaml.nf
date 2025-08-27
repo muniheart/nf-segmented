@@ -6,7 +6,8 @@ import org.yaml.snakeyaml.Yaml;
 // import java.io.StringWriter;
 import java.io.File;
 
-include { SPLIT_SAMPLESHEET } from "../modules/local/split_samplesheet.nf"
+include { SPLIT_SAMPLESHEET     } from "../modules/local/split_samplesheet.nf"
+include { EXTRACT_NESTED_PARAMS } from "../modules/local/extract_nested_params.nf"
 
 def as_list = { it instanceof List ? it : [it] }
 
@@ -91,31 +92,30 @@ workflow PARSE_META_YAML {
     log.info "PARSE_META_YAML: ch_segments class: ${ch_segments.getClass()}"
     log.info "PARSE_META_YAML: ch_segments: ${ch_segments}"
     ch_segments.subscribe { log.info "PARSE_META_YAML: ch_segments: ${it}" }
-
+    
     /*
-     * Extract params.nested, samplesheet, batch_size from params.
+     * Extract nested params from meta file, writing a YAML format params-file for each segment.
      *
      */
-    ch_nested_params = ch_segments.map { it ->
+    ch_nested_params = EXTRACT_NESTED_PARAMS( meta_file )
+
+    /*
+     * Extract samplesheet, batch_size from segments.
+     *
+     */
+    ch_meta = ch_segments.map { it ->
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
         def meta = [ samplesheet: samplesheet, batch_size: batch_size ]
-        return [ meta, it.nested ]
+        return [ meta ]
     }
 
+    ch_nested_params = ch_meta.merge( ch_nested_params ) { a,b -> [meta:a, params_file:b] }
     ch_nested_params.subscribe { log.info "ch_nested_params: ${it}" }
 
-    /*
-     * Write params.nested to params file and update the channel with file path.
-     *
-     */
-
-    ch_2 = ch_nested_params | WRITE_PARAMS_YAML
-
-    ch_2.subscribe { log.info "ch_2: ${it}" }
-    ch_3=ch_2
-        .groupTuple()
+    /* Group by meta.
+    ch_3=ch_nested_params.groupTuple()
     ch_3.subscribe { log.info "ch_3: ${it}" }
 
     ch_4=ch_3
@@ -127,8 +127,7 @@ workflow PARSE_META_YAML {
     ch_5 = ch_4 | SPLIT_SAMPLESHEET
     ch_5.subscribe { log.info "PARSE_META_YAML: ch_5: ${it}" }
 
-	ch_6 = ch_5.map { it -> it[1..2].combinations() }
-        .map { a,b -> [ params: a, samplesheet: b ] }
+    ch_6 = ch_5.map { it -> it.tail().combinations { a,b -> [ params:a, samplesheet:b ] }
 
 	ch_6.subscribe { log.info "PARSE_META_YAML: ch_out: $it" }
 
