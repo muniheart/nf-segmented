@@ -63,7 +63,7 @@ Maintaining validity of nextflow's cache for a pipeline requires that file paths
 across resume runs.  This is accomplished here by mounting workdir images of prior segments to the container that runs
 the nested pipeline and to the container of each containerized process of the nested pipeline.  Further, each image is mounted at the path of its source workdir.  The bind-mount directives are created in `conf/modules.config` and passed to
 singularity via `process.containerOptions`.  The propagation of bind-mounts to nested containers
-should be handled seamlessly by singularity and apptainer, but I found that this mechanism did not work reliably.
+should be handled seamlessly by singularity and apptainer, but I found that this mechanism did not work reliably [[#1](https://github.com/muniheart/nf-segmented/issues/1)].
 Instead, bind-mount directives are passed to each nested container through `containerOptions`.
 
 # Requirements
