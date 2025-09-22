@@ -17,6 +17,7 @@ process NEXTFLOW_RUN {
     path cache_dir                      // common nextflow cache-dir for all tasks
     path env_file                       // file with env var strings defining workdir paths.
     path workdirs                       // previous tasks' workdirs.
+    path params_file                    // params-file, extracted from data[0].
     val data                           // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
@@ -45,7 +46,7 @@ process NEXTFLOW_RUN {
         'nextflow -log nextflow.log run',
             nextflow_opts,
             pipeline_name,
-            meta.params_file ? "-params-file ${meta.params_file}" : '',
+            params_file ? "-params-file ${params_file}" : '',
             additional_config ? additional_config.collect { it ? "-c $it" : '' }.join(' ') : '',
             samplesheet ? "--input $samplesheet" : '',
             databases ? "--databases $databases" : '',
