@@ -5,6 +5,8 @@
  *
  */
 process GET_PARAMS_FILE {
+    def params_file
+
     input:
     val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
