@@ -12,8 +12,7 @@ process GET_PARAMS_FILE {
 
     exec:
     log.info "GET_PARAMS_FILE: data: $data"
-    log.info "GET_PARAMS_FILE: data.head(): ${data.head()}"
-    params_file = data.head().collect { a -> a.params_file }
+    params_file = data[0].params_file // data.head().collect { a -> a.params_file }
 
     output:
     val params_file
