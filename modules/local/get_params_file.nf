@@ -5,15 +5,13 @@
  *
  */
 process GET_PARAMS_FILE {
-    def params_file
-
     input:
     val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     exec:
     log.info "GET_PARAMS_FILE: data: $data"
-    params_file = data[0].params_file // data.head().collect { a -> a.params_file }
+    pfile = data[0].params_file // data.head().collect { a -> a.params_file }
 
     output:
-    val params_file
+    val pfile
 }
