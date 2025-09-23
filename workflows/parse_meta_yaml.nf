@@ -47,7 +47,7 @@ def extract_samplesheet( ch ) {
     ch.map { it ->
         Path p = Paths.get( it[1].samplesheet )
         if ( ! p.isAbsolute() ) {
-            dir = Path( "${params.input}" )
+            Path dir = Paths.get( "${params.input}" )
             p = dir.resolve( p )
         }
         File res = p.toFile()
