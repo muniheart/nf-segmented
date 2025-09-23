@@ -5,6 +5,11 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 // import java.io.StringWriter;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+// import java.io.Path;
+// import java.io.File;
 
 include { SPLIT_SAMPLESHEET         } from "../modules/local/split_samplesheet.nf"
 include { EXTRACT_NESTED_PARAMS     } from "../modules/local/extract_nested_params.nf"
@@ -33,10 +38,21 @@ def parse_yaml( infile ) {
     return Channel.fromList( meta )
 }
 
+/*
+ *  Variable substitution is not available before pipeline execution.  The best I can do is
+ *  resolve a relative path against params.input.
+ *
+ */
 def extract_samplesheet( ch ) {
     ch.map { it ->
-        def ss_file = file( it[1].samplesheet, checkIfExists: true )
-        return it + [ ss_file ]
+        Path p = Paths.get( it[1].samplesheet )
+        if ( ! p.isAbsolute() ) {
+            dir = Path( params.input )
+            p = dir.resolve( p )
+        }
+        File res = p.toFile()
+        assert res.exists()
+        return it + [ res ]
     }
 }
 /*
