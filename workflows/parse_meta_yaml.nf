@@ -46,11 +46,14 @@ def parse_yaml( infile ) {
 def extract_samplesheet( ch ) {
     ch.map { it ->
         Path p = Paths.get( it[1].samplesheet )
+        log.info "extract_samplesheet: p: $p"
         if ( ! p.isAbsolute() ) {
             Path dir = Paths.get( "${params.input}" )
             p = dir.resolve( p )
         }
+        log.info "extract_samplesheet: p: $p"
         File res = p.toFile()
+        log.info "extract_samplesheet: res: $res"
         assert res.exists()
         return it + [ res ]
     }
