@@ -9,7 +9,7 @@ process GET_PARAMS_FILE {
     val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     exec:
-    log.info "GET_WORKDIRS: data: $data"
+    log.info "GET_PARAMS_FILE: data: $data"
     params_file = data.head().collect { a -> a.params_file }
 
     output:
