@@ -55,7 +55,7 @@ def extract_samplesheet( ch ) {
         File res = p.toFile()
         log.info "extract_samplesheet: res: $res"
         assert res.exists()
-        return it + [ res ]
+        return it + [ p ]
     }
 }
 /*
