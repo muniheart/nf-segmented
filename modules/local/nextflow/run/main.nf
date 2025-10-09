@@ -38,7 +38,6 @@ process NEXTFLOW_RUN {
     image_param = "${task.ext.image_mounts_absolute}" ? "--image_mounts ${task.ext.image_mounts_absolute}" : ''
     log.info "image_param: ${image_param}"
 
-    samplesheet = meta.containsKey( 'samplesheet' ) && meta.samplesheet ? meta.samplesheet : samplesheet
     databases   = meta.containsKey( 'databases'   ) && meta.databases   ? meta.databases   : databases
 
     // Construct nextflow command
