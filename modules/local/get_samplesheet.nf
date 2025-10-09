@@ -24,8 +24,7 @@ process GET_SAMPLESHEET {
     path pfile
 
     exec:
-    log.info "GET_SAMPLESHEET: data: $data"
-    pfile = data[0].params_file
+    log.info "GET_SAMPLESHEET: pfile: $pfile"
     p = parse_yaml( pfile )
 
     output:
