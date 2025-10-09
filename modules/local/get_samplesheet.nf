@@ -22,15 +22,12 @@ def parse_yaml( infile ) {
  */
 process GET_SAMPLESHEET {
     input:
-    path pfile
+    val pfile
 
-    script:
+    exec:
     log.info "GET_SAMPLESHEET: pfile: $pfile"
     p = parse_yaml( pfile.toFile() )
     ss = p.samplesheet
-    """
-    :
-    """
 
     output:
     val ss
