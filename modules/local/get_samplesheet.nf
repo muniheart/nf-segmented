@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 def parse_yaml( infile ) {
-    InputStream inputStream = new FileInputStream( infile.toFile() );
+    InputStream inputStream = new FileInputStream( infile );
 	Yaml yaml = new Yaml();
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
@@ -26,7 +26,8 @@ process GET_SAMPLESHEET {
     exec:
     log.info "GET_SAMPLESHEET: pfile: $pfile"
     p = parse_yaml( pfile )
+    ss = p.samplesheet
 
     output:
-    val p.samplesheet
+    val ss
 }
