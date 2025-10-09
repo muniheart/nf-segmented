@@ -29,7 +29,9 @@ workflow iteration {
 
     workdirs = GET_WORKDIRS( data )
     params_file = GET_PARAMS_FILE( data )
-    samplesheet = as_path( GET_SAMPLESHEET( params_file ) ?: params.nfcore_demo_samplesheet )
+    x = params_file ? GET_SAMPLESHEET( params_file ) : params.nfcore_demo_samplesheet
+    log.info "iteration: params_file: ${params_file}; x: $x"
+    samplesheet = x ? as_path( x ) : null
 
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
