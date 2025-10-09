@@ -23,10 +23,13 @@ process GET_SAMPLESHEET {
     input:
     path pfile
 
-    exec:
+    script:
     log.info "GET_SAMPLESHEET: pfile: $pfile"
     p = parse_yaml( pfile.toFile() )
     ss = p.samplesheet
+    """
+    :
+    """
 
     output:
     val ss
