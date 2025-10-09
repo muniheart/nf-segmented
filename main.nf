@@ -6,6 +6,7 @@ include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { WRITE_ENVIRONMENT } from "./modules/local/write_environment.nf"
 include { GET_WORKDIRS } from "./modules/local/get_workdirs.nf"
 include { GET_PARAMS_FILE } from "./modules/local/get_params_file.nf"
+include { GET_SAMPLESHEET } from "./modules/local/get_samplesheet.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
@@ -28,11 +29,12 @@ workflow iteration {
 
     workdirs = GET_WORKDIRS( data )
     params_file = GET_PARAMS_FILE( data )
+    samplesheet = GET_SAMPLESHEET( data ) ?: as_path( params.nfcore_demo_databases )
 
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
-        as_path( params.nfcore_demo_samplesheet ),
+        samplesheet,
         as_path( params.nfcore_demo_databases ),
         as_path( params.nfcore_demo_add_config ),
         params.outdir,
