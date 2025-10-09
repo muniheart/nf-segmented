@@ -25,7 +25,7 @@ process GET_SAMPLESHEET {
 
     exec:
     log.info "GET_SAMPLESHEET: pfile: $pfile"
-    p = parse_yaml( pfile )
+    p = parse_yaml( pfile.toString() )
     ss = p.samplesheet
 
     output:
