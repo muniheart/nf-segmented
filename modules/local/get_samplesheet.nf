@@ -10,6 +10,7 @@ def parse_yaml( infile ) {
     // nested nextflow will be run once per params file.
     // Order of arguments to `+` allows  YAML params to override default params.
     p = yaml.load( inputStream )
+    log.info "parse_yaml: p: $p"
     return p
 }
 
