@@ -22,12 +22,11 @@ def parse_yaml( infile ) {
  */
 process GET_SAMPLESHEET {
     input:
-    val pfile
+    val data
 
     exec:
-    log.info "GET_SAMPLESHEET: pfile: $pfile"
-    p = parse_yaml( pfile )
-    ss = p.samplesheet
+    log.info "GET_SAMPLESHEET: data: $data"
+    ss = data[0].samplesheet // data.head().collect { a -> a.params_file }
 
     output:
     val ss
