@@ -62,7 +62,7 @@ process NEXTFLOW_RUN {
     alias nextflow=/usr/local/bin/nextflow
 
     # $nxf_cmd
-    mkdir $workdir
+    mkdir -p $workdir/ab/cdef012d
     touch nextflow.log
     """
 
