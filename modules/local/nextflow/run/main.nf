@@ -61,7 +61,9 @@ process NEXTFLOW_RUN {
 
     alias nextflow=/usr/local/bin/nextflow
 
-    $nxf_cmd
+    # $nxf_cmd
+    mkdir $workdir
+    touch nextflow.log
     """
 
     output:
