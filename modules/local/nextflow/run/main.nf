@@ -35,8 +35,8 @@ process NEXTFLOW_RUN {
 
     log.info "as_list(data): ${as_list(data)}"
 
-    image_param = "${task.ext.image_mounts_absolute}" ? "--image_mounts ${task.ext.image_mounts_absolute}" : ''
-    log.info "image_param: ${image_param}"
+//  image_param = "${task.ext.image_mounts_absolute}" ? "--image_mounts ${task.ext.image_mounts_absolute}" : ''
+//  log.info "image_param: ${image_param}"
 
     databases   = meta.containsKey( 'databases'   ) && meta.databases   ? meta.databases   : databases
 
@@ -50,7 +50,7 @@ process NEXTFLOW_RUN {
             samplesheet ? "--input $samplesheet" : '',
             databases ? "--databases $databases" : '',
             "--outdir $child_outdir",
-            "${image_param}"
+//          "${image_param}"
     ].join(" ")
 
     log.info "workflow: ${workflow}"
