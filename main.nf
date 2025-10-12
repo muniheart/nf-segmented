@@ -34,6 +34,7 @@ workflow iteration {
     image_mounts = GET_INPUTS_FROM_DATA.out.image_mounts
 
     container_opts = GET_CONTAINER_OPTS( image_mounts, cache_dir )
+    log.info "container_opts: $container_opts"
 
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
