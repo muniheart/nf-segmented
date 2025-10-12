@@ -7,7 +7,7 @@ process GET_CONTAINER_OPTS {
     output:
     val opts
 
-    exec:
+    script:
     env_vars = \
         [
             "NXF_APPTAINER_CACHEDIR=\${NXF_APPTAINER_CACHEDIR}",
@@ -29,4 +29,7 @@ process GET_CONTAINER_OPTS {
         bind_mounts         ? "-B ${bind_mounts}" : "",
         env_file            ? "--env-file ${env_file}" : ""
     ].findAll().join(" ").trim() ?: ''
+    """
+    :
+    """
 }
