@@ -18,7 +18,8 @@ process NEXTFLOW_RUN {
     path env_file                       // file with env var strings defining workdir paths.
     path workdirs                       // previous tasks' workdirs.
     path params_file                    // params-file, extracted from data[0].
-    val data                           // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
+    val image_mounts                    // absolute and relative image mount specs.
+    val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
     log.info "task.ext.args: ${task.ext.args}"
@@ -35,8 +36,8 @@ process NEXTFLOW_RUN {
 
     log.info "as_list(data): ${as_list(data)}"
 
-//  image_param = "${task.ext.image_mounts_absolute}" ? "--image_mounts ${task.ext.image_mounts_absolute}" : ''
-//  log.info "image_param: ${image_param}"
+    image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
+    log.info "image_param: ${image_param}"
 
     databases   = meta.containsKey( 'databases'   ) && meta.databases   ? meta.databases   : databases
 
@@ -50,7 +51,7 @@ process NEXTFLOW_RUN {
             samplesheet ? "--input $samplesheet" : '',
             databases ? "--databases $databases" : '',
             "--outdir $child_outdir",
-//          "${image_param}"
+            "${image_param}"
     ].join(" ")
 
     log.info "workflow: ${workflow}"
