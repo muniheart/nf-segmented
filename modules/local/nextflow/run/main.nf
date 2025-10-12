@@ -5,10 +5,7 @@
 def as_list = { x -> x ? ( x instanceof List ? x : [x] ) : [] }
 
 process NEXTFLOW_RUN {
-    def container_opts
-
     container "https://depot.galaxyproject.org/singularity/nextflow%3A25.04.6--h2a3209d_0"
-    containerOptions "$container_opts"
 
     input:
     val pipeline_name                   // String
