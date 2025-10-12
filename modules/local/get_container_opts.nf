@@ -31,5 +31,5 @@ process GET_CONTAINER_OPTS {
                 bind_mounts         ? "-B ${bind_mounts}" : "",
                 env_file            ? "--env-file ${env_file}" : ""
             ].join(" ").trim()
-        }
+        } ?: ''
 }
