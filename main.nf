@@ -33,7 +33,7 @@ workflow iteration {
     workdirs = GET_INPUTS_FROM_DATA.out.workdirs
     image_mounts = GET_INPUTS_FROM_DATA.out.image_mounts
 
-    container_opts = GET_CONTAINER_OPTS( image_mounts, cache_dir, WRITE_ENVIRONMENT.out )
+    container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", WRITE_ENVIRONMENT.out )
     log.info "container_opts: $container_opts"
 
     NFCORE_DEMO(
