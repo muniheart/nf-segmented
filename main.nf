@@ -40,8 +40,8 @@ workflow iteration {
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
         samplesheet,
-        params.nfcore_demo_databases ?: '',
-        params.nfcore_demo_add_config ?: '',
+        "${as_path( params.nfcore_demo_databases )}",
+        "${as_path( params.nfcore_demo_add_config )}",
 //      params.outdir,
         cache_dir,
         WRITE_ENVIRONMENT.out,
