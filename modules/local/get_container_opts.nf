@@ -2,7 +2,7 @@ process GET_CONTAINER_OPTS {
     input:
     val image_mounts
     val cache_dir
-    path env_file
+    val env_file
 
     output:
     val opts
