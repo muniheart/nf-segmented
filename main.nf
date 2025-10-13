@@ -21,7 +21,7 @@ workflow iteration {
     log.info "iteration: data.getClass(): ${data.getClass()}"
     log.info "iteration: data: ${data}"
 
-    def cache_dir = file( workflow.workDir.resolve('local/nf_segmented').toUriString() )
+    def cache_dir = file( launchDir.resolve('NFCORE_DEMO').toUriString() )
     assert cache_dir.mkdirs()
 
     WRITE_ENVIRONMENT( data )
