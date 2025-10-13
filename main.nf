@@ -9,6 +9,9 @@ include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
+def cache_dir = file( launchDir.resolve('NFCORE_DEMO').toUriString() )
+assert cache_dir.mkdirs()
+
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 def as_path = { it -> it ? file( it, checkIfExists: true ) : Channel.value([]) }
 
@@ -20,9 +23,6 @@ workflow iteration {
     data.subscribe { log.info "iteration: data: ${it}" }
     log.info "iteration: data.getClass(): ${data.getClass()}"
     log.info "iteration: data: ${data}"
-
-    def cache_dir = file( launchDir.resolve('NFCORE_DEMO').toUriString() )
-    assert cache_dir.mkdirs()
 
     WRITE_ENVIRONMENT( data )
 
