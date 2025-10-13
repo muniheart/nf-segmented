@@ -9,7 +9,7 @@ include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
-def cache_dir = file( launchDir.resolve('NFCORE_DEMO').toUriString() )
+def cache_dir = launchDir.resolve('NFCORE_DEMO')
 assert cache_dir.mkdirs()
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
