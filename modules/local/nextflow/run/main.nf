@@ -23,12 +23,12 @@ process NEXTFLOW_RUN {
     val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
-    log.info "task.ext.args: ${task.ext.args}"
-    log.info "task.ext: ${task.ext}"
+//  log.info "task.ext.args: ${task.ext.args}"
+//  log.info "task.ext: ${task.ext}"
     def meta = data[0]
     def i = task.index
-    log.info "NEXTFLOW_RUN: task: ${task}"
-    log.info "NEXTFLOW RUN: i: ${i}"
+//  log.info "NEXTFLOW_RUN: task: ${task}"
+//  log.info "NEXTFLOW RUN: i: ${i}"
     workdir = "work_${i}"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
@@ -52,7 +52,7 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].join(" ")
 
-    log.info "workflow: ${workflow}"
+//  log.info "workflow: ${workflow}"
 
     """
     echo ${params.slurm.passwd_line} >> /etc/passwd
@@ -64,12 +64,12 @@ process NEXTFLOW_RUN {
     """
 
     stub:
-    log.info "task.ext.args: ${task.ext.args}"
-    log.info "task.ext: ${task.ext}"
+//  log.info "task.ext.args: ${task.ext.args}"
+//  log.info "task.ext: ${task.ext}"
     def meta = data[0]
     def i = task.index
-    log.info "NEXTFLOW_RUN: task: ${task}"
-    log.info "NEXTFLOW RUN: i: ${i}"
+//  log.info "NEXTFLOW_RUN: task: ${task}"
+//  log.info "NEXTFLOW RUN: i: ${i}"
     workdir = "work_${i}"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
@@ -93,7 +93,7 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].join(" ")
 
-    log.info "workflow: ${workflow}"
+//  log.info "workflow: ${workflow}"
 
     """
     echo "${task.process}: stub"
