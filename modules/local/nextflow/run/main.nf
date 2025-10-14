@@ -65,7 +65,7 @@ process NEXTFLOW_RUN {
 
     stub:
     """
-    echo "nxf_cmd: ${task.process}: $nxf_cmd"
+    echo "${task.process}: stub"
     """
 
     output:
