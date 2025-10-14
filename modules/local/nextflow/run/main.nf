@@ -35,7 +35,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += i>1 ? " -resume" : ""
     child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
 
-    log.info "as_list(data): ${as_list(data)}"
+//  log.info "as_list(data): ${as_list(data)}"
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
     log.info "image_param: ${image_param}"
