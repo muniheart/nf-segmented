@@ -64,9 +64,40 @@ process NEXTFLOW_RUN {
     """
 
     stub:
+    log.info "task.ext.args: ${task.ext.args}"
+    log.info "task.ext: ${task.ext}"
+    def meta = data[0]
+    def i = task.index
+    log.info "NEXTFLOW_RUN: task: ${task}"
+    log.info "NEXTFLOW RUN: i: ${i}"
+    workdir = "work_${i}"
+    nextflow_opts += " -w $workdir"
+    nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
+    nextflow_opts += i>1 ? " -resume" : ""
+    child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
+
+//  log.info "as_list(data): ${as_list(data)}"
+
+    databases   = meta.containsKey( 'databases'   ) && meta.databases   ? meta.databases   : databases
+
+    // Construct nextflow command
+    def nxf_cmd = [
+        'nextflow -log nextflow.log run',
+            nextflow_opts,
+            pipeline_name,
+            params_file ? "-params-file ${params_file}" : '',
+            additional_config ? additional_config.split(/\s+/).collect { "-c $it" }.join(' ') : '',
+            samplesheet ? "--input $samplesheet" : '',
+            databases ? "--databases $databases" : '',
+            "--outdir $child_outdir",
+            "${image_param}"
+    ].join(" ")
+
+    log.info "workflow: ${workflow}"
+
     """
     echo "${task.process}: stub"
-    mkdir -p work_1/ab/cdef012
+    mkdir -p ${workdir}/ab/cdef012
     touch nextflow.log
     """
 
