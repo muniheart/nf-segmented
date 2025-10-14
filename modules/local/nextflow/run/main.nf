@@ -63,6 +63,11 @@ process NEXTFLOW_RUN {
     $nxf_cmd
     """
 
+    stub:
+    """
+    echo "nxf_cmd: ${task.process}: $nxf_cmd"
+    """
+
     output:
     path "$workdir", emit: work_dir
     stdout emit: log
