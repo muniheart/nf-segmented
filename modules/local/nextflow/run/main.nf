@@ -66,6 +66,8 @@ process NEXTFLOW_RUN {
     stub:
     """
     echo "${task.process}: stub"
+    mkdir -p ${workdir}/ab/cdef012
+    touch nextflow.log
     """
 
     output:
