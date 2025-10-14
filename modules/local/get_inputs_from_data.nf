@@ -33,10 +33,12 @@ process GET_INPUTS_FROM_DATA {
         relative: get_image_mount_args( data ),
         absolute: get_image_mount_args( data, true )
     ]
+    image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
     
     output:
     val pfile,          emit: params_file
     val ss,             emit: samplesheet
     val workdirs,       emit: workdirs
     val image_mounts,   emit: image_mounts
+    val image_param,    emit: image_param
 }

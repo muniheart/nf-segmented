@@ -15,10 +15,10 @@ process NEXTFLOW_RUN {
     val additional_config              // custom configs
 //  path outdir, name: 'results'        // create link to params.outdir
     val cache_dir                       // common nextflow cache-dir for all tasks
-    val env_file                       // file with env var strings defining workdir paths.
-    val workdirs                       // previous tasks' workdirs.
-    val params_file                    // params-file, extracted from data[0].
-    val image_mounts                    // absolute and relative image mount specs.
+    val env_file                        // file with env var strings defining workdir paths.
+    val workdirs                        // previous tasks' workdirs.
+    val params_file                     // params-file, extracted from data[0].
+    val image_param                     // absolute and relative image mount specs.
     val container_opts                  // precomputed string of containerOptions.
     val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
@@ -36,9 +36,6 @@ process NEXTFLOW_RUN {
     child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
 
 //  log.info "as_list(data): ${as_list(data)}"
-
-    image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
-    log.info "image_param: ${image_param}"
 
     databases   = meta.containsKey( 'databases'   ) && meta.databases   ? meta.databases   : databases
 
