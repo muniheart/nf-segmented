@@ -52,7 +52,7 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].join(" ")
 
-    image = "${work_dir}.sqfs"
+    image = "${workdir}.sqfs"
 
 //  log.info "workflow: ${workflow}"
 
@@ -64,11 +64,11 @@ process NEXTFLOW_RUN {
 
     $nxf_cmd
 
-    mksquashfs ${work_dir}/* ${image} -no-compression
+    mksquashfs ${workdir}/* ${image} -no-compression
 
     if ! ( ${params.keep_workdir } ); then
         # Remove contents of work-dir.
-        rm -rf ${work_dir}/*
+        rm -rf ${workdir}/*
     fi
     """
 
@@ -102,7 +102,7 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].join(" ")
 
-    image = "${work_dir}.sqfs"
+    image = "${workdir}.sqfs"
 
 //  log.info "workflow: ${workflow}"
 
