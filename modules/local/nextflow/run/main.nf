@@ -52,6 +52,8 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].join(" ")
 
+    image = "${work_dir}.sqfs"
+
 //  log.info "workflow: ${workflow}"
 
     """
@@ -61,6 +63,13 @@ process NEXTFLOW_RUN {
     alias nextflow=/usr/local/bin/nextflow
 
     $nxf_cmd
+
+    mksquashfs ${work_dir}/* ${image} -no-compression
+
+    if ! ( ${params.keep_workdir } ); then
+        # Remove contents of work-dir.
+        rm -rf ${work_dir}/*
+    fi
     """
 
     stub:
@@ -93,16 +102,19 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].join(" ")
 
+    image = "${work_dir}.sqfs"
+
 //  log.info "workflow: ${workflow}"
 
     """
     echo "${task.process}: stub"
     mkdir -p ${workdir}/ab/cdef012
-    touch nextflow.log
+    touch nextflow.log $image
     """
 
     output:
-    path "$workdir", emit: work_dir
+    tuple path("$image"), path("$workdir"), emit: image_pair
+
     stdout emit: log
     path 'nextflow.log'
 }
