@@ -36,12 +36,16 @@ process GET_INPUTS_FROM_DATA {
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
 
-    // Create BASH env file that defines a variable for each work-dir.
-    key_val_strs = data.subList( 1, data.size() ).withIndex()
-        .collect { a, index -> "wk${index+1}=${a[1].resolveSymLink()}" }.join(" ")
+    if ( params.define_workdir_vars ) {
+        // Create BASH env file that defines a variable for each work-dir.
+        key_val_strs = data.subList( 1, data.size() ).withIndex()
+            .collect { a, index -> "wk${index+1}=${a[1].resolveSymLink()}" }.join(" ")
     
-    work_env = file( "${task.workDir}/work.env" )
-    work_env.text = key_val_strs
+        work_env = file( "${task.workDir}/work.env" )
+        work_env.text = key_val_strs
+    } else {
+        work_env = null
+    }
 
     output:
     val pfile,          emit: params_file
