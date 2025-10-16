@@ -20,7 +20,7 @@ process GET_CONTAINER_OPTS {
     bind_mounts = \
         [
             params.bind_mounts,
-            ${cache_dir},
+            "${cache_dir}",
         ].findAll().join(",")
 
     opts = [
