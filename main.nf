@@ -26,7 +26,7 @@ workflow iteration {
 
     pfile = GET_INPUTS_FROM_DATA.out.params_file
     samplesheet = GET_INPUTS_FROM_DATA.out.samplesheet ?: as_path( params.nfcore_demo_databases )
-    workdirs = GET_INPUTS_FROM_DATA.out.workdirs
+    workdirs = params.create_workdir_symlinks ? GET_INPUTS_FROM_DATA.out.workdirs : []
     image_mounts = GET_INPUTS_FROM_DATA.out.image_mounts
     image_param = GET_INPUTS_FROM_DATA.out.image_param
     work_env = GET_INPUTS_FROM_DATA.out.work_env
