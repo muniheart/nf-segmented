@@ -13,14 +13,14 @@ process GET_CONTAINER_OPTS {
             "NXF_APPTAINER_CACHEDIR=\${NXF_APPTAINER_CACHEDIR}",
             "NXF_HOME=\${NXF_HOME}",
             "NXF_OFFLINE=\${NXF_OFFLINE}",
-//          "NXF_CACHE_DIR=${cache_dir.resolveSymLink()}",
+            "NXF_CACHE_DIR=${cache_dir}",
             "${params.env_vars}"
         ].join(",")
 
     bind_mounts = \
         [
             params.bind_mounts,
-//          cache_dir.resolveSymLink(),
+            ${cache_dir},
         ].findAll().join(",")
 
     opts = [
