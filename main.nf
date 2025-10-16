@@ -2,7 +2,6 @@ nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
-include { WRITE_ENVIRONMENT } from "./modules/local/write_environment.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
 include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
@@ -23,8 +22,6 @@ workflow iteration {
     log.info "iteration: data.getClass(): ${data.getClass()}"
     log.info "iteration: data: ${data}"
 
-    WRITE_ENVIRONMENT( data )
-
     GET_INPUTS_FROM_DATA( data )
 
     pfile = GET_INPUTS_FROM_DATA.out.params_file
@@ -32,8 +29,9 @@ workflow iteration {
     workdirs = GET_INPUTS_FROM_DATA.out.workdirs
     image_mounts = GET_INPUTS_FROM_DATA.out.image_mounts
     image_param = GET_INPUTS_FROM_DATA.out.image_param
+    work_env = GET_INPUTS_FROM_DATA.out.work_env
 
-    container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", WRITE_ENVIRONMENT.out )
+    container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", work_env )
     log.info "container_opts: $container_opts"
 
     NFCORE_DEMO(
@@ -44,7 +42,7 @@ workflow iteration {
         params.nfcore_demo_add_config ? "${as_path( params.nfcore_demo_add_config )}" : '',
 //      params.outdir,
         cache_dir,
-        WRITE_ENVIRONMENT.out,
+        work_env,
         workdirs,
         pfile,
         image_param,
