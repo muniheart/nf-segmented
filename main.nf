@@ -31,7 +31,7 @@ workflow iteration {
     image_param = GET_INPUTS_FROM_DATA.out.image_param
     work_env = GET_INPUTS_FROM_DATA.out.work_env
 
-    container_opts = GET_CONTAINER_OPTS( image_mounts, cache_dir, work_env )
+    container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", work_env )
     log.info "container_opts: $container_opts"
 
     NFCORE_DEMO(
@@ -41,7 +41,7 @@ workflow iteration {
         params.nfcore_demo_databases ? "${as_path( params.nfcore_demo_databases )}" : '',
         params.nfcore_demo_add_config ? "${as_path( params.nfcore_demo_add_config )}" : '',
 //      params.outdir,
-        cache_dir,
+//      cache_dir,
         work_env,
         workdirs,
         pfile,
