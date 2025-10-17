@@ -14,7 +14,7 @@ process NEXTFLOW_RUN {
     val databases                      // pipeline databases sheet
     val additional_config              // custom configs
 //  path outdir, name: 'results'        // create link to params.outdir
-    val cache_dir                       // common nextflow cache-dir for all tasks
+//  val cache_dir                       // common nextflow cache-dir for all tasks
     val env_file                        // file with env var strings defining workdir paths.
     path workdirs                       // previous tasks' workdirs.
     val params_file                     // params-file, extracted from data[0].
