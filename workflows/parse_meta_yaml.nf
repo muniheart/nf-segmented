@@ -110,7 +110,9 @@ workflow PARSE_META_YAML {
         def samplesheet = it.nested.containsKey( 'input' ) && it.nested.input ? it.nested.input :
             it.main.containsKey( 'samplesheet' ) && it.main.samplesheet ? it.main.samplesheet : params.samplesheet
         def batch_size = it.main.containsKey( 'batch_size' ) ? it.main.batch_size : params.batch_size
-        return [ index, [ samplesheet: samplesheet, batch_size: batch_size ] ]
+        def samplesheet_groupby = it.main.containsKey( 'samplesheet_groupby' ) ? it.main.samplesheet_groupby :
+            params.containsKey( 'samplesheet_groupby' ) ? params.samplesheet_groupby : null
+        return [ index, [ samplesheet: samplesheet, batch_size: batch_size, samplesheet_groupby: samplesheet_groupby ] ]
     }
     ch_meta.subscribe { log.info "PARSE_META_YAML: ch_meta: $it" }
 
