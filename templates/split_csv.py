@@ -21,7 +21,7 @@ def split_csv(input_file, output_prefix, max_records, key):
         sys.exit(1)
 
     # Produce one group per record when key is None.
-    grouped = list(df.groupby( key if key is None else df.index ))
+    grouped = list(df.groupby( df.index if key is None else key ))
 
     file_index = 1
     current_chunk = []
