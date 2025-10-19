@@ -8,7 +8,7 @@ process SPLIT_SAMPLESHEET {
     script:
     log.info "SPLIT_SAMPLESHEET: index: $index; meta: $meta; samplesheet: $samplesheet"
     if ( meta.batch_size > 0 ) {
-        if ( params.samplesheet_groupby ) {
+        if ( meta.samplesheet_groupby ) {
             """
             if [ "$CLUSTER_ID" = "fir" ]; then
                 module load scipy-stack/2025a
@@ -23,7 +23,7 @@ process SPLIT_SAMPLESHEET {
                 --input samplesheet.csv \
                 --output-prefix samplesheet \
                 --max-records ${meta.batch_size}\
-                --key ${params.samplesheet_groupby}
+                --key ${meta.samplesheet_groupby}
             """
         } else {
             """
