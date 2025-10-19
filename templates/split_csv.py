@@ -14,11 +14,14 @@ def split_csv(input_file, output_prefix, max_records, key):
         print(f"Error reading CSV file: {e}", file=sys.stderr)
         sys.exit(1)
 
-    if key not in df.columns:
-        print(f"Error: Column '{key}' not found in input file.", file=sys.stderr)
+    key = None if key is None else key.split(',')
+
+    if key is not None and not set( df.columns ).issuperset( key ):
+        print(f"Error: Column(s) '{key}' not found in input file.", file=sys.stderr)
         sys.exit(1)
 
-    grouped = list(df.groupby(key))
+    # Produce one group per record when key is None.
+    grouped = list(df.groupby( key if key is None else df.index ))
 
     file_index = 1
     current_chunk = []
@@ -60,7 +63,7 @@ def main():
     parser.add_argument('--input', required=True, help='Path to input CSV file')
     parser.add_argument('--output-prefix', required=True, help='Prefix for output CSV files')
     parser.add_argument('--max-records', type=int, required=True, help='Maximum number of records per output file')
-    parser.add_argument('--key', required=True, help='Column name to group by (e.g., id)')
+    parser.add_argument('--key', type=str, required=False, const=None, help='Column name(s) to group by (e.g., id)')
 
     args = parser.parse_args()
 
