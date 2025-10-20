@@ -14,8 +14,8 @@ process GET_CONTAINER_OPTS {
             "NXF_HOME=\${NXF_HOME}",
             "NXF_OFFLINE=\${NXF_OFFLINE}",
             "NXF_CACHE_DIR=${cache_dir}",
-            "${params.env_vars}"
-        ].join(",")
+            "${ params.env_vars ?: '' }"
+        ].findAll().join(",")
 
     bind_mounts = \
         [
