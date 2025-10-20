@@ -12,7 +12,7 @@ process NEXTFLOW_RUN {
     val nextflow_opts                   // String
     path samplesheet                    // pipeline samplesheet
     val databases                      // pipeline databases sheet
-    val additional_config              // custom configs
+    path additional_config, stageAs: 'nextflow.config'      // custom configs
 //  path outdir, name: 'results'        // create link to params.outdir
 //  val cache_dir                       // common nextflow cache-dir for all tasks
     val env_file                        // file with env var strings defining workdir paths.
@@ -45,7 +45,6 @@ process NEXTFLOW_RUN {
             nextflow_opts,
             pipeline_name,
             params_file ? "-params-file ${params_file}" : '',
-            additional_config ? additional_config.split(/\s+/).collect { "-c $it" }.join(' ') : '',
             samplesheet ? "--input $samplesheet" : '',
             databases ? "--databases $databases" : '',
             "--outdir $child_outdir",
