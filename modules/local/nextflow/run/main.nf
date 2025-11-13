@@ -32,7 +32,7 @@ process NEXTFLOW_RUN {
     workdir = "work_${i}"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
-    nextflow_opts += i>1 ? " -resume" : ""
+    nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
     child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
 
 //  log.info "as_list(data): ${as_list(data)}"
