@@ -41,7 +41,7 @@ workflow iteration {
         samplesheet,
         params.nfcore_demo_databases ? "${as_path( params.nfcore_demo_databases )}" : '',
         params.nfcore_demo_add_config ? "${as_path( params.nfcore_demo_add_config )}" : '',
-//      params.outdir,
+        params.outdir,
 //      cache_dir,
         work_env,
         workdirs,
