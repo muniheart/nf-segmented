@@ -52,9 +52,7 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].findAll().join(" ")
 
-    if test -f "$log_file"; then
-        ln -s "$log_file"
-    fi
+    image = "${workdir}.sqfs"
 
 //  log.info "workflow: ${workflow}"
 
@@ -65,6 +63,20 @@ process NEXTFLOW_RUN {
     alias nextflow=/usr/local/bin/nextflow
 
     $nxf_cmd
+<<<<<<< HEAD
+=======
+
+    if test -f "$log_file"; then
+        ln -s "$log_file"
+    fi
+
+    mksquashfs ${workdir}/* ${image} -no-compression
+
+    if ! ( ${params.keep_workdir } ); then
+        # Remove contents of work-dir.
+        rm -rf ${workdir}/*
+    fi
+>>>>>>> 53869db (Move bash code into script string.)
     """
 
     stub:
@@ -98,9 +110,7 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].findAll().join(" ")
 
-    if test -f "$log_file"; then
-        ln -s "$log_file"
-    fi
+    image = "${workdir}.sqfs"
 
 //  log.info "workflow: ${workflow}"
 
