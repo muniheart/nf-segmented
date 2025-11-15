@@ -13,7 +13,7 @@ process NEXTFLOW_RUN {
     path samplesheet                    // pipeline samplesheet
     val databases                      // pipeline databases sheet
     path additional_config, stageAs: 'nextflow.config'      // custom configs
-    path outdir, name: 'results'        // create link to params.outdir
+    path outdir, stageAs: 'results'     // create link to params.outdir
 //  val cache_dir                       // common nextflow cache-dir for all tasks
     val env_file                        // file with env var strings defining workdir paths.
     path workdirs                       // previous tasks' workdirs.
