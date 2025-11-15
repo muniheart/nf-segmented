@@ -33,8 +33,8 @@ process NEXTFLOW_RUN {
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
-    child_outdir = "${workflow.outputDir}/${task.process.split(':')[-1].toLowerCase()}" 
-    log_file = "${child_outdir}/nextflow.log"
+    child_outdir = "${params.outdir}/${task.process.split(':')[-1].toLowerCase()}" 
+    log_file = 'nextflow_{i}.log'
 
 //  log.info "as_list(data): ${as_list(data)}"
 
@@ -64,10 +64,6 @@ process NEXTFLOW_RUN {
 
     $nxf_cmd
 
-    if test -f "$log_file"; then
-        ln -s "$log_file"
-    fi
-
     mksquashfs ${workdir}/* ${image} -no-compression
 
     if ! ( ${params.keep_workdir } ); then
@@ -87,8 +83,8 @@ process NEXTFLOW_RUN {
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += i>1 ? " -resume" : ""
-    child_outdir = "${workflow.outputDir}/${task.process.split(':')[-1].toLowerCase()}" 
-    log_file = "${child_outdir}/nextflow.log"
+    child_outdir = "${params.outdir}/${task.process.split(':')[-1].toLowerCase()}" 
+    log_file = 'nextflow_${i}.log'
 
 //  log.info "as_list(data): ${as_list(data)}"
 
@@ -121,5 +117,5 @@ process NEXTFLOW_RUN {
     tuple path("$image"), path("$workdir"), emit: image_pair
 
     stdout emit: log
-    path 'nextflow.log'
+    path "$log_file"
 }
