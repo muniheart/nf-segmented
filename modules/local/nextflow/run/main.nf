@@ -52,10 +52,6 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].findAll().join(" ")
 
-    if test -f "$log_file"; then
-        ln -s "$log_file"
-    fi
-
     image = "${workdir}.sqfs"
 
 //  log.info "workflow: ${workflow}"
@@ -67,6 +63,10 @@ process NEXTFLOW_RUN {
     alias nextflow=/usr/local/bin/nextflow
 
     $nxf_cmd
+
+    if test -f "$log_file"; then
+        ln -s "$log_file"
+    fi
 
     mksquashfs ${workdir}/* ${image} -no-compression
 
@@ -106,10 +106,6 @@ process NEXTFLOW_RUN {
             "--outdir $child_outdir",
             "${image_param}"
     ].findAll().join(" ")
-
-    if test -f "$log_file"; then
-        ln -s "$log_file"
-    fi
 
     image = "${workdir}.sqfs"
 
