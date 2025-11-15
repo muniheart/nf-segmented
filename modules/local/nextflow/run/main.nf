@@ -34,6 +34,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
     child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
+    log_file = "${child_outdir}/nextflow.log"
 
 //  log.info "as_list(data): ${as_list(data)}"
 
@@ -41,7 +42,7 @@ process NEXTFLOW_RUN {
 
     // Construct nextflow command
     def nxf_cmd = [
-        "nextflow -log ${child_outdir}/nextflow.log run",
+        "nextflow -log $log_file run",
             nextflow_opts,
             pipeline_name,
             params_file ? "-params-file ${params_file}" : '',
@@ -50,6 +51,10 @@ process NEXTFLOW_RUN {
             "--outdir $child_outdir",
             "${image_param}"
     ].join(" ")
+
+    if [ -f $log_file ]; then
+        ln -s $log_file
+    fi
 
     image = "${workdir}.sqfs"
 
@@ -83,6 +88,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += i>1 ? " -resume" : ""
     child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
+    log_file = "${child_outdir}/nextflow.log"
 
 //  log.info "as_list(data): ${as_list(data)}"
 
@@ -90,7 +96,7 @@ process NEXTFLOW_RUN {
 
     // Construct nextflow command
     def nxf_cmd = [
-        'nextflow -log nextflow.log run',
+        'nextflow -log $log_file run',
             nextflow_opts,
             pipeline_name,
             params_file ? "-params-file ${params_file}" : '',
@@ -100,6 +106,10 @@ process NEXTFLOW_RUN {
             "--outdir $child_outdir",
             "${image_param}"
     ].join(" ")
+
+    if [ -f $log_file ]; then
+        ln -s $log_file
+    fi
 
     image = "${workdir}.sqfs"
 
