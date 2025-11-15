@@ -50,10 +50,10 @@ process NEXTFLOW_RUN {
             databases ? "--databases $databases" : '',
             "--outdir $child_outdir",
             "${image_param}"
-    ].join(" ")
+    ].findAll().join(" ")
 
-    if [ -f $log_file ]; then
-        ln -s $log_file
+    if test -f "$log_file"; then
+        ln -s "$log_file"
     fi
 
 //  log.info "workflow: ${workflow}"
@@ -87,7 +87,7 @@ process NEXTFLOW_RUN {
 
     // Construct nextflow command
     def nxf_cmd = [
-        'nextflow -log $log_file run',
+        "nextflow -log $log_file run",
             nextflow_opts,
             pipeline_name,
             params_file ? "-params-file ${params_file}" : '',
@@ -96,10 +96,10 @@ process NEXTFLOW_RUN {
             databases ? "--databases $databases" : '',
             "--outdir $child_outdir",
             "${image_param}"
-    ].join(" ")
+    ].findAll().join(" ")
 
-    if [ -f $log_file ]; then
-        ln -s $log_file
+    if test -f "$log_file"; then
+        ln -s "$log_file"
     fi
 
 //  log.info "workflow: ${workflow}"
