@@ -13,7 +13,7 @@ process NEXTFLOW_RUN {
     path samplesheet                    // pipeline samplesheet
     val databases                      // pipeline databases sheet
     path additional_config, stageAs: 'nextflow.config'      // custom configs
-    path outdir, stageAs: 'results'     // create link to params.outdir
+//  path outdir, stageAs: 'results'     // create link to params.outdir
 //  val cache_dir                       // common nextflow cache-dir for all tasks
     val env_file                        // file with env var strings defining workdir paths.
     path workdirs                       // previous tasks' workdirs.
@@ -33,7 +33,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
-    child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
+    child_outdir = "${workflow.outputDir}/${task.process.split(':')[-1].toLowerCase()}" 
     log_file = "${child_outdir}/nextflow.log"
 
 //  log.info "as_list(data): ${as_list(data)}"
@@ -90,7 +90,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += i>1 ? " -resume" : ""
-    child_outdir = "results/${task.process.split(':')[-1].toLowerCase()}" 
+    child_outdir = "${workflow.outputDir}/${task.process.split(':')[-1].toLowerCase()}" 
     log_file = "${child_outdir}/nextflow.log"
 
 //  log.info "as_list(data): ${as_list(data)}"
