@@ -109,5 +109,4 @@ process NEXTFLOW_RUN {
     output:
     path "$workdir", emit: work_dir
     stdout emit: log
-    path "$log_file"
 }
