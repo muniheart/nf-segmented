@@ -117,5 +117,4 @@ process NEXTFLOW_RUN {
     tuple path("$image"), path("$workdir"), emit: image_pair
 
     stdout emit: log
-    path "$log_file"
 }
