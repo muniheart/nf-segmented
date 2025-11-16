@@ -33,8 +33,10 @@ process NEXTFLOW_RUN {
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
-    child_outdir = "${params.outdir}/${task.process.split(':')[-1].toLowerCase()}" 
-    log_file = "${child_outdir}/nextflow_${i}.log"
+
+    task_name = task.process.split(':')[-1].toLowerCase()
+    child_outdir = file( params.outdir ).resolve( task_name )
+    log_file = child_outdir.resolve( ".${task_name}_${i}.log" )
 
 //  log.info "as_list(data): ${as_list(data)}"
 
@@ -75,9 +77,11 @@ process NEXTFLOW_RUN {
     workdir = "work_${i}"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
-    nextflow_opts += i>1 ? " -resume" : ""
-    child_outdir = "${params.outdir}/${task.process.split(':')[-1].toLowerCase()}" 
-    log_file = "${child_outdir}/nextflow_${i}.log"
+    nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
+
+    task_name = task.process.split(':')[-1].toLowerCase()
+    child_outdir = file( params.outdir ).resolve( task_name )
+    log_file = child_outdir.resolve( ".${task_name}_${i}.log" )
 
 //  log.info "as_list(data): ${as_list(data)}"
 
