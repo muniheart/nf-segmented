@@ -34,7 +34,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
     child_outdir = "${params.outdir}/${task.process.split(':')[-1].toLowerCase()}" 
-    log_file = "nextflow_${i}.log"
+    log_file = "${child_outdir}/nextflow_${i}.log"
 
 //  log.info "as_list(data): ${as_list(data)}"
 
@@ -84,7 +84,7 @@ process NEXTFLOW_RUN {
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += i>1 ? " -resume" : ""
     child_outdir = "${params.outdir}/${task.process.split(':')[-1].toLowerCase()}" 
-    log_file = "nextflow_${i}.log"
+    log_file = "${child_outdir}/nextflow_${i}.log"
 
 //  log.info "as_list(data): ${as_list(data)}"
 
