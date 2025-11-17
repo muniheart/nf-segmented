@@ -9,7 +9,7 @@ process SQUASH_WORK {
     image = "${work_dir_parent}.sqfs"
 
     """
-    mksquashfs ${work_dir_parent} ${image} -no-compression
+    mksquashfs \$(realpath ${work_dir_parent}) ${image} -no-compression
 
     # params.keep_workdir: ${params.keep_workdir}
     if ! ( ${params.keep_workdir } ); then
