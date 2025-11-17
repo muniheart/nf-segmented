@@ -54,8 +54,6 @@ process NEXTFLOW_RUN {
             "${image_param}"
     ].findAll().join(" ")
 
-    image = "${workdir}.sqfs"
-
 //  log.info "workflow: ${workflow}"
 
     """
@@ -99,8 +97,6 @@ process NEXTFLOW_RUN {
             "--outdir $child_outdir",
             "${image_param}"
     ].findAll().join(" ")
-
-    image = "${workdir}.sqfs"
 
 //  log.info "workflow: ${workflow}"
 
