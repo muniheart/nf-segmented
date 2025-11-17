@@ -29,7 +29,9 @@ process NEXTFLOW_RUN {
     def i = task.index
 //  log.info "NEXTFLOW_RUN: task: ${task}"
 //  log.info "NEXTFLOW RUN: i: ${i}"
-    workdir = "work_${i}"
+
+//  Place workdir at depth 2 so removal of its files won't invalidate task cache.
+    workdir = "work_${i}/nested"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
@@ -72,7 +74,9 @@ process NEXTFLOW_RUN {
     def i = task.index
 //  log.info "NEXTFLOW_RUN: task: ${task}"
 //  log.info "NEXTFLOW RUN: i: ${i}"
-    workdir = "work_${i}"
+
+//  Place workdir at depth 2 so removal of its files won't invalidate task cache.
+    workdir = "work_${i}/nested"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
@@ -107,6 +111,6 @@ process NEXTFLOW_RUN {
     """
 
     output:
-    path "$workdir", emit: work_dir
+    path "work_*", emit: work_dir_parent
     stdout emit: log
 }

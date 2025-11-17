@@ -51,7 +51,7 @@ workflow iteration {
         data
     )
 
-    SQUASH_WORK( NFCORE_DEMO.out.work_dir )
+    SQUASH_WORK( NFCORE_DEMO.out.work_dir_parent )
 
     emit:
     SQUASH_WORK.out
