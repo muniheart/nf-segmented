@@ -14,7 +14,7 @@ process SQUASH_WORK {
     # params.keep_workdir: ${params.keep_workdir}
     if ! ( ${params.keep_workdir } ); then
         # Remove contents of work-dir.
-        rm -rf ${work_dir_parent}/nested/*
+        rm -rf ${work_dir_parent}/decouple_hash/*
     fi
     """
 }

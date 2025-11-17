@@ -31,7 +31,7 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
 //  Place workdir at depth 2 so removal of its files won't invalidate task cache.
-    workdir = "work_${i}/nested"
+    workdir = "work_${i}/decouple_hash"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
@@ -76,7 +76,7 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
 //  Place workdir at depth 2 so removal of its files won't invalidate task cache.
-    workdir = "work_${i}/nested"
+    workdir = "work_${i}/decouple_hash"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
