@@ -14,6 +14,44 @@ assert cache_dir.mkdirs()
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 def as_path = { it -> it ? file( it, checkIfExists: true ) : Channel.value([]) }
 
+workflow initial_run {
+    take:
+    data                                // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
+
+    main:
+    data.subscribe { log.info "iteration: data: ${it}" }
+    log.info "iteration: data.getClass(): ${data.getClass()}"
+    log.info "iteration: data: ${data}"
+
+    GET_INPUTS_FROM_DATA( data )
+
+    pfile = GET_INPUTS_FROM_DATA.out.params_file
+    samplesheet = GET_INPUTS_FROM_DATA.out.samplesheet ?: as_path( params.nfcore_demo_databases )
+    workdirs = params.create_workdir_symlinks ? GET_INPUTS_FROM_DATA.out.workdirs : []
+    image_mounts = GET_INPUTS_FROM_DATA.out.image_mounts
+    image_param = GET_INPUTS_FROM_DATA.out.image_param
+    work_env = GET_INPUTS_FROM_DATA.out.work_env
+
+    container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", work_env )
+    log.info "container_opts: $container_opts"
+
+    NFCORE_DEMO(
+        params.nfcore_demo_pipeline,     // Select nf-core pipeline
+        params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
+        samplesheet,
+        params.nfcore_demo_databases ? "${as_path( params.nfcore_demo_databases )}" : '',
+        params.nfcore_demo_add_config ? "${as_path( params.nfcore_demo_add_config )}" : '',
+//      params.outdir,
+//      cache_dir,
+        work_env,
+        workdirs,
+        pfile,
+        image_param,
+        container_opts,
+        data
+    )
+}
+
 workflow iteration {
     take:
     data                                // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
@@ -101,6 +139,11 @@ workflow {
 //  *      Yes.  Must generate combinations: ( seg_1, ss_11 ), ( seg_1, ss_12 ), ... ( seg_2, ss_21 ), ...
 //  *      so that we are sure that the segments are processed in order.
 //  */
+
+    if ( ! workflow.resume ) {
+        // Run nextflow on one segment to generate log entry.
+        initial_run( ch_meta.first() )
+    }
 
     ch_out = iteration.scan( ch_meta )
 //  ch_out.subscribe { log.info "ch_out: $it" }
