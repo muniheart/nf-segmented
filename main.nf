@@ -142,7 +142,8 @@ workflow {
 
     if ( ! workflow.resume ) {
         // Run nextflow on one segment to generate log entry.
-        initial_run( ch_meta.first() )
+        ch_data = ch_meta.first().map { it -> [ it ] }
+        initial_run( ch_data )
     }
 
     ch_out = iteration.scan( ch_meta )
