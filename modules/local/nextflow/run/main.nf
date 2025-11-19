@@ -65,13 +65,6 @@ process NEXTFLOW_RUN {
     alias nextflow=/usr/local/bin/nextflow
 
     $nxf_cmd
-
-    mksquashfs ${workdir}/* ${image} -no-compression
-
-    if ! ( ${params.keep_workdir } ); then
-        # Remove contents of work-dir.
-        rm -rf ${workdir}/*
-    fi
     """
 
     stub:
@@ -114,7 +107,6 @@ process NEXTFLOW_RUN {
     """
     echo "${task.process}: stub"
     mkdir -p ${workdir}/ab/cdef012
-    touch nextflow.log $image
     """
 
     output:
