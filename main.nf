@@ -2,6 +2,7 @@ nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
+include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
 include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
@@ -49,6 +50,8 @@ workflow iteration {
         container_opts,
         data
     )
+
+    SQUASH_WORK( NFCORE_DEMO.out.work_dir_parent )
 
     emit:
     NFCORE_DEMO.out.image_pair
