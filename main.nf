@@ -1,8 +1,6 @@
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
-import groovyx.gpars.dataflow.DataflowBroadcast
-
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"

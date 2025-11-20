@@ -1,3 +1,5 @@
+import groovyx.gpars.dataflow.DataflowBroadcast
+
 /*
  * I can't find a container with both nextflow and squashfs-tools.  Using system installed squashfs-tools
  * causes PATH problems for nextflow.  I will use separate containers for the two tools.
