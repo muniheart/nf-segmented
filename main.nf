@@ -124,7 +124,7 @@ workflow {
     if ( workflow.resume )
         iteration.scan( ch_meta )
     else {
-        iteration( ch_meta.first() )
+        iteration( ch_meta.first().map { it -> [it] } )
         link_runs( ch_meta, iteration.out )
     }
 }
