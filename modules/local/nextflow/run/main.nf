@@ -20,10 +20,11 @@ process NEXTFLOW_RUN {
     path params_file                    // params-file, extracted from data[0].
     val image_param                     // absolute and relative image mount specs.
     val container_opts                  // precomputed string of containerOptions.
-    val is_resume                       // true on resume run
     val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
+    is_resume = data instanceof DataflowBroadcast
+
 //  log.info "task.ext.args: ${task.ext.args}"
 //  log.info "task.ext: ${task.ext}"
     def meta = data[0]

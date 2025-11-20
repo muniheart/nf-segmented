@@ -37,8 +37,6 @@ workflow iteration {
     container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", work_env )
     log.info "container_opts: $container_opts"
 
-    is_resume = data instanceof DataflowBroadcast
-
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
@@ -52,7 +50,6 @@ workflow iteration {
         pfile,
         image_param,
         container_opts,
-        is_resume,
         data
     )
 
