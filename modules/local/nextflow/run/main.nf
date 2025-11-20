@@ -20,6 +20,7 @@ process NEXTFLOW_RUN {
     path params_file                    // params-file, extracted from data[0].
     val image_param                     // absolute and relative image mount specs.
     val container_opts                  // precomputed string of containerOptions.
+    val is_resume                       // true on resume run
     val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
@@ -34,7 +35,7 @@ process NEXTFLOW_RUN {
     workdir = "work_${i}/decouple_hash"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
-    nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
+    nextflow_opts += is_resume ? " -resume" : ""
 
     task_name = task.process.split(':')[-1].toLowerCase()
     child_outdir = file( params.outdir ).resolve( task_name )

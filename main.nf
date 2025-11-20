@@ -1,6 +1,8 @@
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
+import groovyx.gpars.dataflow.DataflowBroadcast
+
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
@@ -35,6 +37,8 @@ workflow iteration {
     container_opts = GET_CONTAINER_OPTS( image_mounts, "$cache_dir", work_env )
     log.info "container_opts: $container_opts"
 
+    is_resume = data instanceof DataflowBroadcast
+
     NFCORE_DEMO(
         params.nfcore_demo_pipeline,     // Select nf-core pipeline
         params.nfcore_demo_opts,   // workflow opts supplied as params for flexibility
@@ -48,6 +52,7 @@ workflow iteration {
         pfile,
         image_param,
         container_opts,
+        is_resume,
         data
     )
 
@@ -102,6 +107,29 @@ workflow {
 //  *      so that we are sure that the segments are processed in order.
 //  */
 
-    ch_out = iteration.scan( ch_meta )
-//  ch_out.subscribe { log.info "ch_out: $it" }
+   /*
+    *   There are two modes by which to run the workflow:
+    *       workflow.resume: true
+    *           Run all segments.
+    *       workflow.resume: false
+    *         - Run first segment to initialize a new run and generate a log record.  This is launched in
+    *           sequential manner.
+    *         - Run all segments.  This is launched in recursive manner.
+    *
+    */
+    workflow link_runs {
+        take:
+        data
+        init
+
+        main:
+        iteration.scan( data )
+    }
+
+    if ( workflow.resume )
+        iteration.scan( ch_meta )
+    else {
+        iteration( ch_meta.first() )
+        link_runs( ch_meta, iteration.out )
+    }
 }
