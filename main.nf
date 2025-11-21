@@ -114,8 +114,8 @@ workflow {
     */
     workflow link_runs {
         take:
-        data
         init
+        data
 
         main:
         iteration.scan( data )
@@ -125,6 +125,6 @@ workflow {
         iteration.scan( ch_meta )
     else {
         iteration( ch_meta.first().map { it -> [it] } )
-        link_runs( ch_meta, iteration.out )
+        link_runs( iteration.out.collect().flatMap(), ch_meta )
     }
 }
