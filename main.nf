@@ -12,7 +12,7 @@ include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
  * Place cache-dir under outdir.  This will obviate the need to execute a separate nextflow command to generate
  * a new run.
  */
-def cache_dir = params.outdir.resolve( 'NFCORE_DEMO'.toLowerCase() ).resolve( '.nextflow' )
+def cache_dir = file( params.outdir ).resolve( 'NFCORE_DEMO'.toLowerCase() ).resolve('.nextflow')
 assert cache_dir.mkdirs()
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
