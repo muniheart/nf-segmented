@@ -8,7 +8,11 @@ include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 
-def cache_dir = workflow.workDir.resolve( 'NFCORE_DEMO'.toLowerCase() )
+/*
+ * Place cache-dir under outdir.  This will obviate the need to execute a separate nextflow command to generate
+ * a new run.
+ */
+def cache_dir = params.outdir.resolve( 'NFCORE_DEMO'.toLowerCase() ).resolve( '.nextflow' )
 assert cache_dir.mkdirs()
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
