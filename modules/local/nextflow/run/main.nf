@@ -38,6 +38,8 @@ process NEXTFLOW_RUN {
 
     task_name = task.process.split(':')[-1].toLowerCase()
     child_outdir = file( params.outdir ).resolve( task_name )
+    cache_dir = child_outdir.resolve( '.nextflow' )
+    assert cache_dir.mkdirs()
     log_file = child_outdir.resolve( ".${task_name}_${i}.log" )
 
 //  log.info "as_list(data): ${as_list(data)}"
@@ -83,6 +85,8 @@ process NEXTFLOW_RUN {
 
     task_name = task.process.split(':')[-1].toLowerCase()
     child_outdir = file( params.outdir ).resolve( task_name )
+    cache_dir = child_outdir.resolve( '.nextflow' )
+    assert cache_dir.mkdirs()
     log_file = child_outdir.resolve( ".${task_name}_${i}.log" )
 
 //  log.info "as_list(data): ${as_list(data)}"

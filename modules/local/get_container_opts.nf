@@ -1,7 +1,6 @@
 process GET_CONTAINER_OPTS {
     input:
     val image_mounts
-    val cache_dir
     val env_file
 
     output:
@@ -13,14 +12,12 @@ process GET_CONTAINER_OPTS {
             "NXF_APPTAINER_CACHEDIR=\${NXF_APPTAINER_CACHEDIR}",
             "NXF_HOME=\${NXF_HOME}",
             "NXF_OFFLINE=\${NXF_OFFLINE}",
-            "NXF_CACHE_DIR=${cache_dir}",
             "${ params.env_vars ?: '' }"
         ].findAll().join(",")
 
     bind_mounts = \
         [
             params.bind_mounts,
-            "${cache_dir}",
         ].findAll().join(",")
 
     opts = [
