@@ -7,6 +7,7 @@ include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
 include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
+include { MERGE_IMAGES } from "./modules/local/merge_images.nf"
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 def as_path = { it -> it ? file( it, checkIfExists: true ) : Channel.value([]) }
@@ -100,5 +101,7 @@ workflow {
 //  */
 
     ch_out = iteration.scan( ch_meta )
-//  ch_out.subscribe { log.info "ch_out: $it" }
+
+    // Collect ( image, path ) pairs
+    ch_out.toList() | MERGE_IMAGES
 }
