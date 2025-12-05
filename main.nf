@@ -104,11 +104,13 @@ workflow {
 
     // Add default meta.
     ch_out = iteration.scan( ch_meta ).toList()
+    ch_final = ch_out
                 .collect { data -> [ [params_file:null, samplesheet:null], *data ] }
-    GET_INPUTS_FROM_DATA_FINAL( ch_out )
+    GET_INPUTS_FROM_DATA_FINAL( ch_final )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
-    MERGE_IMAGES( container_opts, ch_out )
+    ch_images = ch_out.map { it -> it.transpose() }
+    MERGE_IMAGES( container_opts, ch_images )
 }

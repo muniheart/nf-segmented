@@ -3,7 +3,7 @@ include { get_image_mount_args } from "./get_inputs_from_data.nf"
 process MERGE_IMAGES {
     input:
     val container_opts
-    val data
+    tuple val( images ), path( mount_targets )        // tuple of lists.
 
     output:
     path 'work.sqfs'
@@ -11,9 +11,9 @@ process MERGE_IMAGES {
 
     script:
     // TaskPath.relativeize may mask Path.relativeize.  May need to cast to Path.
-    workdirs = data.tail().collect { a,b -> workflow.workDir.relativize( b ) }
+    rel_paths = mount_targets.map { it -> workflow.workDir.relativize( it ) }
 
     """
-    mksquashfs ${workdirs.join(' ')} work.sqfs -no-strip
+    mksquashfs ${rel_paths.join(' ')} work.sqfs -no-strip
     """
 }
