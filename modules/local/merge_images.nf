@@ -1,3 +1,5 @@
+import java.nio.file.Path
+
 include { get_image_mount_args } from "./get_inputs_from_data.nf"
 
 process MERGE_IMAGES {
@@ -11,7 +13,7 @@ process MERGE_IMAGES {
 
     script:
     // TaskPath.relativeize may mask Path.relativeize.  May need to cast to Path.
-    rel_paths = mount_targets.collect { w -> workflow.workDir.relativize( w ) }
+    rel_paths = mount_targets.collect { w -> workflow.workDir.relativize( (Path) w ) }
 
     """
     mksquashfs ${rel_paths.join(' ')} work.sqfs -no-strip
