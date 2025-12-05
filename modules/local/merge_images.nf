@@ -15,6 +15,6 @@ process MERGE_IMAGES {
     workdirs = data.collect { a,b -> workflow.workDir.relativize( b ) }
 
     """
-    echo mksquashfs ${workdirs.join(' ')} work.sqfs
+    mksquashfs ${workdirs.join(' ')} work.sqfs -no-strip
     """
 }
