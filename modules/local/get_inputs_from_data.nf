@@ -29,9 +29,6 @@ process GET_INPUTS_FROM_DATA {
 
     exec:
     log.info "GET_INPUTS_FROM_DATA: data: $data"
-    // Check for meta.  If missing, insert default.
-    if ( ! data[0] instanceof Map )
-        data = [ [ params_file: null, samplesheet: null ], *data ]
     pfile = data[0].params_file
     ss = data[0].samplesheet
     workdirs = data.tail().collect { a,b -> b }

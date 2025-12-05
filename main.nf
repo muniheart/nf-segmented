@@ -102,7 +102,9 @@ workflow {
 //  *      so that we are sure that the segments are processed in order.
 //  */
 
+    // Add default meta.
     ch_out = iteration.scan( ch_meta ).toList()
+                .collect { data -> [ [params_file:null, samplesheet:null], data ] }
     GET_INPUTS_FROM_DATA_FINAL( ch_out )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
