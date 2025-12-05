@@ -5,18 +5,14 @@ include { get_image_mount_args } from "./get_inputs_from_data.nf"
 process MERGE_IMAGES {
     input:
     val container_opts
-    val mount_targets           // Must be val!  Cannot get absolute path from TaskPath object.
+    path mount_targets
 
     output:
     path 'work.sqfs'
     stdout
 
     script:
-    // TaskPath.relativeize may mask Path.relativeize.  May need to cast to Path.
-    rel_paths = mount_targets.collect { w -> workflow.workDir.relativize( file( w ) ) }
-
     """
-    cd ${workflow.workDir}
-    mksquashfs ${rel_paths.join(' ')} \$NXF_TASK_WORKDIR/work.sqfs -no-strip
+    mksquashfs \$(realpath --relative-to ${workflow.workdir} *) work.sqfs -no-strip
     """
 }
