@@ -109,9 +109,9 @@ workflow {
     GET_INPUTS_FROM_DATA_FINAL( ch_final )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
+    targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs
 
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
-    ch_images = ch_out.collect { it -> it.transpose() }
-    ch_images.subscribe { log.info "ch_images: $it" }
-    // MERGE_IMAGES( container_opts, ch_images )
+    targets.subscribe { log.info "targets: $it" }
+    // MERGE_IMAGES( container_opts, targets )
 }
