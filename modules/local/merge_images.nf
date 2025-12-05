@@ -13,6 +13,6 @@ process MERGE_IMAGES {
 
     script:
     """
-    mksquashfs \$(realpath --relative-to ${workflow.workdir} *) work.sqfs -no-strip
+    mksquashfs \$(realpath --relative-to ${workflow.workdir} ${mount_targets.join(' ')}) work.sqfs -no-strip
     """
 }
