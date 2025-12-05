@@ -12,7 +12,9 @@ process MERGE_IMAGES {
     stdout
 
     script:
+    path_str = mount_targets.join(' ')
+
     """
-    mksquashfs \$(realpath --relative-to ${workflow.workdir} ${mount_targets.join(' ')}) work.sqfs -no-strip
+    mksquashfs \$(realpath --relative-to ${workflow.workdir} $path_str) work.sqfs -no-strip
     """
 }
