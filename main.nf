@@ -112,6 +112,7 @@ workflow {
     targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs
 
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
+    container_opts.subscribe { log.info "container_opts: $it" }
     targets.subscribe { log.info "targets: $it" }
-    MERGE_IMAGES( container_opts, targets )
+//  MERGE_IMAGES( container_opts, targets )
 }
