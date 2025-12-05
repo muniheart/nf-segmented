@@ -3,7 +3,7 @@ include { get_image_mount_args } from "./get_inputs_from_data.nf"
 process MERGE_IMAGES {
     input:
     val container_opts
-    path( mount_targets )
+    path mount_targets
 
     output:
     path 'work.sqfs'
