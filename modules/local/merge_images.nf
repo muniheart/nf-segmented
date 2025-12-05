@@ -16,7 +16,7 @@ process MERGE_IMAGES {
     rel_paths = mount_targets.collect { w -> workflow.workDir.relativize( file( w ) ) }
 
     """
-    cd $workDir
-    mksquashfs ${rel_paths.join(' ')} ${task.workDir}/work.sqfs -no-strip
+    cd ${workflow.workDir}
+    mksquashfs ${rel_paths.join(' ')} \$NXF_TASK_WORKDIR/work.sqfs -no-strip
     """
 }
