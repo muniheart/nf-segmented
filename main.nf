@@ -113,5 +113,5 @@ workflow {
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
     ch_images = ch_out.collect { it -> it.transpose() }
     ch_images.subscribe { log.info "ch_images: $it" }
-    MERGE_IMAGES( container_opts, ch_images )
+    // MERGE_IMAGES( container_opts, ch_images )
 }
