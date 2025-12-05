@@ -13,7 +13,7 @@ process MERGE_IMAGES {
 
     script:
     // TaskPath.relativeize may mask Path.relativeize.  May need to cast to Path.
-    rel_paths = mount_targets.collect { w -> workflow.workDir.relativize( (Path) w ) }
+    rel_paths = mount_targets.collect { w -> workflow.workDir.relativize( w.toString() ) }
 
     """
     mksquashfs ${rel_paths.join(' ')} work.sqfs -no-strip
