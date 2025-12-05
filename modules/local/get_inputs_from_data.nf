@@ -9,8 +9,9 @@
  */
 def get_image_mount_args( data, resolve_source=false )
 {
-    data.tail()
-    .collect { a,b -> "${ resolve_source ? a.resolveSymLink() : a }:${b.resolveSymLink()}:image-src=/" }
+    data.collect {
+        a,b -> "${ resolve_source ? a.resolveSymLink() : a }:${b.resolveSymLink()}:image-src=/"
+    }
     .join(",")
 }
 
@@ -30,8 +31,8 @@ process GET_INPUTS_FROM_DATA {
     ss = data[0].samplesheet // data.head().collect { a -> a.params_file }
     workdirs = data.tail().collect { a,b -> b }
     image_mounts = [
-        relative: get_image_mount_args( data ),
-        absolute: get_image_mount_args( data, true )
+        relative: get_image_mount_args( data.tail() ),
+        absolute: get_image_mount_args( data.tail(), true )
     ]
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
