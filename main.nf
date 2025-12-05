@@ -109,7 +109,7 @@ workflow {
     GET_INPUTS_FROM_DATA_FINAL( ch_final )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
-    targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs
+    targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.map { it -> file(it) }
 
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
     container_opts.subscribe { log.info "container_opts: $it" }
