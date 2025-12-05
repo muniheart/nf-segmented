@@ -1,5 +1,6 @@
 /*
- *  val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
+ *  val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ] intermediate
+ *                                 // [       [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ] final
  *
  *  Each element data[i], i>0, is a pair: ( symlink to image of workdir, symlink to workdir ).
  *
@@ -23,12 +24,16 @@ def get_image_mount_args( data, resolve_source=false )
  */
 process GET_INPUTS_FROM_DATA {
     input:
-    val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
+    val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ] intermediate
+                                   // [       [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ] final
 
     exec:
     log.info "GET_INPUTS_FROM_DATA: data: $data"
-    pfile = data[0].params_file // data.head().collect { a -> a.params_file }
-    ss = data[0].samplesheet // data.head().collect { a -> a.params_file }
+    // Check for meta.  If missing, insert default.
+    if ( ! data[0] instanceof Map )
+        data = [ [ pfile: null, samplesheet: null ], *data ]
+    pfile = data[0].params_file
+    ss = data[0].samplesheet
     workdirs = data.tail().collect { a,b -> b }
     image_mounts = [
         relative: get_image_mount_args( data.tail() ),

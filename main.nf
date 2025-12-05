@@ -4,7 +4,9 @@ nextflow.preview.recursion=true
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
+include { GET_INPUTS_FROM_DATA as GET_INPUTS_FROM_DATA_FINAL } from "./modules/local/get_inputs_from_data.nf"
 include { GET_CONTAINER_OPTS } from "./modules/local/get_container_opts.nf"
+include { GET_CONTAINER_OPTS as GET_CONTAINER_OPTS_FINAL } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 include { MERGE_IMAGES } from "./modules/local/merge_images.nf"
@@ -100,8 +102,11 @@ workflow {
 //  *      so that we are sure that the segments are processed in order.
 //  */
 
-    ch_out = iteration.scan( ch_meta )
+    ch_out = iteration.scan( ch_meta ).toList()
+    GET_INPUTS_FROM_DATA_FINAL( ch_out )
+    image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
+    work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 
-    // Collect ( image, path ) pairs
-    ch_out.toList() | MERGE_IMAGES
+    container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
+    MERGE_IMAGES( container_opts, ch_out )
 }
