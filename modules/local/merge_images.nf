@@ -13,7 +13,7 @@ process MERGE_IMAGES {
 
     script:
 //  path_str = mount_targets.findAll().join(' ').trim()
-    log.info "mount_targets: $mount_targets"
+//  log.info "mount_targets: $mount_targets"
 
     """
     :
