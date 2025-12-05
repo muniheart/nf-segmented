@@ -3,7 +3,6 @@ include { get_image_mount_args } from "./get_inputs_from_data.nf"
 process MERGE_IMAGES {
     input:
     val container_opts
-    val image_mounts
     val data
 
     output:
