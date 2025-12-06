@@ -12,7 +12,7 @@ process MERGE_IMAGES {
     stdout
 
     script:
-    path_str = mount_targets.join(' ')
+//  path_str = mount_targets.join(' ')
     log.info "mount_targets: $mount_targets"
 
     """
