@@ -13,7 +13,7 @@ process MERGE_IMAGES {
 
     script:
 //  path_str = mount_targets.join(' ')
-    log.info "mount_targets: $mount_targets"
+    mount_targets.subscribe { log.info "mount_targets: $mount_targets" }
 
     """
     :
