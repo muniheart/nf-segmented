@@ -17,7 +17,7 @@ process MERGE_IMAGES {
     log.info "mount_targets: $mount_targets"
 
     """
-    :
+    ls -ld *
     # mksquashfs \$(realpath --relative-to ${workflow.workdir} $path_str) work.sqfs -no-strip
     """
 }
