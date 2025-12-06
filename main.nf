@@ -115,5 +115,5 @@ workflow {
     container_opts.subscribe { log.info "container_opts: $it" }
     targets.subscribe { log.info "targets: $it" }
     targets.subscribe { log.info "targets.getClass(): ${it.getClass()}" }
-//  MERGE_IMAGES( container_opts, targets )
+    MERGE_IMAGES( container_opts, targets )
 }
