@@ -105,6 +105,7 @@ workflow {
     // Add default meta.
     ch_out = iteration.scan( ch_meta )
     ch_out.subscribe { "ch_out: ${it.getClass()}; $it" }
+    ch_out.flatten().subscribe { "ch_out.flatten(): ${it.getClass()}; $it" }
     targets = ch_out.collect { a,b -> b }
     log.info "targets: ${targets.getClass()}"
     targets.subscribe { log.info "targets: ${it.getClass()}; $it" }
