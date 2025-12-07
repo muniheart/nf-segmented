@@ -107,7 +107,7 @@ workflow {
     log.info "ch_out: ${ch_out.getClass()}"
     targets = ch_out.collect { a,b -> b }
     log.info "targets: ${targets.getClass()}"
-    targets.subscribe { log.info "targets: $it" }
+    targets.subscribe { log.info "targets: ${it.getClass()}; $it" }
     ch_final = ch_out.toList()
                 .collect { data -> [ [params_file:null, samplesheet:null], *data ] }
     GET_INPUTS_FROM_DATA_FINAL( ch_final )
