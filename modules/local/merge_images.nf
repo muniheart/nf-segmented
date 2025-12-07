@@ -17,19 +17,15 @@ process MERGE_IMAGES {
 //  log.info "mount_targets: $mount_targets"
 //  mount_targets.each { log.info "mount_targets: ${it.getClass()}; $it" }
 
-    script_str = false ?
-    {
+    if ( false ) {
     """
     ls -ld *
     # mksquashfs \$(realpath --relative-to ${workflow.workdir} $path_str) work.sqfs -no-strip
     touch work.sqfs
     """
-    }
-    :
-    {
+    } else {
     """
     touch work.sqfs
     """
     }
-    script_str
 }
