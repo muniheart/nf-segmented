@@ -20,7 +20,6 @@ process MERGE_IMAGES {
     if ( false ) {
     """
     ls -ld *
-    # mksquashfs \$(realpath --relative-to ${workflow.workdir} $path_str) work.sqfs -no-strip
     touch work.sqfs
     """
     } else {
