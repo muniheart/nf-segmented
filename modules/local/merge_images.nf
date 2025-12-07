@@ -5,7 +5,7 @@ include { get_image_mount_args } from "./get_inputs_from_data.nf"
 process MERGE_IMAGES {
     input:
     val container_opts
-    path mount_targets
+    val mount_targets
 
     output:
     path 'work.sqfs'
@@ -14,10 +14,11 @@ process MERGE_IMAGES {
     script:
 //  path_str = mount_targets.join(' ')
 //  log.info "path_str: $path_str"
-//  log.info "mount_targets: $mount_targets"
+    log.info "mount_targets: $mount_targets"
 
     """
     ls -ld *
     # mksquashfs \$(realpath --relative-to ${workflow.workdir} $path_str) work.sqfs -no-strip
+    touch work.sqfs
     """
 }
