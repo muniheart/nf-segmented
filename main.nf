@@ -1,6 +1,8 @@
 nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
+import java.nio.file.Path
+
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
@@ -106,7 +108,7 @@ workflow {
     ch_out = iteration.scan( ch_meta )
     ch_out.subscribe { "ch_out: ${it.getClass()}; $it" }
     ch_out.flatten().subscribe { "ch_out.flatten(): ${it.getClass()}; $it" }
-    targets = ch_out.collect { a,b -> b }
+    targets = ch_out.collect { a,b -> b }.collect { it -> (Path) it }
     log.info "targets: ${targets.getClass()}"
     targets.subscribe { log.info "targets: ${it.getClass()}; $it" }
     ch_final = ch_out.toList()
