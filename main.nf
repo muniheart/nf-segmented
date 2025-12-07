@@ -104,6 +104,7 @@ workflow {
 
     // Add default meta.
     ch_out = iteration.scan( ch_meta )
+    log.info "ch_out: ${ch_out.getClass()}"
     targets = ch_out.collect { a,b -> b }
     targets.subscribe { log.info "targets: $it" }
     ch_final = ch_out.toList()
@@ -116,5 +117,5 @@ workflow {
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
     container_opts.subscribe { log.info "container_opts: $it" }
 //  targets.subscribe { log.info "targets.getClass(): ${it.getClass()}" }
-    MERGE_IMAGES( container_opts, targets )
+//  MERGE_IMAGES( container_opts, targets )
 }
