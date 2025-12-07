@@ -14,7 +14,7 @@ process MERGE_IMAGES {
     script:
 //  path_str = mount_targets.join(' ')
 //  log.info "path_str: $path_str"
-    log.info "mount_targets: $mount_targets"
+//  log.info "mount_targets: $mount_targets"
 //  mount_targets.each { log.info "mount_targets: ${it.getClass()}; $it" }
 
     """
