@@ -106,6 +106,7 @@ workflow {
     ch_out = iteration.scan( ch_meta )
     log.info "ch_out: ${ch_out.getClass()}"
     targets = ch_out.collect { a,b -> b }
+    log.info "targets: ${targets.getClass()}"
     targets.subscribe { log.info "targets: $it" }
     ch_final = ch_out.toList()
                 .collect { data -> [ [params_file:null, samplesheet:null], *data ] }
