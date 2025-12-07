@@ -107,20 +107,17 @@ workflow {
     // Add default meta.
     ch_out = iteration.scan( ch_meta )
     ch_out.subscribe { "ch_out: ${it.getClass()}; $it" }
-    ch_out.flatten().subscribe { "ch_out.flatten(): ${it.getClass()}; $it" }
-    targets = ch_out.map { a,b -> b }.subscribe { log.info "targets: ${it.getClass()}; $it" }.toList()
-    log.info "targets: ${targets.getClass()}"
-    targets.subscribe { log.info "targets: ${it.getClass()}; $it" }
     ch_final = ch_out.toList()
                 .collect { data -> [ [params_file:null, samplesheet:null], *data ] }
     ch_final.subscribe { log.info "ch_final: $it" }
     GET_INPUTS_FROM_DATA_FINAL( ch_final )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
+    workdirs = GET_INPUTS_FROM_DATA_FINAL.out.workdirs
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 //  targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { it -> file(it) }
 
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
     container_opts.subscribe { log.info "container_opts: $it" }
 //  targets.subscribe { log.info "targets.getClass(): ${it.getClass()}" }
-    MERGE_IMAGES( container_opts, targets )
+    MERGE_IMAGES( container_opts, workdirs )
 }
