@@ -112,7 +112,7 @@ workflow {
     ch_final.subscribe { log.info "ch_final: $it" }
     GET_INPUTS_FROM_DATA_FINAL( ch_final )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
-    workdirs = GET_INPUTS_FROM_DATA_FINAL.out.workdirs
+    workdirs = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { workDir.resolve( it ) }
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 //  targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { it -> file(it) }
 
