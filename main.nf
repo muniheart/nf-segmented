@@ -108,7 +108,7 @@ workflow {
     ch_out = iteration.scan( ch_meta )
     ch_out.subscribe { "ch_out: ${it.getClass()}; $it" }
     ch_out.flatten().subscribe { "ch_out.flatten(): ${it.getClass()}; $it" }
-    targets = ch_out.collect { a,b -> b }.collect { it -> (Path) it }
+    targets = ch_out.map { a,b -> b }.subscribe { log.info "targets: ${it.getClass()}; $it" }.toList()
     log.info "targets: ${targets.getClass()}"
     targets.subscribe { log.info "targets: ${it.getClass()}; $it" }
     ch_final = ch_out.toList()
