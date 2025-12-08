@@ -17,7 +17,7 @@ process MERGE_IMAGES {
 //  log.info "mount_targets: $mount_targets"
 //  mount_targets.each { log.info "mount_targets: ${it.getClass()}; $it" }
     x = mount_targets.collect { it.toRealPath() }
-    y = mount_targets.collect { it.toAbsolutePath() }
+//  y = mount_targets.collect { it.toAbsolutePath() }
     rel_paths = x.collect { workflow.workDir.resolve( it ).toString() }.join(' ')
     if ( false ) {
     """
