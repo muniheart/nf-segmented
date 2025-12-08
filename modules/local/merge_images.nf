@@ -16,7 +16,9 @@ process MERGE_IMAGES {
 //  log.info "path_str: $path_str"
 //  log.info "mount_targets: $mount_targets"
 //  mount_targets.each { log.info "mount_targets: ${it.getClass()}; $it" }
-    rel_paths = mount_targets.collect { workflow.workDir.resolve( it ).toString() }.join(' ')
+    x = mount_targets.collect { it.toRealPath() }
+    y = mount_targets.collect { it.toAbsolutePath() }
+    rel_paths = x.collect { workflow.workDir.resolve( it ).toString() }.join(' ')
     if ( false ) {
     """
     ls -ld *
