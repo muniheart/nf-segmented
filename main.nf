@@ -112,12 +112,12 @@ workflow {
     ch_final.subscribe { log.info "ch_final: $it" }
     GET_INPUTS_FROM_DATA_FINAL( ch_final )
     image_mounts = GET_INPUTS_FROM_DATA_FINAL.out.image_mounts
-    workdirs = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { workDir.resolve( it ) }
+//  workdirs = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { workDir.resolve( it ) }
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 //  targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { it -> file(it) }
 
     container_opts = GET_CONTAINER_OPTS_FINAL( image_mounts, work_env )
     container_opts.subscribe { log.info "container_opts: $it" }
 //  targets.subscribe { log.info "targets.getClass(): ${it.getClass()}" }
-    MERGE_IMAGES( container_opts, workdirs )
+    MERGE_IMAGES( container_opts, GET_INPUTS_FROM_DATA_FINAL.out.workdirs )
 }
