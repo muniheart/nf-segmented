@@ -26,6 +26,9 @@ process MERGE_IMAGES {
     """
     } else {
     """
+    for i in ${x.join(' ')}; do
+        realpath \$i --relative-to ${workflow.workDir}
+    done
     echo "mksquashfs $rel_paths work.sqfs -no-strip"
     touch work.sqfs
     """
