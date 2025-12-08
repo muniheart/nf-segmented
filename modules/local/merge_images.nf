@@ -16,7 +16,7 @@ process MERGE_IMAGES {
 //  log.info "path_str: $path_str"
 //  log.info "mount_targets: $mount_targets"
 //  mount_targets.each { log.info "mount_targets: ${it.getClass()}; $it" }
-
+    rel_paths = mount_targets.collect { workflow.workDir.resolve( it ) }.join(' ')
     if ( false ) {
     """
     ls -ld *
@@ -24,6 +24,7 @@ process MERGE_IMAGES {
     """
     } else {
     """
+    echo "mksquashfs $rel_paths work.sqfs -no-strip"
     touch work.sqfs
     """
     }
