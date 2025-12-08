@@ -26,9 +26,10 @@ process MERGE_IMAGES {
     """
     } else {
     """
+    cd ${workflow.workDir}
     for i in ${x.join(' ')}; do
         wd=\$( realpath \$i --relative-to ${workflow.workDir} )
-        mksquashfs \$wd work.sqfs -no-strip
+        mksquashfs \$wd \$NXF_TASK_WORKDIR/work.sqfs -no-strip
     done
     """
     }
