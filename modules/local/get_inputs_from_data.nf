@@ -14,13 +14,13 @@
  *  variable NXF_TASK_WORKDIR.
  *
  */
-def get_image_mount_args( data, resolve_source=false, final=false )
+def get_image_mount_args( data, resolve_source=false, is_final=false )
 {
     data.collect {
         a,b -> {
             src = resolve_source ? a.resolveSymLink() : a
             tgt = b.resolveSymLink()
-            if ( final ) {
+            if ( is_final ) {
                 tgt = [
                     "\$NXF_TASK_WORKDIR",
                     workflow.workDir.relativize( tgt )
@@ -50,7 +50,7 @@ process GET_INPUTS_FROM_DATA {
     image_mounts = [
         relative: get_image_mount_args( data.tail() ),
         absolute: get_image_mount_args( data.tail(), resolve_source: true ),
-        final: get_image_mount_args( data.tail(), final: true )
+        final: get_image_mount_args( data.tail(), is_final: true )
     ]
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
