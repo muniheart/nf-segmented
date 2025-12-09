@@ -49,8 +49,8 @@ process GET_INPUTS_FROM_DATA {
     workdirs = data.tail().collect { a,b -> b }
     image_mounts = [
         relative: get_image_mount_args( data.tail() ),
-        absolute: get_image_mount_args( data.tail(), resolve_source: true ),
-        final: get_image_mount_args( data.tail(), is_final: true )
+        absolute: get_image_mount_args( data.tail(), resolve_source=true ),
+        final: get_image_mount_args( data.tail(), is_final=true )
     ]
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
