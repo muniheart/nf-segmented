@@ -22,8 +22,8 @@ process GET_CONTAINER_OPTS {
 
     opts = [
         env_vars            ? "--env ${env_vars}" : "",
-        params.mount_images ? ( image_mounts.relative ? "-B ${image_mounts.relative}" : "" ) : "",
-        params.mount_images ? ( task.ext.is_final ? "-B ${image_mounts.final}" : "" ) : "",
+        params.mount_images ? ( task.ext.is_final ? "-B ${image_mounts.final}" :
+                                    ( image_mounts.relative ? "-B ${image_mounts.relative}" : "" ) ) : "",
         bind_mounts         ? "-B ${bind_mounts}" : "",
         env_file            ? "--env-file ${env_file}" : ""
     ].findAll().join(" ").trim() ?: ''
