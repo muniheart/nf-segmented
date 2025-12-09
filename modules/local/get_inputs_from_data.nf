@@ -8,12 +8,27 @@
  *  Call with 'resolve_source=true' to generate bind-mounts for nested containers.
  *
  */
-def get_image_mount_args( data, resolve_source=false )
+/*
+ *  When resolving mount path relative to workdir of MERGE_IMAGES task ( final: true ), the evaluation of
+ *  task.workdir must be delayed so it can be resolved relative to the proper task.  This is done using environment
+ *  variable NXF_TASK_WORKDIR.
+ *
+ */
+def get_image_mount_args( data, resolve_source=false, final=false )
 {
     data.collect {
-        a,b -> "${ resolve_source ? a.resolveSymLink() : a }:${b.resolveSymLink()}:image-src=/"
-    }
-    .join(",")
+        a,b -> {
+            src = resolve_source ? a.resolveSymLink() : a
+            tgt = b.resolveSymLink()
+            if ( final ) {
+                tgt = [
+                    "\$NXF_TASK_WORKDIR",
+                    workflow.workDir.relativize( tgt )
+                ].join('/')
+            }
+            "$src:$tgt:image-src=/"
+        }
+    }.join(",")
 }
 
 /*
@@ -34,7 +49,8 @@ process GET_INPUTS_FROM_DATA {
     workdirs = data.tail().collect { a,b -> b }
     image_mounts = [
         relative: get_image_mount_args( data.tail() ),
-        absolute: get_image_mount_args( data.tail(), true )
+        absolute: get_image_mount_args( data.tail(), resolve_source: true ),
+        final: get_image_mount_args( data.tail(), final: true )
     ]
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
