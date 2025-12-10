@@ -22,7 +22,7 @@ def get_image_mount_args( data, resolve_source=false, is_final=false )
             tgt = b.resolveSymLink()
             if ( is_final ) {
                 tgt = [
-                    "\$NXF_TASK_WORKDIR",
+                    "\\$NXF_TASK_WORKDIR",
                     workflow.workDir.relativize( tgt )
                 ].join('/')
             }
