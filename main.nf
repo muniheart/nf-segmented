@@ -8,7 +8,6 @@ include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
 include { GET_INPUTS_FROM_DATA as GET_INPUTS_FROM_DATA_FINAL } from "./modules/local/get_inputs_from_data.nf"
 include { get_container_opts } from "./modules/local/get_container_opts.nf"
-include { get_container_opts as get_container_opts_final } from "./modules/local/get_container_opts.nf"
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 include { MERGE_IMAGES } from "./modules/local/merge_images.nf"
@@ -116,7 +115,7 @@ workflow {
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 //  targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { it -> file(it) }
 
-    container_opts = get_container_opts_final( image_mounts, work_env )
+    container_opts = get_container_opts( image_mounts, work_env )
     container_opts.subscribe { log.info "container_opts: $it" }
 //  targets.subscribe { log.info "targets.getClass(): ${it.getClass()}" }
     MERGE_IMAGES( container_opts, GET_INPUTS_FROM_DATA_FINAL.out.workdirs )
