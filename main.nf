@@ -32,7 +32,7 @@ workflow iteration {
     image_param = GET_INPUTS_FROM_DATA.out.image_param
     work_env = GET_INPUTS_FROM_DATA.out.work_env
 
-    container_opts = get_container_opts( image_mounts, work_env )
+    container_opts = GET_INPUTS_FROM_DATA.out.container_opts
     log.info "container_opts: $container_opts"
 
     NFCORE_DEMO(
