@@ -1,4 +1,4 @@
-function get_container_opts( image_mounts, env_file )
+def get_container_opts( image_mounts, env_file )
 {
     env_vars = \
         [
