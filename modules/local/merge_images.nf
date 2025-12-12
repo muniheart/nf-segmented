@@ -8,11 +8,9 @@ process MERGE_IMAGES {
     stdout
 
     script:
-    x = mount_targets.collect { it.toRealPath() }
-    rel_paths = x.collect { workflow.workDir.resolve( it ).toString() }.join(' ')
     """
     cd ${workflow.workDir}
-    for i in ${x.join(' ')}; do
+    for i in ${mount_targets.join(' ')}; do
         wd=\$( realpath \$i --relative-to ${workflow.workDir} )
         mksquashfs \$wd \$NXF_TASK_WORKDIR/work.sqfs -no-strip -recovery-path \$NXF_TASK_WORKDIR
     done
