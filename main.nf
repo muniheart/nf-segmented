@@ -115,7 +115,7 @@ workflow {
     work_env = GET_INPUTS_FROM_DATA_FINAL.out.work_env
 //  targets = GET_INPUTS_FROM_DATA_FINAL.out.workdirs.flatten().collect { it -> file(it) }
 
-    container_opts = get_container_opts( image_mounts, work_env )
+    container_opts = get_container_opts( image_mounts, work_env, is_final=true )
     container_opts.subscribe { log.info "container_opts: $it" }
 //  targets.subscribe { log.info "targets.getClass(): ${it.getClass()}" }
     MERGE_IMAGES( container_opts, GET_INPUTS_FROM_DATA_FINAL.out.workdirs )

@@ -1,4 +1,4 @@
-def get_container_opts( image_mounts, env_file )
+def get_container_opts( image_mounts, env_file, is_final=false )
 {
     env_vars = \
         [
@@ -16,8 +16,8 @@ def get_container_opts( image_mounts, env_file )
     opts = [
         env_vars            ? "--env ${env_vars}" : "",
         params.mount_images ? (
-            task.ext.is_final ? ( image_mounts.final ? "-B ${image_mounts.final}" : "" )
-                              : ( image_mounts.relative ? "-B ${image_mounts.relative}" : "" )
+            is_final ? ( image_mounts.final ? "-B ${image_mounts.final}" : "" )
+                     : ( image_mounts.relative ? "-B ${image_mounts.relative}" : "" )
         ) : "",
         bind_mounts         ? "-B ${bind_mounts}" : "",
         env_file            ? "--env-file ${env_file}" : ""
