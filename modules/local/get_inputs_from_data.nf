@@ -1,3 +1,5 @@
+include { get_container_opts } from "./get_container_opts.nf"
+
 /*
  *  val data                       // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ] intermediate
  *                                 // [       [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ] final
@@ -65,6 +67,7 @@ process GET_INPUTS_FROM_DATA {
     } else {
         work_env = null
     }
+    container_opts = get_container_opts( image_mounts, env_file, task.ext.is_final )
 
     output:
     val pfile,          emit: params_file
@@ -73,4 +76,5 @@ process GET_INPUTS_FROM_DATA {
     val image_mounts,   emit: image_mounts
     val image_param,    emit: image_param
     val work_env,       emit: work_env
+    val container_opts, emit: container_opts
 }
