@@ -67,7 +67,7 @@ process GET_INPUTS_FROM_DATA {
     } else {
         work_env = null
     }
-    container_opts = get_container_opts( image_mounts, env_file, task.ext.is_final )
+    container_opts = get_container_opts( image_mounts, work_env, task.ext.is_final )
 
     output:
     val pfile,          emit: params_file
