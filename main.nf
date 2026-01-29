@@ -10,13 +10,14 @@ include { GET_INPUTS_FROM_DATA as GET_INPUTS_FROM_DATA_FINAL } from "./modules/l
 include { PARSE_META_YAML } from "./workflows/parse_meta_yaml.nf"
 include { PARSE_META_CSV } from "./workflows/parse_meta_csv.nf"
 include { MERGE_IMAGES } from "./modules/local/merge_images.nf"
+include { INIT_WORK_IMAGE } from "./modules/local/init_work_image.nf"
 
 // def as_path = { it ? (it instanceof Path ? it : file( it )) : null }
 def as_path = { it -> it ? file( it, checkIfExists: true ) : Channel.value([]) }
 
 workflow iteration {
     take:
-    data                                // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
+    data                                // [ meta, [], ..., [] ]
 
     main:
     data.subscribe { log.info "iteration: data: ${it}" }
@@ -54,7 +55,7 @@ workflow iteration {
     SQUASH_WORK( NFCORE_DEMO.out.work_dir_parent )
 
     emit:
-    SQUASH_WORK.out
+    []
 }
 
 workflow {
@@ -69,6 +70,8 @@ workflow {
 
     if ( ch_meta )
         ch_meta.subscribe { log.info "ch_meta: ${it}" }
+
+    INIT_WORK_IMAGE()
 
 //  /*
 //   * Don't use combine.  ch_samplesheet is list of paths.  I want to pair corresponding elements
