@@ -19,7 +19,7 @@ include { get_container_opts } from "./get_container_opts.nf"
 def get_image_mount_args( data, resolve_source=false, is_final=false )
 {
     [
-        "${workflow.workDir}/nf-core/demo/${workflow.sessionId}/work.sqfs:${workflow.workDir}",
+        "${workflow.workDir}/nf-core/demo/${workflow.sessionId}/work.sqfs:${workflow.workDir}:image-src=/",
         "\$NXF_TASK_WORKDIR"
     ].join(",")
 }
