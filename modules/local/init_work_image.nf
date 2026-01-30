@@ -1,4 +1,4 @@
-import java.file.io.File;
+import java.io.File;
 
 process INIT_WORK_IMAGE {
 
