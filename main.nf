@@ -55,7 +55,7 @@ workflow iteration {
     SQUASH_WORK( NFCORE_DEMO.out.work_dir_parent )
 
     emit:
-    []
+    SQUASH_WORK.out
 }
 
 workflow {

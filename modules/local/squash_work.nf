@@ -2,6 +2,9 @@ process SQUASH_WORK {
     input:
     path work_dir_parent
 
+    output:
+    val params.work_image
+
     script:
     src = workflow.workdir.relativize( work_dir_parent )
     """
