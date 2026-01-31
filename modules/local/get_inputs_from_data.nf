@@ -62,8 +62,6 @@ process GET_INPUTS_FROM_DATA {
     output:
     val pfile,          emit: params_file
     val ss,             emit: samplesheet
-    val images,         emit: images
-    val workdirs,       emit: workdirs
     val image_mounts,   emit: image_mounts
     val image_param,    emit: image_param
     val work_env,       emit: work_env
