@@ -1,15 +1,16 @@
 process SQUASH_WORK {
     input:
     path work_dir_parent
+    path image
 
     output:
-    val params.work_image
+    val image, includeInputs: true
 
     script:
     src = workflow.workdir.relativize( work_dir_parent )
     """
     cd ${workflow.workDir}
-    mksquashfs $src ${params.work_image} -no-compression
+    mksquashfs $src $image -no-compression
 
     # params.keep_workdir: ${params.keep_workdir}
     if ! ( ${params.keep_workdir } ); then
