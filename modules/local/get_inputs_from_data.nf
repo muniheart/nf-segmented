@@ -19,9 +19,9 @@ include { get_container_opts } from "./get_container_opts.nf"
 def get_image_mount_args( data, resolve_source=false, is_final=false )
 {
     [
-        "${workflow.workDir}/nf-core/demo/${workflow.sessionId}/work.sqfs:${workflow.workDir}:image-src=/",
+        data.size() ? "data.first():${workflow.workDir}:image-src=/" : null,
         "\$NXF_TASK_WORKDIR"
-    ].join(",")
+    ].findAll().join(",")
 }
 
 /*
@@ -39,12 +39,10 @@ process GET_INPUTS_FROM_DATA {
     log.info "GET_INPUTS_FROM_DATA: data: $data"
     pfile = data[0].params_file
     ss = data[0].samplesheet
-    images = data.tail().collect { a,b -> a }
-    workdirs = data.tail().collect { a,b -> b }
     image_mounts = [
-        relative: get_image_mount_args( [] ),
-        absolute: get_image_mount_args( [] ),
-        final: get_image_mount_args( [] )
+        relative: get_image_mount_args( data.tail() ),
+        absolute: get_image_mount_args( data.tail() ),
+        final: get_image_mount_args( data.tail() )
     ]
 
     image_param = "${image_mounts.absolute}" ? "--image_mounts ${image_mounts.absolute}" : ''
