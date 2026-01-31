@@ -16,7 +16,8 @@ def as_path = { it -> it ? file( it, checkIfExists: true ) : Channel.value([]) }
 
 workflow iteration {
     take:
-    data                                // [ meta, [], ..., [] ]
+    data                                // [ meta, [ work_image ], ..., [ work_image ] ]
+                                        // where work_image is the path of one-and-only image.
 
     main:
     data.subscribe { log.info "iteration: data: ${it}" }

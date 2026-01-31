@@ -6,7 +6,9 @@ process SQUASH_WORK {
     val task.ext.work_image
 
     script:
+    log.info "SQUASH_WORK: work_dir_parent: $work_dir_parent"
     src = workflow.workdir.relativize( work_dir_parent )
+    log.info "SQUASH_WORK: src: $src"
     """
     cd ${workflow.workDir}
     mksquashfs $src $task.ext.work_image -no-compression
