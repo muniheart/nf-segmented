@@ -7,9 +7,9 @@ process SQUASH_WORK {
 
     script:
     log.info "SQUASH_WORK: work_dir_parent: $work_dir_parent"
+    if ( false ) {
     src = workflow.workdir.relativize( work_dir_parent )
     log.info "SQUASH_WORK: src: $src"
-    if ( false ) {
     """
     cd ${workflow.workDir}
     mksquashfs $src $task.ext.work_image -no-compression
