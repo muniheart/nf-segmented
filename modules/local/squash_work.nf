@@ -3,7 +3,7 @@ process SQUASH_WORK {
     path work_dir_parent
 
     output:
-    val task.ext.work_image
+    val "$task.ext.work_image"
 
     script:
     log.info "SQUASH_WORK: work_dir_parent: $work_dir_parent"
