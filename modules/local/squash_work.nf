@@ -1,24 +1,17 @@
 process SQUASH_WORK {
     input:
-    path work_dir_parent
+    val work_dir_parent             // Use val type to get absolute path.
 
     output:
-    val "$task.ext.work_image"
+    val task.ext.work_image
 
-    script:
-    log.info "SQUASH_WORK: work_dir_parent: $work_dir_parent"
-    log.info "SQUASH_WORK: task.ext.work_image: ${task.ext.work_image}"
-    """
-    image_dir=\$(dirname ${task.ext.work_image})
-    mkdir -p \$image_dir
-    cd ${workflow.workDir}
-    src=\$(realpath --relative-to=. $work_dir_parent)
-    mksquashfs \$src ${task.ext.work_image} -no-compression
+    exec:
+    // Create path to work_image, if non-existent.
+    file( task.ext.work_image ).getParent().mkdirs()
 
-    # params.keep_workdir: ${params.keep_workdir}
-    if ! ( ${params.keep_workdir } ); then
-        # Remove contents of work-dir.
-        rm -rf ${work_dir_parent}/decouple_hash/*
-    fi
-    """
+    // Get path of image source, relative to workflow workdir.
+    src = workflow.workDir.relativize( work_dir_parent )
+    cmd = "mksquashfs $src $task.ext.work_image"
+    file( "$task.workDir/mksquashfs.sh" ).text = cmd
+    cmd.execute( null, workflow.workDir.toFile() )
 }
