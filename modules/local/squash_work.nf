@@ -14,4 +14,10 @@ process SQUASH_WORK {
     cmd = "mksquashfs $src $task.ext.work_image"
     file( "$task.workDir/mksquashfs.sh" ).text = cmd
     cmd.execute( null, workflow.workDir.toFile() )
+
+    if ( ! params.keep_workdir ) {
+        cmd = "rm -rf decouple_hash/*"
+        file( "$task.workDir/mksquash.fs" ).append( cmd )
+        cmd.execute( null, work_dir_parent.toFile() )
+    }
 }
