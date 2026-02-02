@@ -8,10 +8,11 @@ process SQUASH_WORK {
     script:
     log.info "SQUASH_WORK: work_dir_parent: $work_dir_parent"
     log.info "SQUASH_WORK: task.ext.work_image: ${task.ext.work_image}"
-    if ( false ) {
-    src = workflow.workdir.relativize( work_dir_parent )
+    src = workflow.workDir.relativize( work_dir_parent )
     log.info "SQUASH_WORK: src: $src"
     """
+    image_dir=\$(dirname ${task.ext.work_image})
+    mkdir -p \$image_dir
     cd ${workflow.workDir}
     mksquashfs $src $task.ext.work_image -no-compression
 
@@ -21,9 +22,4 @@ process SQUASH_WORK {
         rm -rf ${work_dir_parent}/decouple_hash/*
     fi
     """
-    } else {
-    """
-    :
-    """
-    }
 }
