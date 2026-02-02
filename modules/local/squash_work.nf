@@ -12,7 +12,8 @@ process SQUASH_WORK {
     image_dir=\$(dirname ${task.ext.work_image})
     mkdir -p \$image_dir
     cd ${workflow.workDir}
-    mksquashfs $work_dir_parent ${task.ext.work_image} -no-compression
+    src=\$(realpath --relative-to=. $work_dir_parent)
+    mksquashfs \$src ${task.ext.work_image} -no-compression
 
     # params.keep_workdir: ${params.keep_workdir}
     if ! ( ${params.keep_workdir } ); then
