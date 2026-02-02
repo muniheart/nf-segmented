@@ -20,9 +20,9 @@ workflow iteration {
                                         // where work_image is the path of one-and-only image.
 
     main:
-    data.subscribe { log.info "iteration: data: ${it}" }
-    log.info "iteration: data.getClass(): ${data.getClass()}"
-    log.info "iteration: data: ${data}"
+//  data.subscribe { log.info "iteration: data: ${it}" }
+//  log.info "iteration: data.getClass(): ${data.getClass()}"
+//  log.info "iteration: data: ${data}"
 
     GET_INPUTS_FROM_DATA( data )
 
