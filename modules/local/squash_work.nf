@@ -13,6 +13,7 @@ process SQUASH_WORK {
     src = workflow.workDir.relativize( work_dir_parent )
 
     cmd = [
+        "cd $workflow.workDir",
         "mksquashfs $src $task.ext.work_image",
         params.keep_workdir ? null : "rm -rf decouple_hash/*"
     ].findAll().join(" && ")
