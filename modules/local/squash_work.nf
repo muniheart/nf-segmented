@@ -15,7 +15,7 @@ process SQUASH_WORK {
     cmd = [
         "cd $workflow.workDir",
         "mksquashfs $src $task.ext.work_image",
-        params.keep_workdir ? null : "rm -rf decouple_hash/*"
+        params.keep_workdir ? null : "rm -rf $src/decouple_hash/*"
     ].findAll().join(" && ")
 
     """
