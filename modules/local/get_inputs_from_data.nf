@@ -19,7 +19,7 @@ include { get_container_opts } from "./get_container_opts.nf"
 def get_image_mount_args( data, resolve_source=false, is_final=false )
 {
     [
-        data.size() ? "data.first():${workflow.workDir}:image-src=/" : null,
+        data.size() ? "${data.first()}:${workflow.workDir}:image-src=/" : null,
         "\$NXF_TASK_WORKDIR"
     ].findAll().join(",")
 }
