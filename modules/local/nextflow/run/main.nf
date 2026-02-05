@@ -33,7 +33,8 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
 //  Place workdir at depth 2 so removal of its files won't invalidate task cache.
-    workdir = "${task.ext.workDir}/decouple_hash"
+    relpath = make_workdir_path( task.index, params.base, params.depth )
+    workdir = "${workflow.workDir}/$relpath/decouple_hash"
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += " -resume"
