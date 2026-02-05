@@ -3,7 +3,7 @@ nextflow.preview.recursion=true
 
 import java.nio.file.Path
 
-include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main"
+include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main.nf"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"
 include { GET_INPUTS_FROM_DATA } from "./modules/local/get_inputs_from_data.nf"
 include { GET_INPUTS_FROM_DATA as GET_INPUTS_FROM_DATA_FINAL } from "./modules/local/get_inputs_from_data.nf"
