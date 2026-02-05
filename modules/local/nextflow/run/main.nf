@@ -30,7 +30,6 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW_RUN: task: ${task}"
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
-    relpath = make_workdir_path( task.index, params.base, params.depth )
     nextflow_opts += " -w ${task.ext.workdir}"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += " -resume"
