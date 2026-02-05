@@ -30,7 +30,7 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW_RUN: task: ${task}"
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
-    workdir = [ workflow.workDir, task.process.tokenize(':')[-1].toLowerCase(), task.ext.relpath, "decouple_hash" ].join('/')
+    workdir = [ "${workflow.workDir}", "${task.process.tokenize(':')[-1].toLowerCase()}", task.ext.relpath, "decouple_hash" ].join('/')
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += " -resume"
