@@ -1,4 +1,4 @@
-include { make_workdir_path } from "../modules/local/make_workdir_path.nf"
+include { make_workdir_path } from "../../../modules/local/make_workdir_path.nf"
 
 /*
  * I can't find a container with both nextflow and squashfs-tools.  Using system installed squashfs-tools
