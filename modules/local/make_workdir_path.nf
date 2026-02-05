@@ -7,6 +7,5 @@ def make_workdir_path( index, base, depth ) {
         index = index.intdiv( base )
     }
     log.info "make_workdir_path: p: $p"
-    p.add( 0,"work" )
     p.join("/")
 }

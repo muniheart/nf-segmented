@@ -1,5 +1,3 @@
-include { make_workdir_path } from "../../make_workdir_path.nf"
-
 /*
  * I can't find a container with both nextflow and squashfs-tools.  Using system installed squashfs-tools
  * causes PATH problems for nextflow.  I will use separate containers for the two tools.
@@ -32,10 +30,8 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW_RUN: task: ${task}"
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
-//  Place workdir at depth 2 so removal of its files won't invalidate task cache.
     relpath = make_workdir_path( task.index, params.base, params.depth )
-    workdir = "${workflow.workDir}/$relpath/decouple_hash"
-    nextflow_opts += " -w $workdir"
+    nextflow_opts += " -w ${task.ext.workdir}"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += " -resume"
 
@@ -81,7 +77,7 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
 //  Place workdir at depth 2 so removal of its files won't invalidate task cache.
-    workdir = "work_${i}/decouple_hash"
+    workdir = task.ext.workdir
     nextflow_opts += " -w $workdir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += workflow.resume || i>1 ? " -resume" : ""
@@ -113,7 +109,7 @@ process NEXTFLOW_RUN {
 
     """
     echo "${task.process}: stub"
-    mkdir -p ${workdir}/ab/cdef012
+    mkdir -p $workdir/ab/cdef012
     """
 
     output:
