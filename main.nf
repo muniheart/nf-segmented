@@ -2,7 +2,6 @@ nextflow.enable.dsl=2
 nextflow.preview.recursion=true
 
 import java.nio.file.Path
-import java.lang.Math;
 
 include { NEXTFLOW_RUN as NFCORE_DEMO } from "./modules/local/nextflow/run/main.nf"
 include { SQUASH_WORK } from "./modules/local/squash_work.nf"

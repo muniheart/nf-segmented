@@ -1,3 +1,5 @@
+import java.lang.Math;
+
 def make_workdir_path( index, base, depth ) {
     p = []
     while ( p.size()<depth ) {
