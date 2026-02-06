@@ -20,7 +20,7 @@ process NEXTFLOW_RUN {
     path params_file                    // params-file, extracted from data[0].
     val image_param                     // absolute and relative image mount specs.
     val container_opts                  // precomputed string of containerOptions.
-    val workDir,                        // task workDir
+    val workDir                         // task workDir
     val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
