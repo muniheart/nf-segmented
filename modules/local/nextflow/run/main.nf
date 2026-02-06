@@ -65,6 +65,8 @@ process NEXTFLOW_RUN {
 
     alias nextflow=/usr/local/bin/nextflow
 
+    ln -s $workDir work
+
     $nxf_cmd
     """
 
