@@ -20,6 +20,7 @@ process NEXTFLOW_RUN {
     path params_file                    // params-file, extracted from data[0].
     val image_param                     // absolute and relative image mount specs.
     val container_opts                  // precomputed string of containerOptions.
+    val workDir,                        // task workDir
     val data                            // [ meta, [work_1.sqfs,work_1], ..., [work_{i-1}.sqfs,work_{i-1}] ]
 
     script:
@@ -30,8 +31,7 @@ process NEXTFLOW_RUN {
 //  log.info "NEXTFLOW_RUN: task: ${task}"
 //  log.info "NEXTFLOW RUN: i: ${i}"
 
-    workdir = [ "${workflow.workDir}", "${task.process.tokenize(':')[-1].toLowerCase()}", task.ext.relpath, "decouple_hash" ].join('/')
-    nextflow_opts += " -w $workdir"
+    nextflow_opts += " -w $workDir"
     nextflow_opts += params.dump_hashes ? " -dump-hashes json" : ""
     nextflow_opts += " -resume"
 
