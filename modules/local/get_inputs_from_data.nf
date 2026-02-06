@@ -75,7 +75,7 @@ process GET_INPUTS_FROM_DATA {
                     workflow.workDir,
                     "nfcore_demo",
                     workflow.sessionId,
-                    make_workdir_path( task.index, 8, 3 ),
+                    make_workdir_path( task.index, params.base, params.depth ),
                     "decouple_hash"
     ].join('/')
 
