@@ -31,6 +31,7 @@ workflow iteration {
     image_mounts = GET_INPUTS_FROM_DATA.out.image_mounts
     image_param = GET_INPUTS_FROM_DATA.out.image_param
     work_env = GET_INPUTS_FROM_DATA.out.work_env
+    workDir = GET_INPUTS_FROM_DATA.workDir
 
     container_opts = GET_INPUTS_FROM_DATA.out.container_opts
     log.info "container_opts: $container_opts"
@@ -48,6 +49,7 @@ workflow iteration {
         pfile,
         image_param,
         container_opts,
+        workDir,
         data
     )
 
