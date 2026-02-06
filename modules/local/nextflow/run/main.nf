@@ -115,6 +115,6 @@ process NEXTFLOW_RUN {
     """
 
     output:
-    path "work_*", emit: work_dir_parent
+    val workDir, emit: work_dir_parent
     stdout emit: log
 }
