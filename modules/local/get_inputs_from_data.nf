@@ -75,7 +75,13 @@ process GET_INPUTS_FROM_DATA {
                     workflow.workDir,
                     "nfcore_demo",
                     workflow.sessionId,
-                    make_workdir_path( task.index, params.base, params.depth ),
+                    make_workdir_path( task.index, params.base,
+                        params.depth,
+                        /*
+                         *  Append workDir's relative path, e.g. '1a/75e49a95da3e09cfca66439d9f727b', to nested path.
+                         */
+                        suffix = task.workDir.relativize( workflow.workDir )
+                    ),
                     "decouple_hash"
     ].join('/')
 

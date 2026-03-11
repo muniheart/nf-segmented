@@ -7,7 +7,7 @@ class WorkdirTopOutException extends Exception {
     }
 }
 
-def make_workdir_path( index, base, depth ) {
+def make_workdir_path( index, base, depth, suffix=null ) {
     p = []
     while ( p.size()<depth ) {
         p.add( 0, sprintf("0o%o",index % base ) )
@@ -16,5 +16,7 @@ def make_workdir_path( index, base, depth ) {
     log.info "make_workdir_path: p: $p"
     if ( index >= base )
         throw new WorkdirTopOutException()
+    if ( suffix )
+        p.add( suffix )
     p.join("/")
 }
